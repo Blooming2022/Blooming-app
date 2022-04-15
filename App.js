@@ -2,20 +2,18 @@ import React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  Text,
-  useColorScheme,
-  View,
 } from 'react-native';
+import MainTabNavigator from './src/navigation/MainTabNavigator';
 
 const App = () => {
   return (
-    <SafeAreaView>
-      <Text>Initial</Text>
+    <SafeAreaView style={{ flex: 1 }}>
+      <MainTabNavigator></MainTabNavigator>
     </SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create( {
 });
 
 export default App;
