@@ -1,24 +1,56 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 
-const MissionWeekFlower = () => {
+const MissionWeekFlower = ( { mis0, mis1, mis2, mis3 } ) =>
+{
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
-        <Image source={ require( '../../../../assets/images/week1.png' ) } style={styles.week1}></Image>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <Image source={ require( '../../../../assets/images/week2.png' ) } style={styles.week2}></Image>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <Image source={ require( '../../../../assets/images/week3.png' ) } style={styles.week3}></Image>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <Image source={ require( '../../../../assets/images/week4.png' ) } style={styles.week4}></Image>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <Image source={require('../../../../assets/images/weekCenter.png')} style={styles.weekCenter}></Image>
-      </TouchableOpacity>
+      <View style={ styles.petal1 }>
+        { mis0?
+          <Image source={ require( '../../../../assets/images/week0Active.png' ) }></Image> :
+          <>
+            <TouchableOpacity style={[styles.plusBtn, styles.btn1]}>
+              <Image source={ require( '../../../../assets/images/plusButton.png' ) }></Image>
+            </TouchableOpacity>
+            <Image source={ require( '../../../../assets/images/week0.png' ) } ></Image>
+          </>
+        }
+      </View>
+      <View style={styles.petal2}>
+        { mis1?
+          <Image source={ require( '../../../../assets/images/week1Active.png' ) }></Image> :
+          <>
+            <TouchableOpacity style={[styles.plusBtn, styles.btn2]}>
+              <Image source={ require( '../../../../assets/images/plusButton.png' ) }></Image>
+            </TouchableOpacity>
+            <Image source={ require( '../../../../assets/images/week1.png' ) } ></Image>
+          </>
+        }
+      </View>
+      <View style={styles.petal3}>
+       { mis2?
+          <Image source={ require( '../../../../assets/images/week2Active.png' ) }></Image> :
+          <>
+            <TouchableOpacity style={[styles.plusBtn, styles.btn3]}>
+              <Image source={ require( '../../../../assets/images/plusButton.png' ) }></Image>
+            </TouchableOpacity>
+            <Image source={ require( '../../../../assets/images/week2.png' ) } ></Image>
+          </>
+        }
+      </View>
+      <View style={styles.petal4}>
+        { mis3?
+          <Image source={ require( '../../../../assets/images/week3Active.png' ) }></Image> :
+          <>
+            <TouchableOpacity style={[styles.plusBtn, styles.btn4]}>
+              <Image source={ require( '../../../../assets/images/plusButton.png' ) }></Image>
+            </TouchableOpacity>
+            <Image source={ require( '../../../../assets/images/week3.png' ) } ></Image>
+          </>
+        }
+      </View>
+
+      <Image source={ require( '../../../../assets/images/weekCenter.png' ) } style={ styles.weekCenter }></Image>
       <View style={styles.countBox}>
         <Text style={styles.count}>랜덤: 0/2</Text>
         <Text style={styles.count}>셀프: 0/2</Text>
@@ -33,30 +65,56 @@ const styles = StyleSheet.create( {
     width: 350,
     height: 350,
   },
-  week1: {
+  petal1: {
     position: 'absolute',
     top: 10,
-    left: 80
+    left: 90,
   },
-  week2: {
+  petal2: {
     position: 'absolute',
-    top: 90,
-    left: 10
+    top: 100,
+    left: 20,
   },
-  week3: {
+  petal3: {
     position: 'absolute',
-    top: 150,
-    left: 80
+    top: 170,
+    left: 110
   },
-  week4: {
+  petal4: {
     position: 'absolute',
-    top: 70,
-    left: 150
+    top: 80,
+    right:20,
   },
   weekCenter: {
     position: 'absolute',
-    top: 150,
-    left: 160
+    top: 140,
+    left: 155,
+    zIndex:10
+  },
+  plusBtn: {
+    paddingVertical: 25,
+    paddingHorizontal: 30,
+    // backgroundColor: 'pink',
+  },
+  btn1: {
+    position: 'absolute',
+    top: 25,
+    left:30
+  },
+  btn2: {
+    position: 'absolute',
+    top: 38,
+    left:25
+  },
+  btn3: {
+    position: 'absolute',
+    top: 50,
+    left:30
+  },
+  btn4: {
+    position: 'absolute',
+    top: 40,
+    left:40
   },
   countBox: {
     position: 'absolute',
