@@ -1,31 +1,36 @@
 import React, {useEffect, useState} from 'react';
 import { StyleSheet, Text, View, Image,TouchableOpacity } from 'react-native';
 
-const MissionItem = ( { missionNum, title } ) =>
+const MissionItem = ( { missionNum, title, mission, setMission } ) =>
 {
   const [ imageType, setImageType ] = useState(0);
   const num = missionNum;
   const imageSource = [
+    { image: require( '../../../../assets/images/mission0.png' ) },
     { image: require( '../../../../assets/images/mission1.png' ) },
     { image: require( '../../../../assets/images/mission2.png' ) },
     { image: require( '../../../../assets/images/mission3.png' ) },
-    { image: require( '../../../../assets/images/mission4.png' ) },
+    { image: require( '../../../../assets/images/mission0Active.png' ) },
     { image: require( '../../../../assets/images/mission1Active.png' ) },
     { image: require( '../../../../assets/images/mission2Active.png' ) },
-    { image: require( '../../../../assets/images/mission3Active.png' ) },
-    { image: require( '../../../../assets/images/mission4Active.png' ) }
+    { image: require( '../../../../assets/images/mission3Active.png' ) }
   ];
   useEffect(() =>
   { 
-    setImageType(num);
-  }, [])
+    if (mission) {
+      setImageType(num + 4);
+    } else {
+      setImageType(num);
+    }
+  }, [mission] )
+
   return (
     <View style={ styles.container}>
       <View style={styles.mission}>
-        <TouchableOpacity>
-          <Image source={ imageSource[ imageType ].image }></Image>
+        <TouchableOpacity onPress={ () => {setMission(!mission); }}>
+          <Image source={ imageSource[imageType].image }></Image>
         </TouchableOpacity>
-        <Text style={ styles.title }>{ title }</Text>
+        <Text style={ styles.title }>{title}</Text>
       </View>
       <Image source={require('../../../../assets/images/missionMenu.png')}></Image>
     </View>
