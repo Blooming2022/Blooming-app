@@ -18,7 +18,7 @@ const MissionWeek = () =>
       <View style={styles.missionBox}>
         <MissionItem title='물마시기' missionNum={0} mission={mission0} setMission={setMission0}></MissionItem>
         <MissionItem title='아침/산책/요가' missionNum={1} mission={mission1} setMission={setMission1}></MissionItem>
-        <MissionItem title='새벽 1시 전에 자기' missionNum={2} mission={mission2} setMission={setMission2}></MissionItem>
+        <MissionItem title='새벽다섯시이전에자기열네글자' missionNum={2} mission={mission2} setMission={setMission2}></MissionItem>
         <MissionItem title='운동/뜨개질/낮잠' missionNum={3} mission={mission3} setMission={setMission3}></MissionItem>
       </View>
     </View>
