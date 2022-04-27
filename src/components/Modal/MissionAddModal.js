@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import Modal from "react-native-modal";
 
@@ -6,7 +6,7 @@ const MissionAddModal = ({isModalVisible, setIsModalVisible}) =>
 {
   return (
     <Modal isVisible={isModalVisible} onBackdropPress={() => setIsModalVisible(false)} style={styles.modal}>
-      <View style={styles.container}>
+      <View style={styles.modalView}>
         <TouchableOpacity>
           <Text style={styles.modalText}>랜덤미션 추가</Text>
         </TouchableOpacity>
@@ -24,14 +24,14 @@ const styles = StyleSheet.create( {
     justifyContent:'center',
     alignItems:'center'
   },
-  container: {
+  modalView: {
     backgroundColor:'#ffffff',
     width: 250,
-    height: 120,
+    height: 130,
     borderRadius: 10,
     justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical:33
+    paddingHorizontal:28,
+    paddingVertical:28
   },
   modalText: {
     fontSize: 16,

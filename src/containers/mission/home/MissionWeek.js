@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import MissionItem from './components/MissionItem';
 import MissionWeekFlower from './components/MissionWeekFlower';
 
@@ -12,9 +12,9 @@ const MissionWeek = () =>
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>이번주</Text>
-      <Text style={styles.Dday}>D-4</Text>
-      <MissionWeekFlower mis0={mission0} mis1={mission1} mis2={mission2} mis3={mission3}></MissionWeekFlower>
+        <Text style={styles.title}>이번주</Text>
+        <Text style={styles.Dday}>D-4</Text>
+        <MissionWeekFlower mis0={mission0} mis1={mission1} mis2={mission2} mis3={mission3}></MissionWeekFlower>
       <View style={styles.missionBox}>
         <MissionItem title='물마시기' missionNum={0} mission={mission0} setMission={setMission0}></MissionItem>
         <MissionItem title='아침/산책/요가' missionNum={1} mission={mission1} setMission={setMission1}></MissionItem>
@@ -40,6 +40,9 @@ const styles = StyleSheet.create( {
     fontSize: 36,
     color: '#242424'
   },
+  missionBox: {
+    marginTop:5
+  }
 });
 
 export default MissionWeek;
