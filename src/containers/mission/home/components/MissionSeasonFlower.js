@@ -68,14 +68,14 @@ const styles = StyleSheet.create( {
     top: 48,
     left: 42,
     zIndex:10,
-    backgroundColor: 'pink',
+    // backgroundColor: 'pink',
   },
   btn1: {
     position: 'absolute',
     top: 40,
     left:50,
     zIndex:10,
-    backgroundColor: 'pink',
+    // backgroundColor: 'pink',
   },
   countBox: {
     position: 'absolute',

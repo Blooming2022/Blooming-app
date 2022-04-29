@@ -1,8 +1,5 @@
 import React, {useEffect} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-} from 'react-native';
+import {SafeAreaView, StyleSheet} from 'react-native';
 import MainTabNavigator from './src/navigation/MainTabNavigator';
 import SplashScreen from 'react-native-splash-screen';
 
@@ -16,16 +13,19 @@ const App = () =>
     } catch (e) {
       console.log(e.message);
     }
-  } );
+  });
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={styles.container}>
       <MainTabNavigator></MainTabNavigator>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create( {
+  container: {
+    flex: 1,
+  }
 });
 
 export default App;

@@ -8,10 +8,18 @@ const Tab = createMaterialTopTabNavigator();
 const MissionTabNavigator = () =>
 {
     return (
-      <Tab.Navigator>
-        <Tab.Screen name="MissionWeek" component={MissionWeek} />
-        <Tab.Screen name="MissionMonth" component={MissionMonth} />
-        <Tab.Screen name="MissionSeason" component={MissionSeason} />
+      <Tab.Navigator
+      tabBarShowLabel= {false}
+      screenOptions={{
+        tabBarActiveTintColor: '#ffffff',
+        tabBarInactiveTintColor: '#999999',
+        tabBarLabelStyle: { fontSize: 16, fontWeight:'bold', lineHeight:18 },
+        tabBarStyle: { width: '90%', height:42, borderRadius:35, marginTop:10, marginHorizontal:'5%'},
+        tabBarIndicatorStyle: { height: 42, borderRadius:35, backgroundColor:'#242424' },
+      }}>
+        <Tab.Screen name="MissionWeek" component={MissionWeek} options={{ tabBarLabel: '한주' }} />
+        <Tab.Screen name="MissionMonth" component={MissionMonth} options={{ tabBarLabel: '한달' }}/>
+        <Tab.Screen name="MissionSeason" component={MissionSeason} options={{ tabBarLabel: '계절' }}/>
       </Tab.Navigator>
     );
 }
