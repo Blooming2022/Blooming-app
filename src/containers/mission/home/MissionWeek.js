@@ -6,9 +6,9 @@ import MissionWeekFlower from './components/MissionWeekFlower';
 const MissionWeek = () =>
 {
   const [mission0, setMission0] = useState(false);
-  const [mission1, setMission1] = useState(true);
+  const [mission1, setMission1] = useState(false);
   const [mission2, setMission2] = useState(false);
-  const [ mission3, setMission3 ] = useState(false);
+  const [mission3, setMission3 ] = useState(false);
 
   return (
     <View style={styles.container}>
