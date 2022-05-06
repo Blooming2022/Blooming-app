@@ -1,72 +1,101 @@
-import React, {useEffect, useState} from 'react';
-import { StyleSheet, Text, View, Image,TouchableOpacity } from 'react-native';
-import { Menu, MenuItem } from 'react-native-material-menu';
+import React, {useState} from 'react';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import {Menu, MenuItem} from 'react-native-material-menu';
 
-const MissionItem = ( { missionNum, title, mission, setMission } ) =>
-{
-  const [ imageType, setImageType ] = useState(0);
-  const num = missionNum;
+const MissionItem = ({
+  mission,
+  setMissionList,
+  missionList,
+  picture,
+  setPicture,
+}) => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const imageSource = [
-    { image: require( '../../../../assets/images/mission0.png' ) },
-    { image: require( '../../../../assets/images/mission1.png' ) },
-    { image: require( '../../../../assets/images/mission2.png' ) },
-    { image: require( '../../../../assets/images/mission3.png' ) },
-    { image: require( '../../../../assets/images/mission0Active.png' ) },
-    { image: require( '../../../../assets/images/mission1Active.png' ) },
-    { image: require( '../../../../assets/images/mission2Active.png' ) },
-    { image: require( '../../../../assets/images/mission3Active.png' ) }
+    {image: require('../../../../assets/images/mission0.png')},
+    {image: require('../../../../assets/images/mission1.png')},
+    {image: require('../../../../assets/images/mission2.png')},
+    {image: require('../../../../assets/images/mission3.png')},
+    {image: require('../../../../assets/images/mission0Active.png')},
+    {image: require('../../../../assets/images/mission1Active.png')},
+    {image: require('../../../../assets/images/mission2Active.png')},
+    {image: require('../../../../assets/images/mission3Active.png')},
   ];
   const showMenu = () => {
     setIsMenuVisible(true);
-  }
+  };
   const hideMenu = () => {
     setIsMenuVisible(false);
-  }
-  useEffect(() =>
-  { 
-    if (mission) {
-      setImageType(num + 4);
-    } else {
-      setImageType(num);
-    }
-  }, [mission] )
-
+  };
+  const updateMission = () => {
+    setIsMenuVisible(false);
+  };
+  const deleteMission = () => {
+    setMissionList(missionList.filter(item => item.picNum !== mission.picNum));
+    setPicture(
+      picture.map((item, index) =>
+        index === mission.picNum ? (item = null) : item,
+      ),
+    );
+    setIsMenuVisible(false);
+  };
+  const checkMission = () => {
+    const oldInfoIndex = missionList.findIndex(
+      item => item.picNum == mission.picNum,
+    );
+    const updateList = [...missionList];
+    updateList[oldInfoIndex].isSuccess = !updateList[oldInfoIndex].isSuccess;
+    setMissionList(updateList);
+    setPicture(
+      picture.map((item, index) =>
+        index === mission.picNum ? (item = !item) : item,
+      ),
+    );
+  };
   return (
-    <View style={ styles.container}>
+    <View style={styles.container}>
       <View style={styles.mission}>
-        <TouchableOpacity onPress={() => {setMission(!mission);}}>
-          <Image source={imageSource[imageType].image}></Image>
+        <TouchableOpacity onPress={checkMission}>
+          {mission.isSuccess ? (
+            <Image source={imageSource[mission.picNum + 4].image}></Image>
+          ) : (
+            <Image source={imageSource[mission.picNum].image}></Image>
+          )}
         </TouchableOpacity>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.title}>{mission.title}</Text>
       </View>
       <Menu
         style={styles.menu}
         visible={isMenuVisible}
-        anchor={<TouchableOpacity onPress={showMenu} style={styles.missionMenu}>
-        <Image source={require('../../../../assets/images/missionMenu.png')}></Image>
-        </TouchableOpacity>}
-        onRequestClose={hideMenu}
-      >
-        <MenuItem onPress={hideMenu} textStyle={styles.menuText}>수정</MenuItem>
-        <MenuItem onPress={hideMenu} textStyle={styles.menuText}>삭제</MenuItem>
+        anchor={
+          <TouchableOpacity onPress={showMenu} style={styles.missionMenu}>
+            <Image
+              source={require('../../../../assets/images/missionMenu.png')}></Image>
+          </TouchableOpacity>
+        }
+        onRequestClose={hideMenu}>
+        <MenuItem onPress={updateMission} textStyle={styles.menuText}>
+          수정
+        </MenuItem>
+        <MenuItem onPress={deleteMission} textStyle={styles.menuText}>
+          삭제
+        </MenuItem>
       </Menu>
     </View>
   );
 };
 
-const styles = StyleSheet.create( {
+const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flexDirection: 'row',
     width: 256,
     justifyContent: 'space-between',
-    alignItems:'center',
+    alignItems: 'center',
     borderBottomColor: '#242424',
-    borderBottomWidth:1,
+    borderBottomWidth: 1,
     marginBottom: 16,
     paddingBottom: 3,
-    position:'relative'
+    position: 'relative',
   },
   mission: {
     display: 'flex',
@@ -76,21 +105,21 @@ const styles = StyleSheet.create( {
   title: {
     fontSize: 14,
     color: '#242424',
-    paddingLeft: 16
+    paddingLeft: 16,
   },
   missionMenu: {
     paddingHorizontal: 10,
-    paddingVertical:10,
+    paddingVertical: 10,
   },
   menu: {
     backgroundColor: '#2C2C2C',
-    borderRadius:10,
+    borderRadius: 10,
     width: 80,
   },
   menuText: {
-    fontSize:14,
+    fontSize: 14,
     color: '#ffffff',
-  }
+  },
 });
 
 export default MissionItem;
