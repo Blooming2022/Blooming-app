@@ -18,8 +18,8 @@ const MissionTabNavigator = () =>
         tabBarIndicatorStyle: { height: 42, borderRadius:35, backgroundColor:'#242424' },
       }}>
         <Tab.Screen name="MissionWeek" component={MissionWeek} options={{ tabBarLabel: '한주' }} />
-        <Tab.Screen name="MissionMonth" component={MissionMonth} options={{ tabBarLabel: '한달' }}/>
-        <Tab.Screen name="MissionSeason" component={MissionSeason} options={{ tabBarLabel: '계절' }}/>
+        {/* <Tab.Screen name="MissionMonth" component={MissionMonth} options={{ tabBarLabel: '한달' }}/> */}
+        {/* <Tab.Screen name="MissionSeason" component={MissionSeason} options={{ tabBarLabel: '계절' }}/> */}
       </Tab.Navigator>
     );
 }

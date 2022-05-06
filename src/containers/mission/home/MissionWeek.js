@@ -1,31 +1,50 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import MissionItem from './components/MissionItem';
+import {StyleSheet, Text, View} from 'react-native';
+import MissionList from './components/MissionList';
 import MissionWeekFlower from './components/MissionWeekFlower';
 
-const MissionWeek = () =>
-{
-  const [mission0, setMission0] = useState(false);
-  const [mission1, setMission1] = useState(false);
-  const [mission2, setMission2] = useState(false);
-  const [mission3, setMission3 ] = useState(false);
+const initialList = [
+  {
+    title: '물마시기',
+    picNum: 0,
+    type: 0,
+    period: 0,
+    misMemo: '',
+    isSuccess: true,
+  },
+  {
+    title: '아침/산책/요가',
+    picNum: 1,
+    type: 1,
+    period: 0,
+    misMemo: '',
+    isSuccess: false,
+  },
+];
+
+const MissionWeek = () => {
+  const [missionList, setMissionList] = useState(initialList);
+  const [picture, setPicture] = useState([true, false, null, null]);
 
   return (
     <View style={styles.container}>
-        <Text style={styles.title}>이번주</Text>
-        <Text style={styles.Dday}>D-4</Text>
-        <MissionWeekFlower mis0={mission0} mis1={mission1} mis2={mission2} mis3={mission3}></MissionWeekFlower>
-      <View style={styles.missionBox}>
-        <MissionItem title='물마시기' missionNum={0} mission={mission0} setMission={setMission0}></MissionItem>
-        <MissionItem title='아침/산책/요가' missionNum={1} mission={mission1} setMission={setMission1}></MissionItem>
-        <MissionItem title='새벽다섯시이전에자기열네글자' missionNum={2} mission={mission2} setMission={setMission2}></MissionItem>
-        <MissionItem title='운동/뜨개질/낮잠' missionNum={3} mission={mission3} setMission={setMission3}></MissionItem>
-      </View>
+      <Text style={styles.title}>이번주</Text>
+      <Text style={styles.Dday}>D-4</Text>
+      <MissionWeekFlower
+        missionList={missionList}
+        setMissionList={setMissionList}
+        picture={picture}
+        setPicture={setPicture}></MissionWeekFlower>
+      <MissionList
+        missionList={missionList}
+        setMissionList={setMissionList}
+        picture={picture}
+        setPicture={setPicture}></MissionList>
     </View>
   );
 };
 
-const styles = StyleSheet.create( {
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
@@ -35,15 +54,15 @@ const styles = StyleSheet.create( {
   title: {
     paddingTop: 30,
     fontSize: 16,
-    color: '#242424'
+    color: '#242424',
   },
   Dday: {
     fontSize: 36,
-    color: '#242424'
+    color: '#242424',
   },
   missionBox: {
-    marginTop:5
-  }
+    marginTop: 5,
+  },
 });
 
 export default MissionWeek;
