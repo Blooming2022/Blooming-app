@@ -16,7 +16,7 @@ const MissionAddModal = ({
       title: '자고싶다',
       picNum: picNum,
       type: 0,
-      period: 0,
+      period: 0, // 한주 기준으로 임시 생성. 한달, 계절미션 동작 확인 시 해당 필드의 숫자 바꿀 것.
       misMemo: '',
       isSuccess: false,
     };
@@ -31,7 +31,7 @@ const MissionAddModal = ({
       title: '샐러드/야식/운동',
       picNum: picNum,
       type: 1,
-      period: 0,
+      period: 1, // 한달 기준으로 임시 생성. 한주, 계절미션 동작 확인 시 해당 필드의 숫자 바꿀 것.
       misMemo: '',
       isSuccess: false,
     };
