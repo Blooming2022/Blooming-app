@@ -10,16 +10,37 @@ const MissionItem = ({
   setPicture,
 }) => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
-  const imageSource = [
-    {image: require('../../../../assets/images/mission0.png')},
-    {image: require('../../../../assets/images/mission1.png')},
-    {image: require('../../../../assets/images/mission2.png')},
-    {image: require('../../../../assets/images/mission3.png')},
-    {image: require('../../../../assets/images/mission0Active.png')},
-    {image: require('../../../../assets/images/mission1Active.png')},
-    {image: require('../../../../assets/images/mission2Active.png')},
-    {image: require('../../../../assets/images/mission3Active.png')},
-  ];
+  let imageSource;
+  let addNum;
+  if (mission.period == 0) {
+    imageSource = [
+      {image: require('../../../../assets/images/missionPink.png')},
+      {image: require('../../../../assets/images/missionBlue.png')},
+      {image: require('../../../../assets/images/missionYellow.png')},
+      {image: require('../../../../assets/images/missionViolet.png')},
+      {image: require('../../../../assets/images/missionPinkActive.png')},
+      {image: require('../../../../assets/images/missionBlueActive.png')},
+      {image: require('../../../../assets/images/missionYellowActive.png')},
+      {image: require('../../../../assets/images/missionVioletActive.png')},
+    ];
+    addNum = 4;
+  } else if (mission.period == 1) {
+    imageSource = [
+      {image: require('../../../../assets/images/missionPink.png')},
+      {image: require('../../../../assets/images/missionViolet.png')},
+      {image: require('../../../../assets/images/missionPinkActive.png')},
+      {image: require('../../../../assets/images/missionVioletActive.png')},
+    ];
+    addNum = 2;
+  } else {
+    imageSource = [
+      {image: require('../../../../assets/images/missionViolet.png')},
+      {image: require('../../../../assets/images/missionPink.png')},
+      {image: require('../../../../assets/images/missionVioletActive.png')},
+      {image: require('../../../../assets/images/missionPinkActive.png')},
+    ];
+    addNum = 2;
+  }
   const showMenu = () => {
     setIsMenuVisible(true);
   };
@@ -56,7 +77,7 @@ const MissionItem = ({
       <View style={styles.mission}>
         <TouchableOpacity onPress={checkMission}>
           {mission.isSuccess ? (
-            <Image source={imageSource[mission.picNum + 4].image}></Image>
+            <Image source={imageSource[mission.picNum + addNum].image}></Image>
           ) : (
             <Image source={imageSource[mission.picNum].image}></Image>
           )}

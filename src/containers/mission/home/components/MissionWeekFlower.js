@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import MissionAddModal from '../../../../components/Modal/MissionAddModal';
+import MissionCount from './MissionCount';
 
 const MissionWeekFlower = ({
   missionList,
@@ -104,10 +105,11 @@ const MissionWeekFlower = ({
       <Image
         source={require('../../../../assets/images/weekCenter.png')}
         style={styles.weekCenter}></Image>
-      <View style={styles.countBox}>
-        <Text style={styles.count}>랜덤: 1/2</Text>
-        <Text style={styles.count}>셀프: 2/2</Text>
-      </View>
+      <MissionCount
+        currentSelf={0}
+        maxSelf={2}
+        currentRandom={0}
+        maxRandom={2}></MissionCount>
     </View>
   );
 };
@@ -173,15 +175,6 @@ const styles = StyleSheet.create({
     top: 28,
     left: 35,
     zIndex: 10,
-  },
-  countBox: {
-    position: 'absolute',
-    top: 200,
-    right: 0,
-  },
-  count: {
-    fontSize: 14,
-    color: '#999999',
   },
 });
 

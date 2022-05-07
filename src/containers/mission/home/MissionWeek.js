@@ -1,41 +1,25 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import DdayCount from './components/DdayCount';
 import MissionList from './components/MissionList';
 import MissionWeekFlower from './components/MissionWeekFlower';
 
-const initialList = [
-  {
-    title: '물마시기',
-    picNum: 0,
-    type: 0,
-    period: 0,
-    misMemo: '',
-    isSuccess: true,
-  },
-  {
-    title: '아침/산책/요가',
-    picNum: 1,
-    type: 1,
-    period: 0,
-    misMemo: '',
-    isSuccess: false,
-  },
-];
-
 const MissionWeek = () => {
-  const [missionList, setMissionList] = useState(initialList);
-  const [picture, setPicture] = useState([true, false, null, null]);
+  const [missionList, setMissionList] = useState([]);
+  const [picture, setPicture] = useState([null, null, null, null]);
+  // const [currentSelf, setCurrentSelf] = useState(0);
+  // const [currentRandom, setCurrentRandom] = useState(0);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>이번주</Text>
-      <Text style={styles.Dday}>D-4</Text>
+      <DdayCount title="이번주" remainingTime={4} period={0}></DdayCount>
       <MissionWeekFlower
         missionList={missionList}
         setMissionList={setMissionList}
         picture={picture}
         setPicture={setPicture}></MissionWeekFlower>
       <MissionList
+        style={styles.missionList}
         missionList={missionList}
         setMissionList={setMissionList}
         picture={picture}
@@ -60,7 +44,7 @@ const styles = StyleSheet.create({
     fontSize: 36,
     color: '#242424',
   },
-  missionBox: {
+  missionList: {
     marginTop: 5,
   },
 });
