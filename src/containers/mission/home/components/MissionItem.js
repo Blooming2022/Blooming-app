@@ -12,6 +12,7 @@ const MissionItem = ({
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   let imageSource;
   let addNum;
+
   if (mission.period == 0) {
     imageSource = [
       {image: require('../../../../assets/images/missionPink.png')},
@@ -41,6 +42,7 @@ const MissionItem = ({
     ];
     addNum = 2;
   }
+
   const showMenu = () => {
     setIsMenuVisible(true);
   };
@@ -72,6 +74,7 @@ const MissionItem = ({
       ),
     );
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.mission}>
