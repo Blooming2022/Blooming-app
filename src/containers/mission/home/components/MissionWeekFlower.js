@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, Image, TouchableOpacity} from 'react-native';
 import MissionAddModal from '../../../../components/Modal/MissionAddModal';
 import MissionCount from './MissionCount';
 

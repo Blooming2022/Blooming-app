@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import MissionList from './components/MissionList';
 import DdayCount from './components/DdayCount';
 import MissionSeasonFlower from './components/MissionSeasonFlower';
@@ -32,15 +32,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#ffffff',
     paddingHorizontal: 20,
-  },
-  title: {
-    paddingTop: 30,
-    fontSize: 16,
-    color: '#242424',
-  },
-  Dday: {
-    fontSize: 36,
-    color: '#242424',
   },
   missionList: {
     marginTop: 60,

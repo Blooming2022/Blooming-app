@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     width: 280,
     height: 280,
+    marginTop: 10,
   },
   petal0: {
     position: 'absolute',
