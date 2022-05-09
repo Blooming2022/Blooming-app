@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, ScrollView, View, Text} from 'react-native';
 import MissionItem from './MissionItem';
-const MissionList = ({missionList, setMissionList, picture, setPicture}) => {
+const MissionList = ({missionList, setMissionList}) => {
   return (
     <ScrollView>
       {missionList.length !== 0 ? (
@@ -11,8 +11,6 @@ const MissionList = ({missionList, setMissionList, picture, setPicture}) => {
             key={index}
             setMissionList={setMissionList}
             missionList={missionList}
-            picture={picture}
-            setPicture={setPicture}
           />
         ))
       ) : (

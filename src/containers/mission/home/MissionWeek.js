@@ -6,22 +6,17 @@ import MissionWeekFlower from './components/MissionWeekFlower';
 
 const MissionWeek = () => {
   const [missionList, setMissionList] = useState([]);
-  const [picture, setPicture] = useState([null, null, null, null]);
 
   return (
     <View style={styles.container}>
       <DdayCount title="이번주" remainingTime={4} period={0}></DdayCount>
       <MissionWeekFlower
         missionList={missionList}
-        setMissionList={setMissionList}
-        picture={picture}
-        setPicture={setPicture}></MissionWeekFlower>
+        setMissionList={setMissionList}></MissionWeekFlower>
       <MissionList
         style={styles.missionList}
         missionList={missionList}
-        setMissionList={setMissionList}
-        picture={picture}
-        setPicture={setPicture}></MissionList>
+        setMissionList={setMissionList}></MissionList>
     </View>
   );
 };

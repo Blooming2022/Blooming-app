@@ -6,22 +6,17 @@ import MissionSeasonFlower from './components/MissionSeasonFlower';
 
 const MissionSeason = () => {
   const [missionList, setMissionList] = useState([]);
-  const [picture, setPicture] = useState([null, null]);
 
   return (
     <View style={styles.container}>
       <DdayCount title="이번 계절" remainingTime={4} period={2}></DdayCount>
       <MissionSeasonFlower
         missionList={missionList}
-        setMissionList={setMissionList}
-        picture={picture}
-        setPicture={setPicture}></MissionSeasonFlower>
+        setMissionList={setMissionList}></MissionSeasonFlower>
       <MissionList
         style={styles.missionList}
         missionList={missionList}
-        setMissionList={setMissionList}
-        picture={picture}
-        setPicture={setPicture}></MissionList>
+        setMissionList={setMissionList}></MissionList>
     </View>
   );
 };
