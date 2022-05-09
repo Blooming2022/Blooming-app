@@ -1,14 +1,10 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import {MenuItem} from 'react-native-material-menu';
 import MissionAddModal from '../../../../components/Modal/MissionAddModal';
 import MissionCount from './MissionCount';
 
-const MissionSeasonFlower = ({
-  missionList,
-  setMissionList,
-  picture,
-  setPicture,
-}) => {
+const MissionSeasonFlower = ({missionList, setMissionList}) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [picNum, setPicNum] = useState(0);
   const showModal = num => {
@@ -23,45 +19,45 @@ const MissionSeasonFlower = ({
         setIsModalVisible={setIsModalVisible}
         picNum={picNum}
         setMissionList={setMissionList}
-        missionList={missionList}
-        picture={picture}
-        setPicture={setPicture}></MissionAddModal>
+        missionList={missionList}></MissionAddModal>
       <View style={styles.petal0}>
-        {!!picture[0] ? (
-          <Image
-            source={require('../../../../assets/images/season0Active.png')}></Image>
-        ) : (
+        {missionList.find(item => item.picNum == 0) == undefined ||
+        !missionList.find(item => item.picNum == 0).isSuccess ? (
           <>
-            {picture[0] == null ? (
+            {missionList.find(item => item.picNum == 0) == undefined && (
               <TouchableOpacity
                 style={[styles.plusBtn, styles.btn0]}
                 onPress={() => showModal(0)}>
                 <Image
                   source={require('../../../../assets/images/plusButton.png')}></Image>
               </TouchableOpacity>
-            ) : null}
+            )}
             <Image
               source={require('../../../../assets/images/season0.png')}></Image>
           </>
+        ) : (
+          <Image
+            source={require('../../../../assets/images/season0Active.png')}></Image>
         )}
       </View>
       <View style={styles.petal1}>
-        {!!picture[1] ? (
-          <Image
-            source={require('../../../../assets/images/season1Active.png')}></Image>
-        ) : (
+        {missionList.find(item => item.picNum == 1) == undefined ||
+        !missionList.find(item => item.picNum == 1).isSuccess ? (
           <>
-            {picture[1] == null ? (
+            {missionList.find(item => item.picNum == 1) == undefined && (
               <TouchableOpacity
                 style={[styles.plusBtn, styles.btn1]}
                 onPress={() => showModal(1)}>
                 <Image
                   source={require('../../../../assets/images/plusButton.png')}></Image>
               </TouchableOpacity>
-            ) : null}
+            )}
             <Image
               source={require('../../../../assets/images/season1.png')}></Image>
           </>
+        ) : (
+          <Image
+            source={require('../../../../assets/images/season1Active.png')}></Image>
         )}
       </View>
       <MissionCount

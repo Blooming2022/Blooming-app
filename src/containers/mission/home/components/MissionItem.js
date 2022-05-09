@@ -2,13 +2,7 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {Menu, MenuItem} from 'react-native-material-menu';
 
-const MissionItem = ({
-  mission,
-  setMissionList,
-  missionList,
-  picture,
-  setPicture,
-}) => {
+const MissionItem = ({mission, setMissionList, missionList}) => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   let imageSource;
   let addNum;
@@ -54,11 +48,6 @@ const MissionItem = ({
   };
   const deleteMission = () => {
     setMissionList(missionList.filter(item => item.picNum !== mission.picNum));
-    setPicture(
-      picture.map((item, index) =>
-        index === mission.picNum ? (item = null) : item,
-      ),
-    );
     setIsMenuVisible(false);
   };
   const checkMission = () => {
@@ -68,11 +57,6 @@ const MissionItem = ({
     const updateList = [...missionList];
     updateList[oldInfoIndex].isSuccess = !updateList[oldInfoIndex].isSuccess;
     setMissionList(updateList);
-    setPicture(
-      picture.map((item, index) =>
-        index === mission.picNum ? (item = !item) : item,
-      ),
-    );
   };
 
   return (

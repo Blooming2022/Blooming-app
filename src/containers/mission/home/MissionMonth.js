@@ -6,22 +6,17 @@ import MissionMonthFlower from './components/MissionMonthFlower';
 
 const MissionMonth = () => {
   const [missionList, setMissionList] = useState([]);
-  const [picture, setPicture] = useState([null, null]);
 
   return (
     <View style={styles.container}>
       <DdayCount title="이번달" remainingTime={4} period={1}></DdayCount>
       <MissionMonthFlower
         missionList={missionList}
-        setMissionList={setMissionList}
-        picture={picture}
-        setPicture={setPicture}></MissionMonthFlower>
+        setMissionList={setMissionList}></MissionMonthFlower>
       <MissionList
         style={styles.missionList}
         missionList={missionList}
-        setMissionList={setMissionList}
-        picture={picture}
-        setPicture={setPicture}></MissionList>
+        setMissionList={setMissionList}></MissionList>
     </View>
   );
 };

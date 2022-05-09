@@ -8,8 +8,6 @@ const MissionAddModal = ({
   picNum,
   missionList,
   setMissionList,
-  picture,
-  setPicture,
 }) => {
   const addSelfMission = () => {
     const newInfo = {
@@ -21,9 +19,6 @@ const MissionAddModal = ({
       isSuccess: false,
     };
     setMissionList([...missionList, newInfo]);
-    setPicture(
-      picture.map((item, index) => (index === picNum ? (item = false) : item)),
-    );
     setIsModalVisible(false);
   };
   const addRandomMission = () => {
@@ -36,9 +31,6 @@ const MissionAddModal = ({
       isSuccess: false,
     };
     setMissionList([...missionList, newInfo]);
-    setPicture(
-      picture.map((item, index) => (index === picNum ? (item = false) : item)),
-    );
     setIsModalVisible(false);
   };
   return (
