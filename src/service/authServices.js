@@ -81,31 +81,12 @@ const createUser = async () => {
   }
 }
 
-// updateUser(data): 유저 정보 수정하기
-/**
- * data = {
- *   displayName: 'fakeName',
- *   successNum: 3
- * }
- * 위와 같은 형식으로 수정할 정보만 넣어서 호출
- */
-export const updateUser = async (data) => {
-  try {
-    const user = getCurUser();
-    return await usersCollection.doc(user.uid)
-    .update(data);
-  } catch (e) {
-    alert("정상적으로 처리되지 않았습니다. 다시 시도해주세요.");
-    return -1;
-  }
-}
-
 // 현재 유저 정보 조회
 /**
  * userData = getCurUser().uid
  * 와 같은 형식으로 uid, displayName, email 등 조회 가능
  *  */ 
-export const getCurUser = () => {
+ export const getCurUser = () => {
   try {
     // console.log(auth().currentUser);
     return auth().currentUser;
@@ -128,6 +109,25 @@ export const getUserData = async () => {
       console.log(data);
       return data;
     });
+  } catch (e) {
+    alert("정상적으로 처리되지 않았습니다. 다시 시도해주세요.");
+    return -1;
+  }
+}
+
+// updateUser(data): 유저 정보 수정하기
+/**
+ * data = {
+ *   displayName: 'fakeName',
+ *   successNum: 3
+ * }
+ * 위와 같은 형식으로 수정할 정보만 넣어서 호출
+ */
+export const updateUser = async (data) => {
+  try {
+    const user = getCurUser();
+    return await usersCollection.doc(user.uid)
+    .update(data);
   } catch (e) {
     alert("정상적으로 처리되지 않았습니다. 다시 시도해주세요.");
     return -1;
