@@ -96,7 +96,7 @@ const createUser = async () => {
   }
 }
 
-export const getUserData = async () => {
+export const getExtraUserData = async () => {
   try {
     const user = auth().currentUser;
     await usersCollection.doc(user.uid).get()
