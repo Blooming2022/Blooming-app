@@ -3,7 +3,7 @@ import auth from '@react-native-firebase/auth';
 
 const usersCollection = firestore().collection('users');
 
-// 리뷰 생성
+// 후기 생성
 export const createRev = async (revData) => {
   try {
     const user = auth().currentUser;
@@ -14,7 +14,7 @@ export const createRev = async (revData) => {
   }
 }
 
-// 리뷰 조회
+// 후기 조회
 export const readRev = async () => {
   try {
     const user = auth().currentUser;
@@ -29,7 +29,7 @@ export const readRev = async () => {
   }
 }
 
-// 리뷰 수정
+// 후기 수정
 export const updateRev = async (revID, revData) => {
   try {
     const user = auth().currentUser;
@@ -40,9 +40,10 @@ export const updateRev = async (revID, revData) => {
   }
 }
 
-// 리뷰 삭제
+// 후기 삭제
 export const deleteRev = async (revID) => {
   try {
+    const user = auth().currentUser;
     return await usersCollection.doc(user.uid).collection('revList').doc(revID).delete();
   } catch (e) {
     alert("정상적으로 처리되지 않았습니다. 다시 시도해주세요.");
