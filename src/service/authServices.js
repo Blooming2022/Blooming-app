@@ -4,29 +4,29 @@ import firestore from '@react-native-firebase/firestore';
 const usersCollection = firestore().collection('users');
 
 // guestSignIn(): 게스트 로그인(익명)
-export const guestSignIn = async () => {
+const guestSignIn = async () => {
   try {
     const ret = await auth().signInAnonymously();
     await createUser();
     return ret;
   } catch (e) {
-    alert("정상적으로 처리되지 않았습니다. 다시 시도해주세요.");
+    console.log(e.message);
     return -1;
   }
 }
 
 // signOut(): 로그아웃
-export const signOut = () => {
+const signOut = () => {
   try {
     return ret = auth().signOut();
   } catch (e) {
-    alert("정상적으로 처리되지 않았습니다. 다시 시도해주세요.");
+    console.log(e.message);
     return -1;
   }
 }
 
 // deleteAccount(): 회원 탈퇴
-export const deleteAccount = async () => {
+const deleteAccount = async () => {
   try {
     const user = getCurUser();
     const docPath = usersCollection.doc(user.uid);
@@ -48,19 +48,19 @@ export const deleteAccount = async () => {
     });
     await docPath.collection('misSuccess').get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        docPath.collection('misSuccess').doc(doc.id).delete();
+        docPath.collection('misListSuccess').doc(doc.id).delete();
       });
     });
     await docPath.collection('reviews').get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        docPath.collection('reviews').doc(doc.id).delete();
+        docPath.collection('revList').doc(doc.id).delete();
       });
     });
 
     docPath.delete();
     return user.delete();
   } catch (e) {
-    alert("정상적으로 처리되지 않았습니다. 다시 시도해주세요.");
+    console.log(e.message);
     return -1;
   } 
 }
@@ -76,7 +76,7 @@ const createUser = async () => {
       successNum: 0
     });
   } catch {
-    alert("정상적으로 처리되지 않았습니다. 다시 시도해주세요.");
+    console.log(e.message);
     return -1;
   }
 }
@@ -86,17 +86,17 @@ const createUser = async () => {
  * userData = getCurUser().uid
  * 와 같은 형식으로 uid, displayName, email 등 조회 가능
  *  */ 
- export const getCurUser = () => {
+const getCurUser = () => {
   try {
     // console.log(auth().currentUser);
     return auth().currentUser;
   } catch (e) {
-    alert("정상적으로 처리되지 않았습니다. 다시 시도해주세요.");
+    console.log(e.message);
     return -1;
   }
 }
 
-export const getExtraUserData = async () => {
+const getExtraUserData = async () => {
   try {
     const user = auth().currentUser;
     await usersCollection.doc(user.uid).get()
@@ -110,7 +110,7 @@ export const getExtraUserData = async () => {
       return data;
     });
   } catch (e) {
-    alert("정상적으로 처리되지 않았습니다. 다시 시도해주세요.");
+    console.log(e.message);
     return -1;
   }
 }
@@ -123,13 +123,22 @@ export const getExtraUserData = async () => {
  * }
  * 위와 같은 형식으로 수정할 정보만 넣어서 호출
  */
-export const updateUser = async (data) => {
+const updateUser = async (data) => {
   try {
     const user = getCurUser();
     return await usersCollection.doc(user.uid)
     .update(data);
   } catch (e) {
-    alert("정상적으로 처리되지 않았습니다. 다시 시도해주세요.");
+    console.log(e.message);
     return -1;
   }
+}
+
+export {
+  guestSignIn,
+  signOut,
+  deleteAccount,
+  getCurUser,
+  getExtraUserData,
+  updateUser
 }
