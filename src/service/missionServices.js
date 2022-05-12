@@ -4,19 +4,19 @@ import { updateUser } from './authServices';
 
 const usersCollection = firestore().collection('users');
 
-export const selfMaxWeek = 2;
-export const randMaxWeek = 2;
-export const selfMaxMonth = 1;
-export const randMaxMonth = 1;
-export const selfMaxSeason = 1;
-export const randMaxSeason = 1;
+const selfMaxWeek = 2;
+const randMaxWeek = 2;
+const selfMaxMonth = 1;
+const randMaxMonth = 1;
+const selfMaxSeason = 1;
+const randMaxSeason = 1;
 
 // 미션 생성
 const createMis = async (misRef, misData) => {
   try {
     return await misRef.doc().set(misData);
   } catch (e) {
-    alert("정상적으로 처리되지 않았습니다. 다시 시도해주세요.");
+    console.log(e.message);
     return -1;
   }
 }
@@ -27,9 +27,8 @@ const readMis = async (misRef) => {
     const ret = data.docs.map(doc => ({ ...doc.data(), id: doc.id }))
     console.log(ret);
     return ret;
-  } catch (error) {
-    console.log(error.message);
-    alert("정상적으로 처리되지 않았습니다. 다시 시도해주세요.");
+  } catch (e) {
+    console.log(e.message);
     return -1;
   }
 }
@@ -38,7 +37,7 @@ const updateMis = async (misRef, misID, misData) => {
   try {
     return await misRef.doc(misID).update(misData);
   } catch (e) {
-    alert("정상적으로 처리되지 않았습니다. 다시 시도해주세요.");
+    console.log(e.message);
     return -1;
   }
 }
@@ -47,7 +46,7 @@ const deleteMis = async (misRef, misID) => {
   try {
     return await misRef.doc(misID).delete();
   } catch (e) {
-    alert("정상적으로 처리되지 않았습니다. 다시 시도해주세요.");
+    console.log(e.message);
     return -1;
   }
 }
@@ -116,7 +115,7 @@ export const deleteMisSeason = async (misID) => {
 }
 
 // 성공미션 생성(미션이 성공상태가 되었을 때 호출되어야 할 함수)
-export const createMisSuccess = async (misData) => {
+const createMisSuccess = async (misData) => {
   try {
     const user = auth().currentUser;
     var count = await usersCollection.doc(user.uid).get()
@@ -125,22 +124,22 @@ export const createMisSuccess = async (misData) => {
     updateUser({'successNum': count});
     return createMis(usersCollection.doc(user.uid).collection('misListSuccess'), misData);
   } catch (e) {
-    alert("정상적으로 처리되지 않았습니다. 다시 시도해주세요.");
+    console.log(e.message);
     return -1;
   }
 }
 // 성공미션 조회
-export const readMisSuccess = async () => {
+const readMisSuccess = async () => {
   const user = auth().currentUser;
   return readMis(usersCollection.doc(user.uid).collection('misListSuccess'));
 }
 // 성공미션 수정
-export const updateMisSuccess = async (misID, misData) => {
+const updateMisSuccess = async (misID, misData) => {
   const user = auth().currentUser;
   return updateMis(usersCollection.doc(user.uid).collection('misListSuccess'), misID, misData);
 }
 // 성공미션 삭제
-export const deleteMisSuccess = async (misID) => {
+const deleteMisSuccess = async (misID) => {
   try {
     const user = auth().currentUser;
     var count = await usersCollection.doc(user.uid).get()
@@ -149,7 +148,21 @@ export const deleteMisSuccess = async (misID) => {
     updateUser({'successNum': count});
     return deleteMis(usersCollection.doc(user.uid).collection('misListSuccess'), misID);
   } catch (e) {
-    alert("정상적으로 처리되지 않았습니다. 다시 시도해주세요.");
+    console.log(e.message);
     return -1;
   }
+}
+
+export {
+  selfMaxWeek,
+  randMaxWeek,
+  selfMaxMonth,
+  randMaxMonth,
+  selfMaxSeason,
+  randMaxSeason,
+// 한주/한달/계절 미션 CRUD 통합함수 생성해서 export에 추가해주기
+  createMisSuccess,
+  readMisSuccess,
+  updateMisSuccess,
+  deleteMisSuccess
 }
