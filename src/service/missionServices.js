@@ -83,7 +83,7 @@ const readMisList = async (period) => {
  *  misMemo: str,
  *  compareDate: Date
  * }
- * @param {*} misData 
+ * @param {*} misData 미션 데이터 정보
  * @returns 성공시 Promise<misData> | 실패시 -1
  */
 const createMis = async (misData) => {
@@ -110,8 +110,8 @@ const createMis = async (misData) => {
 }
 
 /** misID를 이용해 해당 미션 한 개를 조회하는 함수.
- * @param {str} misID 
- * @returns
+ * @param {str} misID 조회하고자 하는 미션의 ID
+ * @returns Promise
  */
 const readMisById = async (misID) => {
   let period;
@@ -150,8 +150,8 @@ const readMisListSeason = async () => {
  *   misMemo: 'newMemo'
  * }
  * 위와 같은 형식으로 misData에는 수정할 정보만 넣어서 호출
- * @param {*} misID 
- * @param {*} misData 
+ * @param {*} misID 수정하고자 하는 미션의 ID
+ * @param {*} misData 수정할 내용
  * @returns 성공시 Promise | 실패시 -1
  */
 const updateMis = async (misID, misData) => {
@@ -181,7 +181,7 @@ const updateMis = async (misID, misData) => {
 }
 
 /** misID에 해당하는 미션을 삭제하는 함수
- * @param {*} misID 
+ * @param {*} misID 삭제하고자 하는 미션의 ID
  * @returns 성공시 Promise | 실패시 -1
  */
 const deleteMis = async (misID) => {
@@ -212,7 +212,7 @@ const deleteMis = async (misID) => {
 
 /** 성공미션 생성(미션이 성공상태가 되었을 때 호출되어야 할 함수)
  * 
- * @param {*} misData
+ * @param {*} misData 추가할 미션 정보
  * @returns 성공시 Promise | 실패시 -1
  */
 const createMisSuccess = async (misData) => {
@@ -231,7 +231,7 @@ const createMisSuccess = async (misData) => {
 
 /** misID에 해당하는 성공 미션 한 개 조회
  * 
- * @param {*} misID
+ * @param {*} misID 조회하고자 하는 미션의 ID
  * @returns 성공시 Promise | 실패시 -1
  */
 const readMisSuccessById = async (misID) => {
@@ -273,8 +273,8 @@ const readMisListSuccess = async () => {
  *   misMemo: 'newMemo'
  * }
  * 위와 같은 형식으로 misData에는 수정할 정보만 넣어서 호출
- * @param {*} misID 
- * @param {*} misData 
+ * @param {*} misID 수정하고자 하는 미션의 ID
+ * @param {*} misData 수정할 내용
  * @returns 성공시 Promise | 실패시 -1
  */
 const updateMisSuccess = async (misID, misData) => {
@@ -289,7 +289,7 @@ const updateMisSuccess = async (misID, misData) => {
 
 /** 성공미션 삭제
  * misID에 해당하는 성공미션을 삭제.
- * @param {*} misID 
+ * @param {*} misID 삭제하고자 하는 미션의 ID
  * @returns 
  */
 const deleteMisSuccess = async (misID) => {
