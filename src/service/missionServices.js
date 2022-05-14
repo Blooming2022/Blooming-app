@@ -76,12 +76,12 @@ const readMisList = async (period) => {
  *  successDate: Date,
  *  isMisSelf: boolean,
  *  isAlarmSet: boolean,
- *  misAlarmHour: ,
- *  misAlarmMinute: ,
- *  misAlarmStart: ,
- *  misAlarmStop: ,
+ *  misAlarmHour: Date,
+ *  misAlarmMinute: int,
+ *  misAlarmStart: Date,
+ *  misAlarmStop: Date,
  *  misMemo: str,
- *  compareTime: Date
+ *  compareDate: Date
  * }
  * @param {*} misData 
  * @returns 성공시 Promise<misData> | 실패시 -1
@@ -163,7 +163,7 @@ const updateMis = async (misID, misData) => {
   const period = data[0].misPeriod;
   console.log(period);
   
-  // misData 안의 misPeriod==0이면 한주, 1이면 한달, 2이면 계절미션 리스트에 새로 생성
+  // misData 안의 misPeriod==0이면 한주, 1이면 한달, 2이면 계절미션 리스트에서 찾아서 수정
   if ( period == WEEK ) {
     misRef = misRef.collection('misListWeek');
   } else if ( period == MONTH ) {
