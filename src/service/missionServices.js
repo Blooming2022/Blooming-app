@@ -15,64 +15,13 @@ const randMaxMonth = 1;
 const selfMaxSeason = 1;
 const randMaxSeason = 1;
 
-// 내부적으로 사용하는 함수
-// getMisData(misID, period): readMisById() 내부에서 호출
-const getMisData = async (misID, period) => {
-  const user = auth().currentUser;
-  let misRef = usersCollection.doc(user.uid);
-
-  if ( period == WEEK ) {
-    misRef = misRef.collection('misListWeek');
-  } else if ( period == MONTH ) {
-    misRef = misRef.collection('misListMonth');
-  } else if ( period == SEASON ) {
-    misRef = misRef.collection('misListSeason');
-  }
-  
-  try {
-    const docRef = misRef.where(firebase.firestore.FieldPath.documentId(), '==', misID);
-    let data = await docRef.get();
-    const ret = data.docs.map(doc => ({ ...doc.data(), id: doc.id }))
-    return ret;
-  } catch (error) {
-    console.log(error.message);
-    return -1;
-  }
-}
-// readMisList(period): 미션 리스트 조회 함수 내부에서 호출
-const readMisList = async (period) => {
-  const user = auth().currentUser;
-  let misRef = usersCollection.doc(user.uid);
-
-  if ( period == WEEK ) {
-    misRef = misRef.collection('misListWeek');
-  } else if ( period == MONTH ) {
-    misRef = misRef.collection('misListMonth');
-  } else if ( period == SEASON ) {
-    misRef = misRef.collection('misListSeason');
-  }
-
-  try {
-    const data = await misRef.get();
-    const ret = await data.docs.map(doc => ({ ...doc.data(), id: doc.id }))
-    console.log(ret);
-    return ret;
-  } catch (e) {
-    console.log(e.message);
-    return -1;
-  }
-}
-
-
-// export한 함수
-
 /** 새로운 미션을 생성하기 위해 호출하는 함수.
  * misData는 아래와 같은 형식입니다.
  * {
  *  misTitle: str,
  *  misPeriod: int,
  *  picNum: int,
- *  isChecked: boolean,
+ *  isSuccess: boolean,
  *  successDate: Date,
  *  isMisSelf: boolean,
  *  isAlarmSet: boolean,
@@ -113,36 +62,62 @@ const createMis = (misData) => {
  * @param {str} misID 조회하고자 하는 미션의 ID
  * @returns Promise
  */
-const readMisById = async (misID) => {
+ const getMisById = async (misID) => {
   let period;
   let ret;
+  const user = auth().currentUser;
 
-  for(period=WEEK; period<=SEASON; period++) {
-    ret = await getMisData(misID, period);
-    if(ret[0]) break;
-  }
+  try {
+    for(period=WEEK; period<=SEASON; period++) {
   
-  console.log(ret);
-  return ret;
+      let misRef = usersCollection.doc(user.uid);
+      if ( period == WEEK ) {
+        misRef = misRef.collection('misListWeek');
+      } else if ( period == MONTH ) {
+        misRef = misRef.collection('misListMonth');
+      } else if ( period == SEASON ) {
+        misRef = misRef.collection('misListSeason');
+      }
+      const docRef = misRef.where(firebase.firestore.FieldPath.documentId(), '==', misID);
+      let data = await docRef.get();
+      ret = data.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+  
+      if(ret[0]) break;
+    }
+    // console.log(ret);
+    return ret;
+  } catch (e) {
+    console.log(e.message);
+    return -1;
+  }
 }
 
-/** 한주 미션 리스트 조회
+/** 미션 기간별 전체 리스트 조회
+ * 
+ * @param {int} period period=0이면 한주, 1이면 한달, 2이면 계절 미션 리스트 데이터를 가져옴
  * @returns 
  */
-const readMisListWeek = () => {
-  return readMisList(WEEK);
-}
-/** 한달 미션 리스트 조회
- * @returns 
- */
-const readMisListMonth = () => {
-  return readMisList(MONTH);
-}
-/** 계절 미션 리스트 조회
- * @returns 
- */
-const readMisListSeason = () => {
-  return readMisList(SEASON);
+const getMisList = async (period) => {
+  const user = auth().currentUser;
+  let misRef = usersCollection.doc(user.uid);
+
+  if ( period == WEEK ) {
+    misRef = misRef.collection('misListWeek');
+  } else if ( period == MONTH ) {
+    misRef = misRef.collection('misListMonth');
+  } else if ( period == SEASON ) {
+    misRef = misRef.collection('misListSeason');
+  }
+
+  try {
+    const data = await misRef.get();
+    const ret = await data.docs.map(doc => ({ ...doc.data(), id: doc.id }))
+    console.log(ret);
+    return ret;
+  } catch (e) {
+    console.log(e.message);
+    return -1;
+  }
 }
 
 /** misID와 misData를 받아 misID에 해당하는 미션을 수정하는 함수
@@ -160,9 +135,8 @@ const updateMis = async (misID, misData) => {
   let misRef = usersCollection.doc(user.uid);
 
   // misID로 미션 조회 후 해당 미션의 misPeriod를 읽어옴
-  let data = await readMisById(misID);
+  let data = await getMisById(misID);
   const period = data[0].misPeriod;
-  console.log(period);
   
   // misData 안의 misPeriod==0이면 한주, 1이면 한달, 2이면 계절미션 리스트에서 찾아서 수정
   if ( period == WEEK ) {
@@ -190,7 +164,7 @@ const deleteMis = async (misID) => {
   let misRef = usersCollection.doc(user.uid);
 
   // misID로 미션 조회 후 해당 미션의 misPeriod를 읽어옴
-  let data = await readMisById(misID);
+  let data = await getMisById(misID);
   const period = data[0].misPeriod;
   console.log(period);
 
@@ -210,9 +184,13 @@ const deleteMis = async (misID) => {
   }
 }
 
-// 여기서 사실 misID로 받은 다음 필요한 정보만 뽑아서 저장해야 하는 거 아닐까?
 /** 성공미션 생성(미션이 성공상태가 되었을 때 호출되어야 할 함수)
- * 
+ * misData는 아래와 같은 형식입니다.
+ * {
+ *  successDate: Date,
+ *  misPeriod: int,
+ *  misTitle: str
+ * }
  * @param {*} misData 추가할 미션 정보
  * @returns 성공시 Promise | 실패시 -1
  */
@@ -235,7 +213,7 @@ const createMisSuccess = async (misData) => {
  * @param {*} misID 조회하고자 하는 미션의 ID
  * @returns 성공시 Promise | 실패시 -1
  */
-const readMisSuccessById = async (misID) => {
+const getMisSuccessById = async (misID) => {
   try {
     const user = auth().currentUser;
     const misRef = usersCollection.doc(user.uid).collection('misListSuccess');
@@ -255,7 +233,7 @@ const readMisSuccessById = async (misID) => {
  * 
  * @returns 성공시 Promise | 실패시 -1
  */
-const readMisListSuccess = async () => {
+const getMisListSuccess = async () => {
   try {
     const user = auth().currentUser;
     const data = await usersCollection.doc(user.uid).collection('misListSuccess').get();
@@ -270,8 +248,7 @@ const readMisListSuccess = async () => {
 
 /**  성공미션 수정
  * misData = {
- *   misTitle: 'fakeTItle',
- *   misMemo: 'newMemo'
+ *   misTitle: 'fakeTitle'
  * }
  * 위와 같은 형식으로 misData에는 수정할 정보만 넣어서 호출
  * @param {*} misID 수정하고자 하는 미션의 ID
@@ -316,17 +293,14 @@ export {
   randMaxSeason,
 
   createMis,
-  readMisById,
-  // readMisList,
-  readMisListWeek,
-  readMisListMonth,
-  readMisListSeason,
+  getMisById,
+  getMisList,
   updateMis,
   deleteMis,
 
   createMisSuccess,
-  readMisSuccessById,
-  readMisListSuccess,
+  getMisSuccessById,
+  getMisListSuccess,
   updateMisSuccess,
   deleteMisSuccess
 }
