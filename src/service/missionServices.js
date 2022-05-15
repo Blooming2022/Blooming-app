@@ -86,7 +86,7 @@ const readMisList = async (period) => {
  * @param {*} misData 미션 데이터 정보
  * @returns 성공시 Promise<misData> | 실패시 -1
  */
-const createMis = async (misData) => {
+const createMis = (misData) => {
   // period 설정해주기
   const user = auth().currentUser;
   const period = misData.misPeriod;
@@ -102,7 +102,7 @@ const createMis = async (misData) => {
   }
 
   try {
-    return await misRef.doc().set(misData);
+    return misRef.doc().set(misData);
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -122,25 +122,26 @@ const readMisById = async (misID) => {
     if(ret[0]) break;
   }
   
+  console.log(ret);
   return ret;
 }
 
 /** 한주 미션 리스트 조회
  * @returns 
  */
-const readMisListWeek = async () => {
+const readMisListWeek = () => {
   return readMisList(WEEK);
 }
 /** 한달 미션 리스트 조회
  * @returns 
  */
-const readMisListMonth = async () => {
+const readMisListMonth = () => {
   return readMisList(MONTH);
 }
 /** 계절 미션 리스트 조회
  * @returns 
  */
-const readMisListSeason = async () => {
+const readMisListSeason = () => {
   return readMisList(SEASON);
 }
 
@@ -173,7 +174,7 @@ const updateMis = async (misID, misData) => {
   }
 
   try {
-    return await misRef.doc(misID).update(misData);
+    return misRef.doc(misID).update(misData);
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -202,14 +203,14 @@ const deleteMis = async (misID) => {
   }
 
   try {
-    return await misRef.doc(misID).delete();
+    return misRef.doc(misID).delete();
   } catch (e) {
     console.log(e.message);
     return -1;
   }
 }
 
-
+// 여기서 사실 misID로 받은 다음 필요한 정보만 뽑아서 저장해야 하는 거 아닐까?
 /** 성공미션 생성(미션이 성공상태가 되었을 때 호출되어야 할 함수)
  * 
  * @param {*} misData 추가할 미션 정보
@@ -222,7 +223,7 @@ const createMisSuccess = async (misData) => {
     .then((docs) => docs.data()["successNum"] );
     count = count + 1;
     updateUser({'successNum': count});
-    return await usersCollection.doc(user.uid).collection('misListSuccess').doc().set(misData);
+    return usersCollection.doc(user.uid).collection('misListSuccess').doc().set(misData);
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -277,10 +278,10 @@ const readMisListSuccess = async () => {
  * @param {*} misData 수정할 내용
  * @returns 성공시 Promise | 실패시 -1
  */
-const updateMisSuccess = async (misID, misData) => {
+const updateMisSuccess = (misID, misData) => {
   try {
     const user = auth().currentUser;
-    return await usersCollection.doc(user.uid).collection('misListSuccess').doc(misID).update(misData);
+    return usersCollection.doc(user.uid).collection('misListSuccess').doc(misID).update(misData);
   } catch(e) {
     console.log(e.message);
     return -1;
@@ -299,7 +300,7 @@ const deleteMisSuccess = async (misID) => {
     .then((docs) => docs.data()["successNum"] );
     count = count - 1;
     updateUser({'successNum': count});
-    return await usersCollection.doc(user.uid).collection('misListSuccess').doc(misID).delete();
+    return usersCollection.doc(user.uid).collection('misListSuccess').doc(misID).delete();
   } catch (e) {
     console.log(e.message);
     return -1;
