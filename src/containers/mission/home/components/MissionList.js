@@ -15,8 +15,8 @@ const MissionList = ({missionList, setMissionList}) => {
         ))
       ) : (
         <View style={styles.noItem}>
-          <Text>당신의 삶을 변화시킬</Text>
-          <Text>특별한 미션을 만들어보세요!</Text>
+          <Text style={styles.noItemText}>당신의 삶을 변화시킬</Text>
+          <Text style={styles.noItemText}>특별한 꽃을 피워보세요!</Text>
         </View>
       )}
     </ScrollView>
@@ -27,6 +27,10 @@ const styles = StyleSheet.create({
   noItem: {
     marginTop: 50,
     alignItems: 'center',
+  },
+  noItemText: {
+    fontSize: 16,
+    color: '#242424',
   },
 });
 
