@@ -3,7 +3,7 @@ import {Image} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MissionTabNavigator from './MissionTabNavigator';
-import Review from '../containers/review/Review';
+import ReviewStackNavigator from './ReivewStackNavigator';
 import Report from '../containers/report/Report';
 import MyPage from '../containers/myPage/MyPage';
 import Nickname from '../containers/login/Nickname';
@@ -48,25 +48,17 @@ const MainTabNavigator = () => {
           tabBarStyle: {height: 60, borderRadius: 8, paddingVertical: 4},
         })}>
         <Tab.Screen
-          name="MissionTabNavigator"
+          name="Mission"
           component={MissionTabNavigator}
           options={{tabBarLabel: '미션'}}
         />
         <Tab.Screen
           name="Review"
-          component={Review}
+          component={ReviewStackNavigator}
           options={{tabBarLabel: '후기'}}
         />
-        <Tab.Screen
-          name="Report"
-          component={Report}
-          options={{tabBarLabel: '분석'}}
-        />
-        <Tab.Screen
-          name="Mypage"
-          component={Nickname}
-          options={{tabBarLabel: 'My'}}
-        />
+        <Tab.Screen name="Report" component={Report} options={{tabBarLabel: '분석'}} />
+        <Tab.Screen name="Mypage" component={Nickname} options={{tabBarLabel: 'My'}} />
       </Tab.Navigator>
     </NavigationContainer>
   );
