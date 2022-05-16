@@ -276,8 +276,9 @@ const deleteMisSuccess = async (misID) => {
     var count = await usersCollection.doc(user.uid).get()
     .then((docs) => docs.data()["successNum"] );
     count = count - 1;
+    const ret = usersCollection.doc(user.uid).collection('misListSuccess').doc(misID).delete();
     updateUser({'successNum': count});
-    return usersCollection.doc(user.uid).collection('misListSuccess').doc(misID).delete();
+    return ret;
   } catch (e) {
     console.log(e.message);
     return -1;
