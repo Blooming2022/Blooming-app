@@ -246,6 +246,21 @@ const getMisListSuccess = async () => {
   }
 }
 
+/** 성공미션 리스트에서 successDate를 기준으로 가장 최근에 성공한 미션 세 개를 조회
+ * @returns 성공시 Promise<> | 실패시 -1
+ */
+ const getLatestSuccessMis = async () => {
+  try {
+    const user = auth().currentUser;
+    const latestMis = await usersCollection.doc(user.uid).collection('misListSuccess').orderBy('successDate', 'desc').limit(3).get();
+    const ret = latestMis.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+    return ret;
+  } catch (e) {
+    console.log(e.message);
+    return -1;
+  }
+}
+
 /**  성공미션 수정
  * misData = {
  *   misTitle: 'fakeTitle'
@@ -302,6 +317,7 @@ export {
   createMisSuccess,
   getMisSuccessById,
   getMisListSuccess,
+  getLatestSuccessMis,
   updateMisSuccess,
   deleteMisSuccess
 }
