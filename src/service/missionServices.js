@@ -84,7 +84,6 @@ const createMis = (misData) => {
   
       if(ret[0]) break;
     }
-    // console.log(ret);
     return ret;
   } catch (e) {
     console.log(e.message);
@@ -112,7 +111,6 @@ const getMisList = async (period) => {
   try {
     const data = await misRef.get();
     const ret = await data.docs.map(doc => ({ ...doc.data(), id: doc.id }))
-    console.log(ret);
     return ret;
   } catch (e) {
     console.log(e.message);
@@ -166,7 +164,6 @@ const deleteMis = async (misID) => {
   // misID로 미션 조회 후 해당 미션의 misPeriod를 읽어옴
   let data = await getMisById(misID);
   const period = data[0].misPeriod;
-  console.log(period);
 
   if ( period == WEEK ) {
     misRef = misRef.collection('misListWeek');
@@ -197,11 +194,12 @@ const deleteMis = async (misID) => {
 const createMisSuccess = async (misData) => {
   try {
     const user = auth().currentUser;
-    var count = await usersCollection.doc(user.uid).get()
-    .then((docs) => docs.data()["successNum"] );
-    count = count + 1;
-    updateUser({'successNum': count});
-    return usersCollection.doc(user.uid).collection('misListSuccess').doc().set(misData);
+    const ret = usersCollection.doc(user.uid).collection('misListSuccess').doc().set(misData);
+    const userSimpleData = await getCurUserSimpleData();
+    let successNum = userSimpleData.successNum;
+    successNum = successNum + 1;
+    updateUser({'successNum': successNum});
+    return ret;
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -221,7 +219,6 @@ const getMisSuccessById = async (misID) => {
     const data = await docRef.get();
 
     const ret = data.docs.map(doc => ({ ...doc.data(), id: doc.id }))
-    console.log(ret);
     return ret;
   } catch(e) {
     console.log(e.message);
@@ -238,7 +235,6 @@ const getMisListSuccess = async () => {
     const user = auth().currentUser;
     const data = await usersCollection.doc(user.uid).collection('misListSuccess').get();
     const ret = data.docs.map(doc => ({ ...doc.data(), id: doc.id }))
-    console.log(ret);
     return ret;
   } catch(e) {
     console.log(e.message);
@@ -246,15 +242,29 @@ const getMisListSuccess = async () => {
   }
 }
 
-/** 성공미션 리스트에서 successDate를 기준으로 가장 최근에 성공한 미션 세 개를 조회
- * @returns 성공시 Promise<> | 실패시 -1
+/** 성공미션 리스트에서 successDate를 기준으로 가장 최근에 성공한 미션을 조회
+ * 성공미션이 3개 이상 있으면 세 개 조회, 그보다 적은 경우에는 있는 미션을 모두 조회
+ * @returns 성공시 Promise<> | 실패시 -1 | 성공미션이 없는 경우 0
  */
  const getLatestSuccessMis = async () => {
   try {
     const user = auth().currentUser;
-    const latestMis = await usersCollection.doc(user.uid).collection('misListSuccess').orderBy('successDate', 'desc').limit(3).get();
-    const ret = latestMis.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-    return ret;
+    const userSimpleData = await getCurUserSimpleData();
+    const successNum = userSimpleData.successNum;
+    let limitNum;
+    if (successNum >= 3) {
+      limitNum = 3;
+    } else if (successNum == 2) {
+      limitNum = 2;
+    } else if (successNum == 1) {
+      limitNum = 1;
+    } else {
+      limitNum = 0;
+      console.log('There is no Data.');
+      return 0;
+    }
+    const latestMis = await usersCollection.doc(user.uid).collection('misListSuccess').orderBy('successDate', 'desc').limit(limitNum).get();
+    return latestMis.docs.map(doc => ({ ...doc.data(), id: doc.id }));
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -285,14 +295,14 @@ const updateMisSuccess = (misID, misData) => {
  * @param {*} misID 삭제하고자 하는 미션의 ID
  * @returns 
  */
-const deleteMisSuccess = async (misID) => {
+ const deleteMisSuccess = async (misID) => {
   try {
     const user = auth().currentUser;
-    var count = await usersCollection.doc(user.uid).get()
-    .then((docs) => docs.data()["successNum"] );
-    count = count - 1;
     const ret = usersCollection.doc(user.uid).collection('misListSuccess').doc(misID).delete();
-    updateUser({'successNum': count});
+    const userSimpleData = await getCurUserSimpleData();
+    let successNum = userSimpleData.successNum;
+    successNum = successNum - 1;
+    updateUser({'successNum': successNum});
     return ret;
   } catch (e) {
     console.log(e.message);
