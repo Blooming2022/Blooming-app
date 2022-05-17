@@ -1,5 +1,5 @@
 import auth from '@react-native-firebase/auth';
-import firestore, { query, where } from '@react-native-firebase/firestore';
+import firestore from '@react-native-firebase/firestore';
 
 const usersCollection = firestore().collection('users');
 
@@ -98,7 +98,7 @@ const getCurUserDetailData = () => {
  * "successNum": int
  * }
  * userSimpleData = await getCurUserSimpleData();
- * succesNum = userSimpleData.successNum;
+ * successNum = userSimpleData.successNum;
  * 와 같은 형식으로 displayName, gmailAddr, successNum 을 조회할 수 있습니다.
  *  */ 
 const getCurUserSimpleData = async () => {
@@ -126,8 +126,7 @@ const getCurUserSimpleData = async () => {
 const updateUser = async (data) => {
   try {
     const user = getCurUserDetailData();
-    return await usersCollection.doc(user.uid)
-    .update(data);
+    return await usersCollection.doc(user.uid).update(data);
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -140,7 +139,7 @@ const updateUser = async (data) => {
  */
 const deleteAccount = async () => {
   try {
-    const user = getCurUser();
+    const user = auth().currentUser;
     const docPath = usersCollection.doc(user.uid);
     
     await docPath.collection('misListWeek').get().then((querySnapshot) => {
