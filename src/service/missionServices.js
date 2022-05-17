@@ -84,7 +84,7 @@ const createMis = (misData) => {
   
       if(ret[0]) break;
     }
-    return ret;
+    return ret[0];
   } catch (e) {
     console.log(e.message);
     return -1;
