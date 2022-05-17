@@ -80,7 +80,9 @@ const createUser = async () => {
  * }
  * userData = getCurUserDetailData().uid
  * 와 같은 형식으로 uid, displayName, email 등을 조회할 수 있습니다.
- *  */ 
+ * 
+ * @returns 성공시 FirebaseAuthTypes.User | 실패시 -1
+ */
 const getCurUserDetailData = () => {
   try {
     return auth().currentUser;
@@ -100,7 +102,9 @@ const getCurUserDetailData = () => {
  * userSimpleData = await getCurUserSimpleData();
  * successNum = userSimpleData.successNum;
  * 와 같은 형식으로 displayName, gmailAddr, successNum 을 조회할 수 있습니다.
- *  */ 
+ *
+ * @returns 성공시 Promise<number> | 실패시 -1
+ */
 const getCurUserSimpleData = async () => {
   try {
     const user = auth().currentUser;
@@ -116,12 +120,15 @@ const getCurUserSimpleData = async () => {
   }
 }
 
-/** 유저 정보 수정하기
+/** 유저 기본정보 수정하기
  * data = {
  *   displayName: 'fakeName',
  *   successNum: 3
  * }
  * 위와 같은 형식으로 수정할 정보만 넣어서 호출합니다.
+ * 
+ * @param {*} data 수정하고자 하는 유저의 정보
+ * @returns 성공시 Promise<void> | 실패시 -1
  */
 const updateUser = async (data) => {
   try {
@@ -135,7 +142,7 @@ const updateUser = async (data) => {
 
 /** 회원 탈퇴
  * 해당 회원의 정보를 모두 삭제하는 함수
- * @returns 성공시 Promise | 실패시 -1
+ * @returns 성공시 Promise<void> | 실패시 -1
  */
 const deleteAccount = async () => {
   try {
