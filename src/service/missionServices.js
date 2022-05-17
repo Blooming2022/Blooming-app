@@ -60,7 +60,7 @@ const createMis = (misData) => {
 
 /** misID를 이용해 해당 미션 한 개를 조회하는 함수.
  * @param {str} misID 조회하고자 하는 미션의 ID
- * @returns Promise
+ * @returns 성공시 Promise | 실패시 -1
  */
  const getMisById = async (misID) => {
   let period;
@@ -94,7 +94,7 @@ const createMis = (misData) => {
 /** 미션 기간별 전체 리스트 조회
  * 
  * @param {int} period period=0이면 한주, 1이면 한달, 2이면 계절 미션 리스트 데이터를 가져옴
- * @returns 
+ * @returns 성공시 Promise | 실패시 -1
  */
 const getMisList = async (period) => {
   const user = auth().currentUser;
@@ -189,7 +189,7 @@ const deleteMis = async (misID) => {
  *  misTitle: str
  * }
  * @param {*} misData 추가할 미션 정보
- * @returns 성공시 Promise | 실패시 -1
+ * @returns 성공시 Promise<void> | 실패시 -1
  */
 const createMisSuccess = async (misData) => {
   try {
@@ -242,11 +242,11 @@ const getMisListSuccess = async () => {
   }
 }
 
-/** 성공미션 리스트에서 successDate를 기준으로 가장 최근에 성공한 미션을 조회
+/** 성공미션 리스트에서 successDate를 기준으로 최근에 성공한 미션을 조회
  * 성공미션이 3개 이상 있으면 세 개 조회, 그보다 적은 경우에는 있는 미션을 모두 조회
  * @returns 성공시 Promise<> | 실패시 -1 | 성공미션이 없는 경우 0
  */
- const getLatestSuccessMis = async () => {
+const getLatestSuccessMis = async () => {
   try {
     const user = auth().currentUser;
     const userSimpleData = await getCurUserSimpleData();
@@ -293,9 +293,9 @@ const updateMisSuccess = (misID, misData) => {
 /** 성공미션 삭제
  * misID에 해당하는 성공미션을 삭제.
  * @param {*} misID 삭제하고자 하는 미션의 ID
- * @returns 
+ * @returns 성공시 Promise<void> | 실패시 -1
  */
- const deleteMisSuccess = async (misID) => {
+const deleteMisSuccess = async (misID) => {
   try {
     const user = auth().currentUser;
     const ret = usersCollection.doc(user.uid).collection('misListSuccess').doc(misID).delete();
