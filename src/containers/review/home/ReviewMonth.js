@@ -8,6 +8,7 @@ const ReviewMonth = () => {
   const [reviewList, setReviewList] = useState([
     {
       id: 0,
+      misPeriod: 0,
       misTitle: '물마시기',
       revContent: 'water is good for health',
       revDate: date,
@@ -15,6 +16,7 @@ const ReviewMonth = () => {
     },
     {
       id: 1,
+      misPeriod: 0,
       misTitle: '컵케이크 10개 먹기',
       revContent: '컵케이크 10개를 먹어봤다. 뿌듯하다!',
       revDate: date,
@@ -23,6 +25,7 @@ const ReviewMonth = () => {
     },
     {
       id: 2,
+      misPeriod: 0,
       misTitle: '책 3권 읽기',
       revContent: '뿌듯하다!',
       revDate: date,
@@ -30,6 +33,7 @@ const ReviewMonth = () => {
     },
     {
       id: 3,
+      misPeriod: 0,
       misTitle: '강아지 산책하기',
       revContent: '강아지랑 동네 한바퀴 돌고 왔다. 뿌듯하다!',
       revDate: date,
@@ -37,6 +41,7 @@ const ReviewMonth = () => {
     },
     {
       id: 4,
+      misPeriod: 0,
       misTitle: '강아지랑 동네 한바퀴 돌고 아이스아메리카노 마시기.아이고 더 길어야하네',
       revContent: '강아지랑 동네 한바퀴 돌고 왔다. 뿌듯하다!',
       revDate: date,
@@ -44,6 +49,7 @@ const ReviewMonth = () => {
     },
     {
       id: 5,
+      misPeriod: 0,
       misTitle: '강아지 산책하기',
       revContent: '강아지랑 동네 한바퀴 돌고 왔다. 뿌듯하다!',
       revDate: date,
@@ -52,6 +58,7 @@ const ReviewMonth = () => {
     },
     {
       id: 6,
+      misPeriod: 0,
       misTitle: '하얀 배경 고려하기',
       revContent: '하얀 배경 고려하기. 완료!',
       revDate: date,
@@ -59,6 +66,7 @@ const ReviewMonth = () => {
     },
     {
       id: 7,
+      misPeriod: 0,
       misTitle: '아침 요가하기',
       revContent: '아침 요가 30분 했다. 뿌듯하다!',
       revDate: date,

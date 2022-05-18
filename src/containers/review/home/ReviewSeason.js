@@ -8,6 +8,7 @@ const ReviewSeason = () => {
   const [reviewList, setReviewList] = useState([
     {
       id: 0,
+      misPeriod: 1,
       misTitle: '물마시기',
       revContent: 'water is good for health',
       revDate: date,

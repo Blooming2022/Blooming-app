@@ -6,7 +6,7 @@ import {formatDate} from '../../../../service/commonServices';
 const ReviewItem = ({review, width}) => {
   const navigation = useNavigation();
   const goToReviewDetail = () => {
-    navigation.navigate('ReviewDetail');
+    navigation.navigate('ReviewDetail', {review: review});
   };
 
   return (
