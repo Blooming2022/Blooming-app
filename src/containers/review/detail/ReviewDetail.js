@@ -4,8 +4,6 @@ import {formatDate} from '../../../service/commonServices';
 
 const ReviewDetail = ({route, navigation}) => {
   const review = route.params.review;
-  console.log(route.params);
-  console.log(route.params.review);
   let misPeriod;
   if (review.misPeriod === 0) {
     misPeriod = '한주미션';
@@ -14,6 +12,7 @@ const ReviewDetail = ({route, navigation}) => {
   } else {
     misPeriod = '계절미션';
   }
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.revDate}>{formatDate(review.revDate)}</Text>
