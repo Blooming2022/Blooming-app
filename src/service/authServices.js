@@ -1,7 +1,33 @@
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 const usersCollection = firestore().collection('users');
+
+/** 구글 계정 로그인
+ * 
+ * @returns 성공시 Promise <FirebaseAuthTypes.UserCredential> | 실패시 -1
+ */
+const googleSignIn = async () => {
+  try {
+    googleConfigure();
+
+    const { idToken } = await GoogleSignin.signIn();
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+    const ret = auth().signInWithCredential(googleCredential);
+    const user = getCurUserDetailData();
+    await usersCollection.doc(user.uid)
+    .set({
+      displayName: user.displayName,
+      gmailAddr: user.email,
+      successNum: 0
+    });
+    return ret;
+  } catch(e) {
+    console.log(e.message);
+    return -1;
+  }
+}
 
 /** 게스트(익명) 로그인
  * @returns 성공시 Promise<FirebaseAuthTypes.UserCredential> | 실패시 -1
@@ -9,7 +35,13 @@ const usersCollection = firestore().collection('users');
 const guestSignIn = async () => {
   try {
     const ret = await auth().signInAnonymously();
-    await createUser();
+    const user = getCurUserDetailData();
+    await usersCollection.doc(user.uid)
+    .set({
+      displayName: user.displayName,
+      gmailAddr: user.email,
+      successNum: 0
+    });
     return ret;
   } catch (e) {
     console.log(e.message);
@@ -29,10 +61,8 @@ const signOut = () => {
   }
 }
 
-/** 새 유저 디테일 정보 생성하기
- * 따로 값을 입력하는 것이 아니라,
- * 구글 로그인이면 구글 계정 정보, 익명이면 익명 정보를 활용해 서버에서 디테일 정보를 자동생성해 저장합니다.
- * 여기서 디테일 정보는 아래와 같은 형식입니다.
+/** 현재 유저의 디테일 정보 조회
+ * 디테일 정보는 아래와 같은 형식입니다.
  * {
  * "displayName": str | null,
  * "email": str | null,
@@ -46,38 +76,6 @@ const signOut = () => {
  * "tenantId": str | null,
  * "uid": str
  * }
- * @returns 성공시 Promise<Void> | 실패시 -1
- */
-const createUser = async () => {
-  try {
-    const user = getCurUserDetailData();
-    return await usersCollection.doc(user.uid)
-    .set({
-      displayName: user.displayName,
-      gmailAddr: user.email,
-      successNum: 0
-    });
-  } catch {
-    console.log(e.message);
-    return -1;
-  }
-}
-
-/** 현재 유저의 디테일 정보 조회
- * 디테일 정보 예시는 아래와 같습니다.
- * {
- * "displayName": null,
- * "email": null,
- * "emailVerified": false,
- * "isAnonymous": true,
- * "metadata": {"creationTime": 1652517994945, "lastSignInTime": 1652517994945},
- * "phoneNumber": null,
- * "photoURL": null,
- * "providerData": [],
- * "providerId": "firebase",
- * "tenantId": null,
- * "uid": "tzbI6RkRsPeAm94aglsP2e9e990f"
- * }
  * userData = getCurUserDetailData().uid
  * 와 같은 형식으로 uid, displayName, email 등을 조회할 수 있습니다.
  * 
@@ -85,6 +83,7 @@ const createUser = async () => {
  */
 const getCurUserDetailData = () => {
   try {
+    console.log(auth().currentUser);
     return auth().currentUser;
   } catch (e) {
     console.log(e.message);
@@ -202,6 +201,7 @@ const getNicknameList = async () => {
         count++;
       }
     }
+    console.log(ret);
     return ret;
   } catch (e) {
     console.log(e.message);
@@ -210,6 +210,7 @@ const getNicknameList = async () => {
 }
 
 export {
+  googleSignIn,
   guestSignIn,
   signOut,
   getCurUserDetailData,
