@@ -15,7 +15,7 @@ const googleSignIn = async () => {
 
     const { idToken } = await GoogleSignin.signIn();
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-    const ret = auth().signInWithCredential(googleCredential);
+    const ret = await auth().signInWithCredential(googleCredential);
     const user = getCurUserDetailData();
     await usersCollection.doc(user.uid)
     .set({
@@ -24,7 +24,7 @@ const googleSignIn = async () => {
       successNum: 0
     });
     return ret;
-  } catch(e) {
+  } catch (e) {
     console.log(e.message);
     return -1;
   }
@@ -84,7 +84,6 @@ const signOut = () => {
  */
 const getCurUserDetailData = () => {
   try {
-    console.log(auth().currentUser);
     return auth().currentUser;
   } catch (e) {
     console.log(e.message);
@@ -166,7 +165,7 @@ const deleteAccount = async () => {
     });
 
     docPath.delete();
-    return user.delete();
+    return await user.delete();
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -182,7 +181,7 @@ const getNicknameList = async () => {
     const nickList = data.docs.map(doc => ({ ...doc.data().displayName }));
     let ret = [];
 
-    for(i=0, count=0; i<nickList.length; i++ ) {
+    for(let i=0, count=0; i<nickList.length; i++ ) {
       if(nickList[i][0]) {
         let result = '';
         for( j=0 ; nickList[i][j] ; j++ ) {
@@ -192,7 +191,6 @@ const getNicknameList = async () => {
         count++;
       }
     }
-    console.log(ret);
     return ret;
   } catch (e) {
     console.log(e.message);
