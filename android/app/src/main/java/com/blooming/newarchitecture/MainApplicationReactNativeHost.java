@@ -1,4 +1,4 @@
-package com.bloomingfront.newarchitecture;
+package com.blooming.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.EmptyReactNativeConfig;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.bloomingfront.BuildConfig;
-import com.bloomingfront.newarchitecture.components.MainComponentsRegistry;
-import com.bloomingfront.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.blooming.BuildConfig;
+import com.blooming.newarchitecture.components.MainComponentsRegistry;
+import com.blooming.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 

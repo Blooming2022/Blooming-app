@@ -1,4 +1,4 @@
-package com.bloomingfront.newarchitecture.components;
+package com.blooming.newarchitecture.components;
 
 import com.facebook.jni.HybridData;
 import com.facebook.proguard.annotations.DoNotStrip;
