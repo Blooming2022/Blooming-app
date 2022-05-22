@@ -149,27 +149,17 @@ const deleteAccount = async () => {
     const user = auth().currentUser;
     const docPath = usersCollection.doc(user.uid);
     
-    await docPath.collection('misListWeek').get().then((querySnapshot) => {
+    await docPath.collection('currentMisList').get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        docPath.collection('misListWeek').doc(doc.id).delete();
+        docPath.collection('currentMisList').doc(doc.id).delete();
       });
     });
-    await docPath.collection('misListSeason').get().then((querySnapshot) => {
+    await docPath.collection('successMisList').get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        docPath.collection('misListSeason').doc(doc.id).delete();
+        docPath.collection('successMisList').doc(doc.id).delete();
       });
     });
-    await docPath.collection('misListMonth').get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        docPath.collection('misListMonth').doc(doc.id).delete();
-      });
-    });
-    await docPath.collection('misSuccess').get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        docPath.collection('misListSuccess').doc(doc.id).delete();
-      });
-    });
-    await docPath.collection('reviews').get().then((querySnapshot) => {
+    await docPath.collection('revList').get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
         docPath.collection('revList').doc(doc.id).delete();
       });
