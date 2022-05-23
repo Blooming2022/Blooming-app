@@ -59,7 +59,7 @@ const createCurrentMis = (misData) => {
   }
 }
 
-/** misID를 이용해 현재 진행중인 미션 한 개를 조회하는 함수.
+/** misID를 이용해 진행 미션 한 개를 조회하는 함수.
  * @param {str} misID 조회하고자 하는 미션의 ID
  * @returns 성공시 Promise | 실패시 -1
  */
@@ -78,7 +78,7 @@ const getCurrentMisById = async (misID) => {
   }
 }
 
-/** currentMission - 기간별 전체 리스트 조회
+/** 기간별 진행미션 리스트 조회
  * 
  * @param {int} period period=0이면 한주, 1이면 한달, 2이면 계절, 그 외에는 전체 미션 리스트 데이터를 가져옴
  * @returns 성공시 Promise | 실패시 -1
@@ -131,7 +131,6 @@ const updateCurrentMis = async (misID, misData) => {
     } else {
       // misID로 미션 조회 후 해당 미션의 성공여부를 읽어옴
       const data = await getCurrentMisById(misID);
-      // const isSuccess = data[0].isSuccess;
       const isSuccess = data.isSuccess;
 
       if ( isSuccess == true ) {
@@ -156,7 +155,7 @@ const deleteCurrentMis = async (misID) => {
   
   // misID로 미션 조회 후 해당 미션의 성공여부를 읽어옴
   let data = await getCurrentMisById(misID);
-  const isSuccess = data[0].isSuccess;
+  const isSuccess = data.isSuccess;
 
   try {
     if ( isSuccess == true ) { // 성공미션 리스트에도 존재.
@@ -170,13 +169,7 @@ const deleteCurrentMis = async (misID) => {
 }
 
 /** 성공미션 생성(미션이 성공상태가 되었을 때 호출되어야 할 함수)
- * misData는 아래와 같은 형식입니다.
- * {
- *  successDate: Date,
- *  misPeriod: int,
- *  misTitle: str
- * }
- * @param {*} misData 추가할 미션 정보
+ * @param {*} misID currentMisList에서 successMisList로 추가할 미션의 ID
  * @returns 성공시 Promise<void> | 실패시 -1
  */
 const createSuccessMis = async (misID) => {
@@ -220,27 +213,27 @@ const getSuccessMisById = async (misID) => {
  * @param {int} period period=0이면 한주, 1이면 한달, 2이면 계절, 그 외에는 전체 미션 리스트 데이터를 가져옴
  * @returns 성공시 Promise | 실패시 -1
  */
-  const getSuccessMisList = async (period) => {
-    const user = auth().currentUser;
-    let misRef = usersCollection.doc(user.uid).collection('successMisList');
-  
-    if ( period == WEEK ) {
-      misRef = misRef.where(misPeriod, '==', 0);
-    } else if ( period == MONTH ) {
-      misRef = misRef.where(misPeriod, '==', 1);
-    } else if ( period == SEASON ) {
-      misRef = misRef.where(misPeriod, '==', 2);
-    }
-  
-    try {
-      const data = await misRef.get();
-      const ret = data.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-      return ret;
-    } catch (e) {
-      console.log(e.message);
-      return -1;
-    }
+const getSuccessMisList = async (period) => {
+  const user = auth().currentUser;
+  let misRef = usersCollection.doc(user.uid).collection('successMisList');
+
+  if ( period == WEEK ) {
+    misRef = misRef.where(misPeriod, '==', 0);
+  } else if ( period == MONTH ) {
+    misRef = misRef.where(misPeriod, '==', 1);
+  } else if ( period == SEASON ) {
+    misRef = misRef.where(misPeriod, '==', 2);
   }
+
+  try {
+    const data = await misRef.get();
+    const ret = data.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+    return ret;
+  } catch (e) {
+    console.log(e.message);
+    return -1;
+  }
+}
 
 /** 성공미션 리스트에서 successDate를 기준으로 최근에 성공한 미션을 조회
  * 성공미션이 3개 이상 있으면 세 개 조회, 그보다 적은 경우에는 있는 미션을 모두 조회
@@ -287,6 +280,7 @@ const updateSuccessMis = (misID, misData) => {
     const isOutdated = data.isOutdated;
     
     if ( isOutdated == false ) {
+      usersCollection.doc(user.uid).collection('currentMisList').doc(misID).update(misData);
       return usersCollection.doc(user.uid).collection('successMisList').doc(misID).update(misData);
     } else {
       console.log("This mission is outdated. You can't update it.");
@@ -310,6 +304,7 @@ const deleteSuccessMis = async (misID) => {
     const isOutdated = data.isOutdated;
 
     if ( isOutdated == false ) {
+      usersCollection.doc(user.uid).collection('currentMisList').doc(misID).delete();
       const ret = usersCollection.doc(user.uid).collection('successMisList').doc(misID).delete();
       const userProfile = await getUserProfile();
       let successNum = userProfile.successNum;
