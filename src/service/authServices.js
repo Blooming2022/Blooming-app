@@ -62,8 +62,8 @@ const signOut = () => {
   }
 }
 
-/** 현재 유저의 디테일 정보 조회
- * 디테일 정보는 아래와 같은 형식입니다.
+/** 현재 유저의 인증 정보 조회
+ * 인증 정보는 아래와 같은 형식입니다.
  * {
  * "displayName": str | null,
  * "email": str | null,
@@ -91,8 +91,8 @@ const getCurrentUser = () => {
   }
 }
 
-/** 현재 유저의 기본정보 조회
- * 기본정보는 아래와 같은 형식입니다.
+/** 현재 유저의 프로필 정보 조회
+ * 프로필 정보는 아래와 같은 형식입니다.
  * {
  * "displayName": str | null,
  * "gmailAddr": str | null,
@@ -119,7 +119,7 @@ const getUserProfile = async () => {
   }
 }
 
-/** 유저 기본정보 수정하기
+/** 유저 프로필 정보 수정하기
  * data = {
  *   displayName: 'fakeName',
  *   successNum: 3
