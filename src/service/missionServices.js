@@ -1,6 +1,6 @@
 import firestore, { firebase } from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-import { updateUser } from './authServices';
+import { updateUserProfile, getUserProfile } from './authServices';
 
 const usersCollection = firestore().collection('users');
 
@@ -30,25 +30,26 @@ const randMaxSeason = 1;
  *  misAlarmStart: Date,
  *  misAlarmStop: Date,
  *  misMemo: str,
- *  compareDate: Date
+ *  compareDate: Date,
+ *  isOutdated: boolean,
  * }
  * @param {*} misData 미션 데이터 정보
  * @returns 성공시 Promise<misData> | 실패시 -1
  */
-const createMis = (misData) => {
+const createCurrentMis = (misData) => {
   // period 설정해주기
   const user = auth().currentUser;
-  const period = misData.misPeriod;
-  let misRef = usersCollection.doc(user.uid);
+  // const period = misData.misPeriod;
+  let misRef = usersCollection.doc(user.uid).collection('currentMisList');
 
   // misData 안의 misPeriod==0이면 한주, 1이면 한달, 2이면 계절미션 리스트에 새로 생성
-  if ( period == WEEK ) {
-    misRef = misRef.collection('misListWeek');
-  } else if ( period == MONTH ) {
-    misRef = misRef.collection('misListMonth');
-  } else if ( period == SEASON ) {
-    misRef = misRef.collection('misListSeason');
-  }
+  // if ( period == WEEK ) {
+  //   misRef = misRef.collection('misListWeek');
+  // } else if ( period == MONTH ) {
+  //   misRef = misRef.collection('misListMonth');
+  // } else if ( period == SEASON ) {
+  //   misRef = misRef.collection('misListSeason');
+  // }
 
   try {
     return misRef.doc().set(misData);
@@ -58,32 +59,18 @@ const createMis = (misData) => {
   }
 }
 
-/** misID를 이용해 해당 미션 한 개를 조회하는 함수.
+/** misID를 이용해 현재 진행중인 미션 한 개를 조회하는 함수.
  * @param {str} misID 조회하고자 하는 미션의 ID
  * @returns 성공시 Promise | 실패시 -1
  */
- const getMisById = async (misID) => {
-  let period;
-  let ret;
+const getCurrentMisById = async (misID) => {
   const user = auth().currentUser;
-
   try {
-    for(period=WEEK; period<=SEASON; period++) {
-  
-      let misRef = usersCollection.doc(user.uid);
-      if ( period == WEEK ) {
-        misRef = misRef.collection('misListWeek');
-      } else if ( period == MONTH ) {
-        misRef = misRef.collection('misListMonth');
-      } else if ( period == SEASON ) {
-        misRef = misRef.collection('misListSeason');
-      }
-      const docRef = misRef.where(firebase.firestore.FieldPath.documentId(), '==', misID);
-      let data = await docRef.get();
-      ret = data.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-  
-      if(ret[0]) break;
-    }
+    const misRef = usersCollection.doc(user.uid).collection('currentMisList');
+    const docRef = misRef.where(firebase.firestore.FieldPath.documentId(), '==', misID);
+    let data = await docRef.get();
+    const ret = data.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+
     return ret[0];
   } catch (e) {
     console.log(e.message);
@@ -91,26 +78,26 @@ const createMis = (misData) => {
   }
 }
 
-/** 미션 기간별 전체 리스트 조회
+/** currentMission - 기간별 전체 리스트 조회
  * 
- * @param {int} period period=0이면 한주, 1이면 한달, 2이면 계절 미션 리스트 데이터를 가져옴
+ * @param {int} period period=0이면 한주, 1이면 한달, 2이면 계절, 그 외에는 전체 미션 리스트 데이터를 가져옴
  * @returns 성공시 Promise | 실패시 -1
  */
-const getMisList = async (period) => {
+const getCurrentMisList = async (period) => {
   const user = auth().currentUser;
-  let misRef = usersCollection.doc(user.uid);
+  let misRef = usersCollection.doc(user.uid).collection('currentMisList');
 
   if ( period == WEEK ) {
-    misRef = misRef.collection('misListWeek');
+    misRef = misRef.where(misPeriod, '==', 0);
   } else if ( period == MONTH ) {
-    misRef = misRef.collection('misListMonth');
+    misRef = misRef.where(misPeriod, '==', 1);
   } else if ( period == SEASON ) {
-    misRef = misRef.collection('misListSeason');
+    misRef = misRef.where(misPeriod, '==', 2);
   }
 
   try {
     const data = await misRef.get();
-    const ret = await data.docs.map(doc => ({ ...doc.data(), id: doc.id }))
+    const ret = data.docs.map(doc => ({ ...doc.data(), id: doc.id }));
     return ret;
   } catch (e) {
     console.log(e.message);
@@ -128,25 +115,31 @@ const getMisList = async (period) => {
  * @param {*} misData 수정할 내용
  * @returns 성공시 Promise | 실패시 -1
  */
-const updateMis = async (misID, misData) => {
+const updateCurrentMis = async (misID, misData) => {
   const user = auth().currentUser;
-  let misRef = usersCollection.doc(user.uid);
-
-  // misID로 미션 조회 후 해당 미션의 misPeriod를 읽어옴
-  let data = await getMisById(misID);
-  const period = data[0].misPeriod;
-  
-  // misData 안의 misPeriod==0이면 한주, 1이면 한달, 2이면 계절미션 리스트에서 찾아서 수정
-  if ( period == WEEK ) {
-    misRef = misRef.collection('misListWeek');
-  } else if ( period == MONTH ) {
-    misRef = misRef.collection('misListMonth');
-  } else if ( period == SEASON ) {
-    misRef = misRef.collection('misListSeason');
-  }
+  let misRef = usersCollection.doc(user.uid).collection('currentMisList');
 
   try {
-    return misRef.doc(misID).update(misData);
+    if ( misData.isSuccess == true ) {
+      const ret = misRef.doc(misID).update(misData);
+      createSuccessMis(misID);
+      return ret;
+    } else if ( misData.isSuccess == false ) {
+      const ret = misRef.doc(misID).update(misData);
+      deleteSuccessMis(misID);
+      return ret;
+    } else {
+      // misID로 미션 조회 후 해당 미션의 성공여부를 읽어옴
+      const data = await getCurrentMisById(misID);
+      // const isSuccess = data[0].isSuccess;
+      const isSuccess = data.isSuccess;
+
+      if ( isSuccess == true ) {
+        updateSuccessMis(misID, misData);
+      }
+      
+      return misRef.doc(misID).update(misData);
+    }
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -157,23 +150,18 @@ const updateMis = async (misID, misData) => {
  * @param {*} misID 삭제하고자 하는 미션의 ID
  * @returns 성공시 Promise | 실패시 -1
  */
-const deleteMis = async (misID) => {
+const deleteCurrentMis = async (misID) => {
   const user = auth().currentUser;
-  let misRef = usersCollection.doc(user.uid);
-
-  // misID로 미션 조회 후 해당 미션의 misPeriod를 읽어옴
-  let data = await getMisById(misID);
-  const period = data[0].misPeriod;
-
-  if ( period == WEEK ) {
-    misRef = misRef.collection('misListWeek');
-  } else if ( period == MONTH ) {
-    misRef = misRef.collection('misListMonth');
-  } else if ( period == SEASON ) {
-    misRef = misRef.collection('misListSeason');
-  }
+  const misRef = usersCollection.doc(user.uid).collection('currentMisList');
+  
+  // misID로 미션 조회 후 해당 미션의 성공여부를 읽어옴
+  let data = await getCurrentMisById(misID);
+  const isSuccess = data[0].isSuccess;
 
   try {
+    if ( isSuccess == true ) { // 성공미션 리스트에도 존재.
+        deleteSuccessMis(misID);
+      }
     return misRef.doc(misID).delete();
   } catch (e) {
     console.log(e.message);
@@ -191,14 +179,15 @@ const deleteMis = async (misID) => {
  * @param {*} misData 추가할 미션 정보
  * @returns 성공시 Promise<void> | 실패시 -1
  */
-const createMisSuccess = async (misData) => {
+const createSuccessMis = async (misID) => {
   try {
     const user = auth().currentUser;
-    const ret = usersCollection.doc(user.uid).collection('misListSuccess').doc().set(misData);
-    const userSimpleData = await getCurUserSimpleData();
-    let successNum = userSimpleData.successNum;
+    const misData = await getCurrentMisById(misID);
+    const ret = usersCollection.doc(user.uid).collection('successMisList').doc().set(misData);
+    const userProfile = await getUserProfile();
+    let successNum = userProfile.successNum;
     successNum = successNum + 1;
-    updateUser({'successNum': successNum});
+    updateUserProfile({'successNum': successNum});
     return ret;
   } catch (e) {
     console.log(e.message);
@@ -208,39 +197,50 @@ const createMisSuccess = async (misData) => {
 
 /** misID에 해당하는 성공 미션 한 개 조회
  * 
- * @param {*} misID 조회하고자 하는 미션의 ID
+ * @param {*} misID 조회하고자 하는 성공미션의 ID
  * @returns 성공시 Promise | 실패시 -1
  */
-const getMisSuccessById = async (misID) => {
+const getSuccessMisById = async (misID) => {
   try {
     const user = auth().currentUser;
-    const misRef = usersCollection.doc(user.uid).collection('misListSuccess');
+    const misRef = usersCollection.doc(user.uid).collection('successMisList');
     const docRef = misRef.where(firebase.firestore.FieldPath.documentId(), '==', misID);
     const data = await docRef.get();
 
     const ret = data.docs.map(doc => ({ ...doc.data(), id: doc.id }))
-    return ret;
+    return ret[0];
   } catch(e) {
     console.log(e.message);
     return -1;
   }
 }
 
-/** 성공미션 리스트 조회
+/** 성공미션 기간별 전체 리스트 조회
  * 
+ * @param {int} period period=0이면 한주, 1이면 한달, 2이면 계절, 그 외에는 전체 미션 리스트 데이터를 가져옴
  * @returns 성공시 Promise | 실패시 -1
  */
-const getMisListSuccess = async () => {
-  try {
+  const getSuccessMisList = async (period) => {
     const user = auth().currentUser;
-    const data = await usersCollection.doc(user.uid).collection('misListSuccess').get();
-    const ret = data.docs.map(doc => ({ ...doc.data(), id: doc.id }))
-    return ret;
-  } catch(e) {
-    console.log(e.message);
-    return -1;
+    let misRef = usersCollection.doc(user.uid).collection('successMisList');
+  
+    if ( period == WEEK ) {
+      misRef = misRef.where(misPeriod, '==', 0);
+    } else if ( period == MONTH ) {
+      misRef = misRef.where(misPeriod, '==', 1);
+    } else if ( period == SEASON ) {
+      misRef = misRef.where(misPeriod, '==', 2);
+    }
+  
+    try {
+      const data = await misRef.get();
+      const ret = data.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+      return ret;
+    } catch (e) {
+      console.log(e.message);
+      return -1;
+    }
   }
-}
 
 /** 성공미션 리스트에서 successDate를 기준으로 최근에 성공한 미션을 조회
  * 성공미션이 3개 이상 있으면 세 개 조회, 그보다 적은 경우에는 있는 미션을 모두 조회
@@ -249,8 +249,8 @@ const getMisListSuccess = async () => {
 const getLatestSuccessMis = async () => {
   try {
     const user = auth().currentUser;
-    const userSimpleData = await getCurUserSimpleData();
-    const successNum = userSimpleData.successNum;
+    const userProfile = await getUserProfile();
+    const successNum = userProfile.successNum;
     let limitNum;
     if (successNum >= 3) {
       limitNum = 3;
@@ -271,7 +271,7 @@ const getLatestSuccessMis = async () => {
   }
 }
 
-/**  성공미션 수정
+/**  성공미션 수정. 미션정보 중 isOutdated=true인 경우 수정되지 않음.
  * misData = {
  *   misTitle: 'fakeTitle'
  * }
@@ -280,30 +280,46 @@ const getLatestSuccessMis = async () => {
  * @param {*} misData 수정할 내용
  * @returns 성공시 Promise | 실패시 -1
  */
-const updateMisSuccess = (misID, misData) => {
+const updateSuccessMis = (misID, misData) => {
   try {
     const user = auth().currentUser;
-    return usersCollection.doc(user.uid).collection('misListSuccess').doc(misID).update(misData);
+    const data = await getSuccessMisById(misID);
+    const isOutdated = data.isOutdated;
+    
+    if ( isOutdated == false ) {
+      return usersCollection.doc(user.uid).collection('successMisList').doc(misID).update(misData);
+    } else {
+      console.log("This mission is outdated. You can't update it.");
+      return -1;
+    }
   } catch(e) {
     console.log(e.message);
     return -1;
   }
 }
 
-/** 성공미션 삭제
+/** 성공미션 삭제. 미션정보 중 isOutdated=true인 경우 삭제되지 않음.
  * misID에 해당하는 성공미션을 삭제.
  * @param {*} misID 삭제하고자 하는 미션의 ID
  * @returns 성공시 Promise<void> | 실패시 -1
  */
-const deleteMisSuccess = async (misID) => {
+const deleteSuccessMis = async (misID) => {
   try {
     const user = auth().currentUser;
-    const ret = usersCollection.doc(user.uid).collection('misListSuccess').doc(misID).delete();
-    const userSimpleData = await getCurUserSimpleData();
-    let successNum = userSimpleData.successNum;
-    successNum = successNum - 1;
-    updateUser({'successNum': successNum});
-    return ret;
+    const data = await getSuccessMisById(misID);
+    const isOutdated = data.isOutdated;
+
+    if ( isOutdated == false ) {
+      const ret = usersCollection.doc(user.uid).collection('successMisList').doc(misID).delete();
+      const userProfile = await getUserProfile();
+      let successNum = userProfile.successNum;
+      successNum = successNum - 1;
+      updateUserProfile({'successNum': successNum});
+      return ret;
+    } else {
+      console.log("This mission is outdated. You can't delete it.");
+      return -1;
+    }
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -318,16 +334,15 @@ export {
   selfMaxSeason,
   randMaxSeason,
 
-  createMis,
-  getMisById,
-  getMisList,
-  updateMis,
-  deleteMis,
+  createCurrentMis,
+  getCurrentMisById,
+  getCurrentMisList,
+  updateCurrentMis,
+  deleteCurrentMis,
 
-  createMisSuccess,
-  getMisSuccessById,
-  getMisListSuccess,
+  getSuccessMisById,
+  getSuccessMisList,
   getLatestSuccessMis,
-  updateMisSuccess,
-  deleteMisSuccess
+  updateSuccessMis,
+  deleteSuccessMis,
 }
