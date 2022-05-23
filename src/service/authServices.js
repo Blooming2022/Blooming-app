@@ -172,26 +172,34 @@ const deleteAccount = async () => {
   } 
 }
 
-/** 닉네임이 null인 경우를 제외하고 현재 존재하는 회원들의 nickname들을 반환하는 함수.
- * @returns 성공시 Promise<string[]> | 실패시 -1
+/** 닉네임 중복 검사 함수
+ * 닉네임 중복 검사를 실시해 이미 있는 닉네임이면 true를, 생성 가능한 닉네임이면 false를 반환하는 함수.
+ * 
+ * const result = await isExistNickname(nickName);
+ * 위와 같은 형태로 사용하시면 결과값을 받을 수 있습니다.
+ * @param {string} curNickname 중복 검사하고자 하는 닉네임
+ * @returns 성공시 boolean | 실패시 -1
  */
-const getNicknameList = async () => {
+const isExistNickname = async (curNickname) => {
   try {
     const data = await usersCollection.get();
     const nickList = data.docs.map(doc => ({ ...doc.data().displayName }));
     let ret = [];
 
-    for(let i=0, count=0; i<nickList.length; i++ ) {
+    for(let i=0; i<nickList.length; i++ ) {
       if(nickList[i][0]) {
         let result = '';
         for( j=0 ; nickList[i][j] ; j++ ) {
           result = result + nickList[i][j];
         }
-        ret[count] = result;
-        count++;
+        ret.push(result);
       }
     }
-    return ret;
+
+    for(let i=0; i<ret.length; i++) {
+      if (ret[i] == curNickname) return true;
+    }
+    return false;
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -206,5 +214,5 @@ export {
   getUserProfile,
   updateUserProfile,
   deleteAccount,
-  getNicknameList
+  isExistNickname
 }
