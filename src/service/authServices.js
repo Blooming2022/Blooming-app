@@ -16,7 +16,7 @@ const googleSignIn = async () => {
     const { idToken } = await GoogleSignin.signIn();
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
     const ret = await auth().signInWithCredential(googleCredential);
-    const user = getCurUserDetailData();
+    const user = getCurrentUser();
     await usersCollection.doc(user.uid)
     .set({
       displayName: user.displayName,
@@ -36,7 +36,7 @@ const googleSignIn = async () => {
 const guestSignIn = async () => {
   try {
     const ret = await auth().signInAnonymously();
-    const user = getCurUserDetailData();
+    const user = getCurrentUser();
     await usersCollection.doc(user.uid)
     .set({
       displayName: user.displayName,
@@ -77,12 +77,12 @@ const signOut = () => {
  * "tenantId": str | null,
  * "uid": str
  * }
- * userData = getCurUserDetailData().uid
+ * userData = getCurrentUser().uid
  * 와 같은 형식으로 uid, displayName, email 등을 조회할 수 있습니다.
  * 
  * @returns 성공시 FirebaseAuthTypes.User | 실패시 -1
  */
-const getCurUserDetailData = () => {
+const getCurrentUser = () => {
   try {
     return auth().currentUser;
   } catch (e) {
@@ -98,13 +98,13 @@ const getCurUserDetailData = () => {
  * "gmailAddr": str | null,
  * "successNum": int
  * }
- * userSimpleData = await getCurUserSimpleData();
+ * userSimpleData = await getUserProfile();
  * successNum = userSimpleData.successNum;
  * 와 같은 형식으로 displayName, gmailAddr, successNum 을 조회할 수 있습니다.
  *
  * @returns 성공시 Promise<number> | 실패시 -1
  */
-const getCurUserSimpleData = async () => {
+const getUserProfile = async () => {
   try {
     const user = auth().currentUser;
     let data;
@@ -129,9 +129,9 @@ const getCurUserSimpleData = async () => {
  * @param {*} data 수정하고자 하는 유저의 정보
  * @returns 성공시 Promise<void> | 실패시 -1
  */
-const updateUser = async (data) => {
+const updateUserProfile = async (data) => {
   try {
-    const user = getCurUserDetailData();
+    const user = getCurrentUser();
     return await usersCollection.doc(user.uid).update(data);
   } catch (e) {
     console.log(e.message);
@@ -194,7 +194,7 @@ const getNicknameList = async () => {
     return ret;
   } catch (e) {
     console.log(e.message);
-    return -1
+    return -1;
   }
 }
 
@@ -202,9 +202,9 @@ export {
   googleSignIn,
   guestSignIn,
   signOut,
-  getCurUserDetailData,
-  getCurUserSimpleData,
-  updateUser,
+  getCurrentUser,
+  getUserProfile,
+  updateUserProfile,
   deleteAccount,
   getNicknameList
 }
