@@ -1,0 +1,60 @@
+import React from 'react';
+import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
+
+const CompleteHeader = ({navigation, title, isValid, completeFunction}) => {
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          navigation.goBack();
+        }}>
+        <Image
+          source={require('../../assets/images/backBtn.png')}
+          style={styles.backButtonImage}></Image>
+      </TouchableOpacity>
+      <Text style={styles.title}>{title}</Text>
+      <TouchableOpacity style={styles.button} onPress={completeFunction}>
+        <Text style={[styles.completeText, isValid && styles.violet]}>완료</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    backgroundColor: '#ffffff',
+    height: 58,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderBottomColor: '#E6E6E6',
+    borderBottomWidth: 1,
+    paddingHorizontal: 20,
+  },
+  backButtonImage: {
+    height: 16,
+    resizeMode: 'contain',
+  },
+  title: {
+    fontSize: 16,
+    color: '#242424',
+    fontWeight: 'bold',
+  },
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 18,
+  },
+  completeText: {
+    fontSize: 16,
+    color: '#999999',
+  },
+  violet: {
+    color: '#8752FF',
+    fontWeight: 'bold',
+  },
+});
+
+export default CompleteHeader;

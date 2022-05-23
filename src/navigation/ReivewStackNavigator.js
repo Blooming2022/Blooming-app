@@ -38,24 +38,7 @@ const ReviewStackNavigator = () => {
         name="ReviewCreate"
         component={ReviewCreate}
         options={({navigation}) => ({
-          title: '후기 작성',
-          headerTitleAlign: 'center',
-          headerTitleStyle: {
-            fontSize: 16,
-            fontWeight: 'bold',
-          },
-          headerLeft: () => (
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => {
-                navigation.goBack();
-              }}>
-              <Image
-                source={require('../assets/images/backBtn.png')}
-                style={styles.backButtonImage}
-              />
-            </TouchableOpacity>
-          ),
+          headerShown: false,
         })}
       />
       <Stack.Screen
@@ -72,7 +55,7 @@ const ReviewStackNavigator = () => {
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
-                navigation.goBack();
+                navigation.popToTop();
               }}>
               <Image
                 source={require('../assets/images/backBtn.png')}

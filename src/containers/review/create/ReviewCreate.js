@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, Text, ScrollView, View, Image, TouchableOpacity} from 'react-native';
+import CompleteHeader from '../../../components/Header/CompleteHeader';
 import {formatDate, getKSTTime} from '../../../service/commonServices';
-import SaveButton from '../../../components/Button/SaveButton';
 import PhotoModal from './components/PhotoModal';
+import ReviewContentInput from './components/ReviewContentInput';
 
 const ReviewCreate = ({route, navigation}) => {
   // const mission = route.params.mission;
@@ -11,6 +12,7 @@ const ReviewCreate = ({route, navigation}) => {
     misPeriod: 0,
     misTitle: '아하하',
   };
+  const [isValid, setIsValid] = useState(false);
   const [isImageExist, setIsImageExist] = useState(false);
   const [review, setReview] = useState({
     misID: mission.id,
@@ -34,52 +36,69 @@ const ReviewCreate = ({route, navigation}) => {
     ? (source = require('../../../assets/images/addImage.png'))
     : (source = {uri: review.revImg});
   const [isModalVisible, setModalVisible] = useState(false);
+
+  const createReview = () => {
+    console.log(review);
+    navigation.navigate('ReviewDetail', {review: review});
+  };
   const deleteImage = () => {
     setReview({...review, ...{revImg: ''}});
     setIsImageExist(!isImageExist);
   };
+
+  useEffect(() => {
+    if (review.revContent !== '') setIsValid(true);
+  }, [review]);
+
   return (
-    <ScrollView style={styles.container}>
-      <PhotoModal
-        review={review}
-        setReview={setReview}
-        isModalVisible={isModalVisible}
-        setModalVisible={setModalVisible}
-        isImageExist={isImageExist}
-        setIsImageExist={setIsImageExist}
-        width={300}
-        height={300}></PhotoModal>
-      <View style={styles.content}>
-        <View style={styles.misInfoBox}>
-          <Text style={styles.revDate}>{formatDate(review.revDate)}</Text>
-          <View style={styles.periodBox}>
-            <Text style={styles.misPeriod}>{misPeriodText}</Text>
+    <>
+      <CompleteHeader
+        navigation={navigation}
+        title="후기 작성"
+        isValid={isValid}
+        completeFunction={createReview}></CompleteHeader>
+      <ScrollView style={styles.container}>
+        <PhotoModal
+          review={review}
+          setReview={setReview}
+          isModalVisible={isModalVisible}
+          setModalVisible={setModalVisible}
+          isImageExist={isImageExist}
+          setIsImageExist={setIsImageExist}
+          width={300}
+          height={300}></PhotoModal>
+        <View style={styles.content}>
+          <View style={styles.misInfoBox}>
+            <Text style={styles.revDate}>{formatDate(review.revDate)}</Text>
+            <View style={styles.periodBox}>
+              <Text style={styles.misPeriod}>{misPeriodText}</Text>
+            </View>
           </View>
-        </View>
-        {isImageExist ? (
-          <View style={styles.imgBox}>
-            <Image style={styles.revImg} source={source}></Image>
-            <TouchableOpacity onPress={() => deleteImage()}>
-              <Image
-                style={styles.deleteImgBtn}
-                source={require('../../../assets/images/deleteBtn.png')}></Image>
+          {isImageExist ? (
+            <View style={styles.imgBox}>
+              <Image style={styles.revImg} source={source}></Image>
+              <TouchableOpacity onPress={() => deleteImage()}>
+                <Image
+                  style={styles.deleteImgBtn}
+                  source={require('../../../assets/images/deleteBtn.png')}></Image>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <TouchableOpacity
+              onPress={() => {
+                setModalVisible(true);
+              }}>
+              <Image style={styles.revImg} source={source}></Image>
             </TouchableOpacity>
+          )}
+          <View style={styles.titleBox}>
+            <Text style={styles.misTitle}>{review.misTitle}</Text>
           </View>
-        ) : (
-          <TouchableOpacity
-            onPress={() => {
-              setModalVisible(true);
-            }}>
-            <Image style={styles.revImg} source={source}></Image>
-          </TouchableOpacity>
-        )}
-        <View style={styles.titleBox}>
-          <Text style={styles.misTitle}>{review.misTitle}</Text>
+          <View style={styles.line}></View>
+          <ReviewContentInput review={review} setReview={setReview}></ReviewContentInput>
         </View>
-        <Text style={styles.revContent}> {review.revContent}</Text>
-      </View>
-      <SaveButton title="저장"></SaveButton>
-    </ScrollView>
+      </ScrollView>
+    </>
   );
 };
 
@@ -127,8 +146,13 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   titleBox: {
+    paddingHorizontal: 10,
     width: '90%',
-    paddingBottom: 25,
+  },
+  line: {
+    height: 1,
+    backgroundColor: '#999999',
+    marginVertical: 15,
   },
   misTitle: {
     flexWrap: 'wrap',
@@ -143,7 +167,6 @@ const styles = StyleSheet.create({
   revContent: {
     fontSize: 14,
     color: '#242424',
-    paddingBottom: 100,
   },
 });
 
