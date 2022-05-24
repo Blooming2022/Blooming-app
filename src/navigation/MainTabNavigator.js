@@ -6,6 +6,7 @@ import MissionTabNavigator from './MissionTabNavigator';
 import Review from '../containers/review/Review';
 import Report from '../containers/report/Report';
 import MyPage from '../containers/myPage/MyPage';
+import Nickname from '../containers/login/Nickname';
 
 const Tab = createBottomTabNavigator();
 
@@ -63,7 +64,7 @@ const MainTabNavigator = () => {
         />
         <Tab.Screen
           name="Mypage"
-          component={MyPage}
+          component={Nickname}
           options={{tabBarLabel: 'My'}}
         />
       </Tab.Navigator>

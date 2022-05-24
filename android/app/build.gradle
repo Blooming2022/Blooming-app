@@ -135,7 +135,7 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        applicationId "com.bloomingfront"
+        applicationId "com.blooming"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -157,7 +157,7 @@ android {
                     cppFlags "-std=c++17"
                     // Make sure this target name is the same you specify inside the
                     // src/main/jni/Android.mk file for the `LOCAL_MODULE` variable.
-                    targets "bloomingfront_appmodules"
+                    targets "blooming_appmodules"
 
                     // Fix for windows limit on number of character in file paths and in command lines
                     if (Os.isFamily(Os.FAMILY_WINDOWS)) {
@@ -262,6 +262,7 @@ android {
 }
 
 dependencies {
+    implementation platform('com.google.firebase:firebase-bom:30.0.1')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation project(':react-native-splash-screen')
     //noinspection GradleDynamicVersion
@@ -319,3 +320,5 @@ def isNewArchitectureEnabled() {
     // - Set an environment variable `ORG_GRADLE_PROJECT_newArchEnabled=true`
     return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
 }
+
+apply plugin: 'com.google.gms.google-services'

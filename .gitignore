@@ -62,3 +62,4 @@ buck-out/
 
 # Firebase
 android/app/google-services.json
+src/service/authService_security.js
