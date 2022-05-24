@@ -1,39 +1,50 @@
 import firestore, { firebase } from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
-import { getMisSuccessById } from './missionServices';
+import { getSuccessMisById, updateCurrentMis } from './missionServices';
 
 const usersCollection = firestore().collection('users');
 
+const WEEK = 0;
+const MONTH = 1;
+const SEASON = 2;
+
 /** 후기 생성
  * 
- * @param {string} misID 성공미션 중 현재 후기를 쓰기로 결정한 미션의 아이디
+ * @param {string} misID 성공미션 중 후기를 쓸 미션의 아이디
  * @param {*} revContent 후기 내용
- * @param {string} uri 후기 이미지의 URI정보.
+ * @param {string} uri 후기 이미지의 URI정보. 후기 이미지가 없을 경우 ''를 넣어 호출
  * @returns 성공시 Promise<void> | 실패시 -1
  */
 const createRev = async (misID, revContent, uri) => {
   try {
     const user = auth().currentUser;
     const imgRef = storage().ref(`/revImg/${user.uid}/${misID}.jpg`);
-    const task = imgRef.putFile(uri);
-    task.on('state_changed', taskSnapshot => {
-      console.log(`${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`);
-    });
-    task.then(() => {
-      console.log('img uploaded to the bucket!');
-    });
-    const url = await imgRef.getDownloadURL();
     
-    const misData = await getMisSuccessById(misID);
+    if ( uri != '' ) {
+      const task = imgRef.putFile(uri);
+      task.on('state_changed', taskSnapshot => {
+        console.log(`${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`);
+      });
+      task.then(() => {
+        console.log('img uploaded to the bucket!');
+      });
+    }
+    
+    const misData = await getSuccessMisById(misID);
     const revData = {
       misTitle: misData.misTitle,
       misID: misID,
-      revDate: firestore.FieldValue.serverTimestamp(),
+      misPeriod: misData.misPeriod,
       revContent: revContent,
-      revImg: url,
+      revDate: firestore.FieldValue.serverTimestamp(),
       uri: uri
     };
+    
+    if ( misData.isOutdated ) {
+      await usersCollection.doc(user.uid).collection('successMisList').doc(misID).update({hasReview: true});
+    } else updateCurrentMis(misID, {hasReview: true});
+
     return await usersCollection.doc(user.uid).collection('revList').doc(misID).set(revData);
   } catch (e) {
     console.log(e.message);
@@ -63,14 +74,24 @@ const getRevById = async (misID) => {
   }
 }
 
-/**  후기 리스트 조회
- * 현재 유저가 작성한 후기 전체를 조회합니다.
+/** 후기 리스트 조회
+ * 현재 유저가 작성한 후기를 조회합니다.
+ * @param {int} period 조회할 후기의 period. 0이면 한주, 1이면 한달, 2이면 계절. 그 외는 전체
  * @returns 성공시 Promise<[]> | 실패시 -1
  */
-const getRevList = async () => {
+const getRevList = async (period) => {
   try {
     const user = auth().currentUser;
-    const data = await usersCollection.doc(user.uid).collection('revList').get();
+    let revRef = usersCollection.doc(user.uid).collection('revList');
+    if ( period == WEEK ) {
+      revRef = revRef.where('misPeriod', '==', 0);
+    } else if ( period == MONTH ) {
+      revRef = revRef.where('misPeriod', '==', 1);
+    } else if ( period == SEASON ) {
+      revRef = revRef.where('misPeriod', '==', 2);
+    }
+
+    const data = await revRef.get();    
     const ret = data.docs.map(doc => ({ ...doc.data(), id: doc.id }));
     return ret;
   } catch (e) {
@@ -100,10 +121,8 @@ const updateRev = async (misID, revData, isImgUpdated) => {
       task.then(() => {
         console.log('img uploaded to the bucket!');
       });
-      const url = await imgRef.getDownloadURL();
       // 이미지 관련 정보 수정 - firestore
       revData.uri = uri;
-      revData.revImg = url;
     }
     return await usersCollection.doc(user.uid).collection('revList').doc(misID).update(revData);
   } catch (e) {
@@ -120,8 +139,18 @@ const updateRev = async (misID, revData, isImgUpdated) => {
 const deleteRev = async (misID) => {
   try {
     const user = auth().currentUser;
-    const imgRef = storage().ref(`/revImg/${user.uid}/${misID}.jpg`);
-    imgRef.delete().then().catch((e)=>console.log(e.message));
+    const curRev = await getRevById(misID);
+
+    if ( curRev.uri ) { // uri가 있을 때 실행돼야 함
+      const imgRef = storage().ref(`/revImg/${user.uid}/${misID}.jpg`);
+      imgRef.delete().then().catch((e)=>console.log(e.message));
+    }
+    
+    const misData = await getSuccessMisById(misID);
+    if ( misData.isOutdated ) {
+      await usersCollection.doc(user.uid).collection('successMisList').doc(misID).update({hasReview: false});
+    } else updateCurrentMis(misID, {hasReview: false});
+
     return await usersCollection.doc(user.uid).collection('revList').doc(misID).delete();
   } catch (e) {
     console.log(e.message);
