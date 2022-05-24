@@ -4,6 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import ReviewTabNavigator from './ReivewTabNavigator';
 import ReviewCreate from '../containers/review/create/ReviewCreate';
 import ReviewDetail from '../containers/review/detail/ReviewDetail';
+import ReviewUpdate from '../containers/review/update/ReviewUpdate';
 
 const Stack = createNativeStackNavigator();
 
@@ -45,36 +46,14 @@ const ReviewStackNavigator = () => {
         name="ReviewDetail"
         component={ReviewDetail}
         options={({navigation}) => ({
-          title: '내 후기',
-          headerTitleAlign: 'center',
-          headerTitleStyle: {
-            fontSize: 16,
-            fontWeight: 'bold',
-          },
-          headerLeft: () => (
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => {
-                navigation.popToTop();
-              }}>
-              <Image
-                source={require('../assets/images/backBtn.png')}
-                style={styles.backButtonImage}
-              />
-            </TouchableOpacity>
-          ),
-          headerRight: () => (
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => {
-                // navigation.goBack();
-              }}>
-              <Image
-                source={require('../assets/images/kebabMenu.png')}
-                style={styles.buttonImage}
-              />
-            </TouchableOpacity>
-          ),
+          headerShown: false,
+        })}
+      />
+      <Stack.Screen
+        name="ReviewUpdate"
+        component={ReviewUpdate}
+        options={({navigation}) => ({
+          headerShown: false,
         })}
       />
     </Stack.Navigator>

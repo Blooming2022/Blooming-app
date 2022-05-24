@@ -4,8 +4,8 @@ import {TextInput, View, StyleSheet} from 'react-native';
 const ReviewContentInput = ({review, setReview}) => {
   const changeReviewContent = text => {
     setReview({...review, ...{revContent: text}});
-    console.log(review);
   };
+
   return (
     <View style={styles.container}>
       <TextInput
@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
   textinput: {
     minHeight: 350,
     fontSize: 16,
+    color: '#242424',
   },
 });
 

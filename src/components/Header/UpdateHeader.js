@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 
-const CompleteHeader = ({navigation, title, isValid, completeFunction}) => {
+const UpdateHeader = ({navigation, title, isValid, updateFunction}) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -14,7 +14,7 @@ const CompleteHeader = ({navigation, title, isValid, completeFunction}) => {
           style={styles.backButtonImage}></Image>
       </TouchableOpacity>
       <Text style={styles.title}>{title}</Text>
-      <TouchableOpacity style={styles.button} onPress={completeFunction}>
+      <TouchableOpacity style={styles.button} onPress={updateFunction}>
         <Text style={[styles.completeText, isValid && styles.violet]}>완료</Text>
       </TouchableOpacity>
     </View>
@@ -57,4 +57,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CompleteHeader;
+export default UpdateHeader;

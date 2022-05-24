@@ -13,7 +13,7 @@ const ReviewItem = ({review, width}) => {
     <TouchableHighlight onPress={goToReviewDetail} style={[styles.container, {width: width}]}>
       {review.revImg == '' ? (
         <View style={[styles.blankImage, {width: width}]}>
-          <Text style={styles.revTime}>{formatDate(review.revDate)}</Text>
+          <Text style={styles.revTime}>{formatDate(review.misDate)}</Text>
           <View style={styles.titleBox}>
             <Text style={styles.blankImageTitle} numberOfLines={3} ellipsizeMode="tail">
               {review.misTitle}
@@ -25,7 +25,7 @@ const ReviewItem = ({review, width}) => {
           <ImageBackground
             source={require('./../../../../assets/images/gradient.png')}
             style={styles.gradient}>
-            <Text style={styles.revTime}>{formatDate(review.revDate)}</Text>
+            <Text style={styles.revTime}>{formatDate(review.misDate)}</Text>
           </ImageBackground>
         </ImageBackground>
       )}

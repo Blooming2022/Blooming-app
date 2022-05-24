@@ -1,36 +1,56 @@
 import React from 'react';
 import {StyleSheet, Text, ScrollView, View, Image} from 'react-native';
+import DetailHeader from '../../../components/Header/DetailHeader';
 import {formatDate} from '../../../service/commonServices';
 
 const ReviewDetail = ({route, navigation}) => {
   const review = route.params.review;
-  let misPeriod;
+  let misPeriodText;
   if (review.misPeriod === 0) {
-    misPeriod = '한주미션';
+    misPeriodText = '한주';
   } else if (review.misPeriod === 1) {
-    misPeriod = '한달미션';
+    misPeriodText = '한달';
   } else {
-    misPeriod = '계절미션';
+    misPeriodText = '계절';
   }
 
+  // 아래의 두 함수는 서버 연동 후 변경할 예정입니다. 지금은 화면 흐름만 구현했어요.
+  const goToReviewUpdate = () => {
+    navigation.navigate('ReviewUpdate', {review: review});
+  };
+  const deleteReview = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'ReviewHome'}],
+    });
+  };
+
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.revDate}>{formatDate(review.revDate)}</Text>
-      {review.revImg !== '' && (
-        <Image
-          style={styles.revImg}
-          source={{
-            uri: review.revImg,
-          }}></Image>
-      )}
-      <View style={styles.misInfoBox}>
+    <>
+      <DetailHeader
+        navigation={navigation}
+        updateFunction={goToReviewUpdate}
+        deleteFunction={deleteReview}></DetailHeader>
+      <ScrollView style={styles.container}>
+        <View style={styles.misInfoBox}>
+          <Text style={styles.misDate}>{formatDate(review.misDate)}</Text>
+          <View style={styles.periodBox}>
+            <Text style={styles.misPeriod}>{misPeriodText}</Text>
+          </View>
+        </View>
+        {review.revImg !== '' && (
+          <Image
+            style={styles.revImg}
+            source={{
+              uri: review.revImg,
+            }}></Image>
+        )}
         <View style={styles.titleBox}>
           <Text style={styles.misTitle}>{review.misTitle}</Text>
         </View>
-        <Text style={styles.misPeriod}>{misPeriod}</Text>
-      </View>
-      <Text style={styles.revContent}> {review.revContent}</Text>
-    </ScrollView>
+        <Text style={styles.revContent}> {review.revContent}</Text>
+      </ScrollView>
+    </>
   );
 };
 
@@ -41,11 +61,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: '#ffffff',
   },
-  revDate: {
+  misDate: {
     color: '#242424',
     fontSize: 24,
     fontWeight: '600',
     paddingBottom: 25,
+  },
+  periodBox: {
+    borderColor: '#999999',
+    borderWidth: 1,
+    borderRadius: 35,
+    paddingHorizontal: 13,
+    paddingVertical: 6,
   },
   revImg: {
     width: '100%',
@@ -54,13 +81,12 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   misInfoBox: {
-    paddingBottom: 25,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
   },
   titleBox: {
-    width: '80%',
+    paddingBottom: 25,
   },
   misTitle: {
     flexWrap: 'wrap',

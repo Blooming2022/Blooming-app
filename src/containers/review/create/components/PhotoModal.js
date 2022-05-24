@@ -27,7 +27,6 @@ const PhotoModal = ({
       })
       .catch(error => {
         if (error.code === 'E_PICKER_CANCELLED') {
-          console.log(review);
           return false;
         }
       });
@@ -50,7 +49,6 @@ const PhotoModal = ({
       })
       .catch(error => {
         if (error.code === 'E_PICKER_CANCELLED') {
-          console.log(review);
           return false;
         }
       });
