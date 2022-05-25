@@ -5,6 +5,7 @@ import {getKSTTime} from './../../../service/commonServices';
 
 const ReviewSeason = () => {
   const date = getKSTTime();
+  // dummy data. CRUD와 연동 안됨.
   const [reviewList, setReviewList] = useState([
     {
       id: 0,

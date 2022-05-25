@@ -66,10 +66,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 18,
   },
-  backButtonImage: {
-    height: 16,
-    resizeMode: 'contain',
-  },
   buttonImage: {
     height: 20,
     resizeMode: 'contain',
