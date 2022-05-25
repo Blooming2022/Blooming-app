@@ -37,7 +37,7 @@ const createRev = async (misID, revContent, uri) => {
       misID: misID,
       misPeriod: misData.misPeriod,
       revContent: revContent,
-      revDate: firestore.FieldValue.serverTimestamp(),
+      misSuccessDate: misData.successDateZ,
       uri: uri
     };
     
