@@ -361,43 +361,43 @@ const outdateCounter = async () => {
   const HOUR = 1*60*60*1000;
   const DAY = 24*HOUR;
 
-  const refTimeCollection = firestore().collection('referenceTime');
-  let refWeek = await refTimeCollection.doc("refWeek").get();
-  let refMonth = await refTimeCollection.doc("refMonth").get();
-  let refSeason = await refTimeCollection.doc("refSeason").get();
+  const timeCollection = firestore().collection('TargetTime');
+  let targetWeek = await timeCollection.doc("targetWeek").get();
+  let targetMonth = await timeCollection.doc("targetMonth").get();
+  let targetSeason = await timeCollection.doc("targetSeason").get();
   
   let today = new Date().getTime() + 9*HOUR;
-  let compareWeek = today - refWeek.data().refTime;
-  let compareMonth = today - refMonth.data().refTime;
-  let compareSeason = today - refSeason.data().refTime;
+  let compareWeek = today - targetWeek.data().targetTime;
+  let compareMonth = today - targetMonth.data().targetTime;
+  let compareSeason = today - targetSeason.data().targetTime;
   
   if (compareWeek >= 0) {
-    const nextTime = refWeek.data().refTime + 7*DAY;
-    refTimeCollection.doc("refWeek").update({refTime: nextTime});
+    const nextTime = refWeek.data().targetTime + 7*DAY;
+    timeCollection.doc("targetWeek").update({targetTime: nextTime});
     return onOutdated(0);
   }
 
   if (compareMonth >= 0) {
     const thisMonth = now.getMonth();
     let nextTime = new Date(now.getFullYear(), thisMonth+1, 1);
-    if ( nextTime.getTime() == refMonth.data().refTime ) {
+    if ( nextTime.getTime() == refMonth.data().targetTime ) {
       nextTime = new Date(now.getFullYear(), thisMonth+2, 1);
     }
-    refTimeCollection.doc("refMonth").update({refTime: nextTime});
+    timeCollection.doc("targetMonth").update({targetTime: nextTime});
     return onOutdated(1);
   }
 
   if (compareSeason >= 0) {
     const thisMonth = now.getMonth();
     let nextTime = new Date(now.getFullYear(), thisMonth+3, 1);
-    if ( nextTime.getTime() == refSeason.data().refTime ) {
+    if ( nextTime.getTime() == refSeason.data().targetTime ) {
       nextTime = new Date(now.getFullYear(), thisMonth+4, 1);
     }
-    refTimeCollection.doc("refSeason").update({refTime: nextTime});
+    timeCollection.doc("targetSeason").update({targetTime: nextTime});
     return onOutdated(2);
   }
-    
 }
+
 export {
   selfMaxWeek,
   randMaxWeek,
