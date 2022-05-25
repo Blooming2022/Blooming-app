@@ -32,6 +32,7 @@ const randMaxSeason = 1;
  *  misMemo: str,
  *  compareDate: Date,
  *  isOutdated: boolean,
+ *  hasReview: boolean
  * }
  * @param {*} misData 미션 데이터 정보
  * @returns 성공시 Promise<misData> | 실패시 -1
@@ -108,11 +109,17 @@ const updateCurrentMis = async (misID, misData) => {
   let misRef = usersCollection.doc(user.uid).collection('currentMisList');
 
   try {
+    if ( misData.misTitle ) {
+      usersCollection.doc(user.uid).collection('revList').doc(misID).update({misTitle: misData.misTitle});
+    }
+
     if ( misData.isSuccess == true ) {
+      misRef.doc(misID).update({successDate: firestore.FieldValue.serverTimestamp()});
       const ret = misRef.doc(misID).update(misData);
       createSuccessMis(misID);
       return ret;
     } else if ( misData.isSuccess == false ) {
+      misRef.doc(misID).update({successDate: null});
       const ret = misRef.doc(misID).update(misData);
       deleteSuccessMis(misID);
       return ret;
@@ -217,7 +224,7 @@ const getSuccessMisList = async (period) => {
     const data = await misRef.get();
     const ret = data.docs.map(doc => ({ ...doc.data(), id: doc.id }));
     if(ret.length == 0) {
-      console.log('There is no data. 1');
+      console.log('There is no data.');
       return -1;
     }
     return ret;
@@ -249,7 +256,6 @@ const getLatestSuccessMis = async () => {
       return 0;
     }
     const latestMis = await usersCollection.doc(user.uid).collection('successMisList').orderBy('successDate', 'desc').limit(limitNum).get();
-    console.log(latestMis.docs.map(doc => ({ ...doc.data(), id: doc.id })));
     return latestMis.docs.map(doc => ({ ...doc.data(), id: doc.id }));
   } catch (e) {
     console.log(e.message);
@@ -313,6 +319,72 @@ const deleteSuccessMis = async (misID) => {
   }
 }
 
+/**
+ * 진행중인 미션의 기간이 끝났을 때 불려올 함수
+ * @param {int} period 기간,,
+ * @returns 성공시 Promise<number> | 실패시 -1
+ */
+const onOutdated = async (period) => {
+  const outdatedData = {isOutdated: true};
+  try {
+    const curMisList = await getCurrentMisList(period);
+    curMisList.forEach(element => {
+      updateCurrentMis(element.id, outdatedData);
+      const misRef = usersCollection.doc(auth().currentUser.uid).collection('currentMisList');
+      return misRef.doc(element.id).delete();
+    });
+  } catch (e) {
+    console.log(e.message);
+    return -1;
+  }
+}
+
+/**
+ * 진행중인 미션의 기간이 끝났는지 아닌지 체크하는 함수.
+ * 만약 기간이 끝났다면 현재 미션들을 모두 outdated로 바꾸고, currentMisList를 비운다.
+ * @returns Promise<number>
+ */
+const outdateCounter = async () => {
+  const HOUR = 1*60*60*1000;
+  const DAY = 24*HOUR;
+
+  const refTimeCollection = firestore().collection('referenceTime');
+  let refWeek = await refTimeCollection.doc("refWeek").get();
+  let refMonth = await refTimeCollection.doc("refMonth").get();
+  let refSeason = await refTimeCollection.doc("refSeason").get();
+  
+  let today = new Date().getTime() + 9*HOUR;
+  let compareWeek = today - refWeek.data().refTime;
+  let compareMonth = today - refMonth.data().refTime;
+  let compareSeason = today - refSeason.data().refTime;
+  
+  if (compareWeek >= 0) {
+    const nextTime = refWeek.data().refTime + 7*DAY;
+    refTimeCollection.doc("refWeek").update({refTime: nextTime});
+    return onOutdated(0);
+  }
+
+  if (compareMonth >= 0) {
+    const thisMonth = now.getMonth();
+    let nextTime = new Date(now.getFullYear(), thisMonth+1, 1);
+    if ( nextTime.getTime() == refMonth.data().refTime ) {
+      nextTime = new Date(now.getFullYear(), thisMonth+2, 1);
+    }
+    refTimeCollection.doc("refMonth").update({refTime: nextTime});
+    return onOutdated(1);
+  }
+
+  if (compareSeason >= 0) {
+    const thisMonth = now.getMonth();
+    let nextTime = new Date(now.getFullYear(), thisMonth+3, 1);
+    if ( nextTime.getTime() == refSeason.data().refTime ) {
+      nextTime = new Date(now.getFullYear(), thisMonth+4, 1);
+    }
+    refTimeCollection.doc("refSeason").update({refTime: nextTime});
+    return onOutdated(2);
+  }
+    
+}
 export {
   selfMaxWeek,
   randMaxWeek,
@@ -330,4 +402,6 @@ export {
   getSuccessMisById,
   getSuccessMisList,
   getLatestSuccessMis,
+
+  outdateCounter
 }
