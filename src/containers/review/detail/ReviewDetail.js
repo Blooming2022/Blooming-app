@@ -1,12 +1,13 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Text, ScrollView, Image} from 'react-native';
 import DetailHeader from '../../../components/Header/DetailHeader';
 import MissionInfoBox from '../create/components/MissionInfoBox';
 import MissionTitleBox from '../create/components/MissionTitleBox';
+import DeleteModal from '../../../components/Modal/DeleteModal';
 
 const ReviewDetail = ({route, navigation}) => {
   const review = route.params.review;
-
+  const [isModalVisible, setIsModalVisible] = useState(false);
   // 아래의 두 함수는 서버 연동 후 변경할 예정입니다. 지금은 화면 흐름만 구현했어요.
   const goToReviewUpdate = () => {
     navigation.navigate('ReviewUpdate', {review: review});
@@ -23,8 +24,12 @@ const ReviewDetail = ({route, navigation}) => {
       <DetailHeader
         navigation={navigation}
         updateFunction={goToReviewUpdate}
-        deleteFunction={deleteReview}></DetailHeader>
+        setIsModalVisible={setIsModalVisible}></DetailHeader>
       <ScrollView style={styles.container}>
+        <DeleteModal
+          isModalVisible={isModalVisible}
+          setIsModalVisible={setIsModalVisible}
+          deleteFunction={deleteReview}></DeleteModal>
         <MissionInfoBox misDate={review.misDate} misPeriod={review.misPeriod}></MissionInfoBox>
         {review.revImg !== '' && (
           <Image

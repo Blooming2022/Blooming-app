@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {Menu, MenuItem} from 'react-native-material-menu';
 
-const DetailHeader = ({navigation, updateFunction, deleteFunction}) => {
+const DetailHeader = ({navigation, updateFunction, setIsModalVisible}) => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const showMenu = () => {
     setIsMenuVisible(true);
@@ -47,7 +47,7 @@ const DetailHeader = ({navigation, updateFunction, deleteFunction}) => {
         <MenuItem
           onPress={() => {
             hideMenu();
-            deleteFunction();
+            setIsModalVisible(true);
           }}
           textStyle={styles.menuText}>
           삭제
