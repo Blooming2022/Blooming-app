@@ -12,7 +12,7 @@ const ReviewMonth = () => {
       misPeriod: 0,
       misTitle: '물마시기',
       revContent: 'water is good for health',
-      misDate: date,
+      misSuccessDate: date,
       revImg: 'https://t1.daumcdn.net/cfile/tistory/99B5EC335982A2BF18',
     },
     {
@@ -20,7 +20,7 @@ const ReviewMonth = () => {
       misPeriod: 0,
       misTitle: '컵케이크 10개 먹기',
       revContent: '컵케이크 10개를 먹어봤다. 뿌듯하다!',
-      misDate: date,
+      misSuccessDate: date,
       revImg:
         'https://www.namesnack.com/images/namesnack-cupcake-business-names-3993x6005-20210127.jpeg?crop=16:9,smart&width=1200&dpr=2',
     },

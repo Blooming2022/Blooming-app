@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {StyleSheet, ScrollView, View} from 'react-native';
+import {StyleSheet, ScrollView} from 'react-native';
 import CompleteHeader from '../../../components/Header/CompleteHeader';
 import PhotoModal from '../create/components/PhotoModal';
 import MissionInfoBox from '../create/components/MissionInfoBox';
@@ -50,7 +50,9 @@ const ReviewUpdate = ({route, navigation}) => {
           isImageExist={isImageExist}
           width={300}
           height={300}></PhotoModal>
-        <MissionInfoBox misDate={review.misDate} misPeriod={review.misPeriod}></MissionInfoBox>
+        <MissionInfoBox
+          misSuccessDate={review.misSuccessDate}
+          misPeriod={review.misPeriod}></MissionInfoBox>
         <ReviewImageInput
           isImageExist={isImageExist}
           revImg={review.revImg}

@@ -30,7 +30,9 @@ const ReviewDetail = ({route, navigation}) => {
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
           deleteFunction={deleteReview}></DeleteModal>
-        <MissionInfoBox misDate={review.misDate} misPeriod={review.misPeriod}></MissionInfoBox>
+        <MissionInfoBox
+          misSuccessDate={review.misSuccessDate}
+          misPeriod={review.misPeriod}></MissionInfoBox>
         {review.revImg !== '' && (
           <Image
             style={styles.revImg}

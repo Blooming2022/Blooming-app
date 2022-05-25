@@ -15,7 +15,7 @@ const ReviewCreate = ({route, navigation}) => {
     id: 0,
     misPeriod: 0,
     misTitle: '아하하',
-    mistDate: getKSTTime(),
+    successDate: getKSTTime(),
   };
   const isInitialMount = useRef(true);
   // 완료 버튼 색 변경 조건
@@ -26,7 +26,7 @@ const ReviewCreate = ({route, navigation}) => {
     misID: mission.id,
     misPeriod: mission.misPeriod,
     misTitle: mission.misTitle,
-    misDate: mission.mistDate,
+    misSuccessDate: mission.successDate,
     revContent: '',
     revImg: '',
   });
@@ -67,7 +67,9 @@ const ReviewCreate = ({route, navigation}) => {
           setIsImageExist={setIsImageExist}
           width={300}
           height={300}></PhotoModal>
-        <MissionInfoBox misDate={review.misDate} misPeriod={mission.misPeriod}></MissionInfoBox>
+        <MissionInfoBox
+          misSuccessDate={review.misSuccessDate}
+          misPeriod={mission.misPeriod}></MissionInfoBox>
         <ReviewImageInput
           isImageExist={isImageExist}
           revImg={review.revImg}

@@ -12,7 +12,7 @@ const ReviewSeason = () => {
       misPeriod: 1,
       misTitle: '물마시기',
       revContent: 'water is good for health',
-      misDate: date,
+      misSuccessDate: date,
       revImg: 'https://t1.daumcdn.net/cfile/tistory/99B5EC335982A2BF18',
     },
   ]);

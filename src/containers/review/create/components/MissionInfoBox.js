@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {formatDate} from '../../../../service/commonServices';
 
-const MissionInfoBox = ({misDate, misPeriod}) => {
+const MissionInfoBox = ({misSuccessDate, misPeriod}) => {
   let misPeriodText;
   if (misPeriod === 0) {
     misPeriodText = '한주';
@@ -14,7 +14,7 @@ const MissionInfoBox = ({misDate, misPeriod}) => {
 
   return (
     <View style={styles.misInfoBox}>
-      <Text style={styles.misDate}>{formatDate(misDate)}</Text>
+      <Text style={styles.misSuccessDate}>성공일: {formatDate(misSuccessDate)}</Text>
       <View style={styles.periodBox}>
         <Text style={styles.misPeriod}>{misPeriodText}</Text>
       </View>
@@ -26,12 +26,12 @@ const styles = StyleSheet.create({
   misInfoBox: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     paddingVertical: 25,
   },
-  misDate: {
+  misSuccessDate: {
     color: '#242424',
-    fontSize: 24,
+    fontSize: 16,
     fontWeight: '600',
   },
   periodBox: {
