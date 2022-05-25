@@ -24,10 +24,11 @@ const ReviewContentInput = ({review, setReview}) => {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 10,
+    paddingBottom: 50,
   },
   textinput: {
     minHeight: 350,
-    fontSize: 16,
+    fontSize: 14,
     color: '#242424',
   },
 });
