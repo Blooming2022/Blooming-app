@@ -1,6 +1,6 @@
 import { firebase } from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
-import { getSuccessMisById, updateCurrentMis } from './missionServices';
+import { updateCurrentMis } from './missionServices';
 import { curUser, usersCollection } from './authServices';
 
 const WEEK = 0;
@@ -17,15 +17,15 @@ const SEASON = 2;
  *  isOutdated: boolean
  *  revContent: str
  *  revImg: str        // 후기 이미지의 URI정보. 후기 이미지가 없을 경우 ''를 넣어 호출
- * } revData 
+ * } createRevInfo 
  * @returns 성공시 Promise<void> | 실패시 -1
  */
-const createRev = async (revData) => {
+const createRev = async (createRevInfo) => {
   try {
-    const imgRef = storage().ref(`/revImg/${curUser.uid}/${revData.misID}.jpg`);
+    const imgRef = storage().ref(`/revImg/${curUser.uid}/${createRevInfo.misID}.jpg`);
     
-    if ( revData.revImg != '' ) {
-      const task = imgRef.putFile(revData.revImg);
+    if ( createRevInfo.revImg != '' ) {
+      const task = imgRef.putFile(createRevInfo.revImg);
       task.on('state_changed', taskSnapshot => {
         console.log(`${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`);
       });
@@ -33,12 +33,18 @@ const createRev = async (revData) => {
         console.log('img uploaded to the bucket!');
       });
     }
+    if ( createRevInfo.isOutdated ) {
+      await usersCollection.doc(curUser.uid).collection('successMisList').doc(createRevInfo.misID).update({hasReview: true});
+    } else{
+      const updateInfo = {
+        misID: createRevInfo.misID,
+        updateData: {hasReview: true},
+        isSuccess: true
+      };
+      updateCurrentMis(updateInfo);
+    }
 
-    if ( revData.isOutdated ) {
-      await usersCollection.doc(curUser.uid).collection('successMisList').doc(revData.misID).update({hasReview: true});
-    } else updateCurrentMis(revData.misID, {hasReview: true});
-
-    return await usersCollection.doc(curUser.uid).collection('revList').doc(revData.misID).set(revData);
+    return await usersCollection.doc(curUser.uid).collection('revList').doc(createRevInfo.misID).set(createRevInfo);
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -99,14 +105,14 @@ const getRevList = async (period) => {
  *  misID: str
  *  isImgUpdated: boolean    // 이미지도 함께 수정하는 경우에 true
  *  revData: {object}        // 수정할 정보만 담아서 호출
- * } revUpdateData 
+ * } updateRevInfo 
  * @returns 성공시 Promise<void> | 실패시 -1
  */
-const updateRev = async (revUpdateData) => {
+const updateRev = async (updateRevInfo) => {
   try {
-    if(revUpdateData.isImgUpdated) {
-      const imgRef = storage().ref(`/revImg/${curUser.uid}/${revUpdateData.misID}.jpg`);
-      const revImg = revUpdateData.revData.revImg;
+    if(updateRevInfo.isImgUpdated) {
+      const imgRef = storage().ref(`/revImg/${curUser.uid}/${updateRevInfo.misID}.jpg`);
+      const revImg = updateRevInfo.revData.revImg;
       // 이미지 수정 - storage
       const task = imgRef.putFile(revImg);
       task.on('state_changed', taskSnapshot => {
@@ -116,7 +122,7 @@ const updateRev = async (revUpdateData) => {
         console.log('img uploaded to the bucket!');
       });
     }
-    return await usersCollection.doc(curUser.uid).collection('revList').doc(revUpdateData.misID).update(revUpdateData.revData);
+    return await usersCollection.doc(curUser.uid).collection('revList').doc(updateRevInfo.misID).update(updateRevInfo.revData);
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -142,8 +148,14 @@ const deleteRev = async (delRevInfo) => {
     
     if ( delRevInfo.isOutdated ) {
       await usersCollection.doc(curUser.uid).collection('successMisList').doc(delRevInfo.misID).update({hasReview: false});
-    } else updateCurrentMis(delRevInfo.misID, {hasReview: false});
-
+    } else {
+      const updateInfo = {
+        misID: delRevInfo.misID,
+        updateData: {hasReview: false},
+        isSuccess: true
+      };
+      updateCurrentMis(updateInfo);
+    }
     return await usersCollection.doc(curUser.uid).collection('revList').doc(delRevInfo.misID).delete();
   } catch (e) {
     console.log(e.message);
