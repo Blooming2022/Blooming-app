@@ -19,17 +19,12 @@ const SaveButton = ({
   };
   return (
     <TouchableOpacity
-      style={[
-        styles.button,
-        buttonDisabled ? styles.buttonDisable : styles.buttonAble,
-      ]}
+      style={[styles.button, buttonDisabled ? styles.buttonDisable : styles.buttonAble]}
       disabled={buttonDisabled}
       onPress={() => {
         checkIsValid();
       }}>
-      <Text style={[styles.buttonText, buttonDisabled && styles.textDisable]}>
-        {title}
-      </Text>
+      <Text style={[styles.buttonText, buttonDisabled && styles.textDisable]}>{title}</Text>
     </TouchableOpacity>
   );
 };
@@ -42,7 +37,7 @@ const styles = StyleSheet.create({
     height: 60,
   },
   buttonAble: {
-    backgroundColor: '#000000',
+    backgroundColor: '#242424',
   },
   buttonDisable: {
     backgroundColor: '#DCDEE1',
