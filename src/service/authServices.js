@@ -4,6 +4,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { googleConfigure } from './authService_security';
 
 const usersCollection = firestore().collection('users');
+let curUser = auth().currentUser;
 
 /** 구글 계정 로그인
  * 
@@ -106,9 +107,8 @@ const getCurrentUser = () => {
  */
 const getUserProfile = async () => {
   try {
-    const user = auth().currentUser;
     let data;
-    await usersCollection.doc(user.uid).get()
+    await usersCollection.doc(curUser.uid).get()
     .then((docs) => {
       data = docs.data();
     });
@@ -145,8 +145,7 @@ const updateUserProfile = async (data) => {
  */
 const deleteAccount = async () => {
   try {
-    const user = auth().currentUser;
-    const docPath = usersCollection.doc(user.uid);
+    const docPath = usersCollection.doc(curUser.uid);
     
     await docPath.collection('currentMisList').get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
@@ -165,7 +164,7 @@ const deleteAccount = async () => {
     });
 
     docPath.delete();
-    return await user.delete();
+    return await curUser.delete();
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -207,6 +206,9 @@ const isExistNickname = async (curNickname) => {
 }
 
 export {
+  curUser,
+  usersCollection,
+
   googleSignIn,
   guestSignIn,
   signOut,
