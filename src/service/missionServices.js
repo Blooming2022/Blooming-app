@@ -366,36 +366,63 @@ const outdateCounter = async () => {
   let targetMonth = await timeCollection.doc("targetMonth").get();
   let targetSeason = await timeCollection.doc("targetSeason").get();
   
+  let now = new Date();
   let today = new Date().getTime() + 9*HOUR;
   let compareWeek = today - targetWeek.data().targetTime;
   let compareMonth = today - targetMonth.data().targetTime;
   let compareSeason = today - targetSeason.data().targetTime;
   
   if (compareWeek >= 0) {
-    const nextTime = refWeek.data().targetTime + 7*DAY;
+    const nextTime = targetWeek.data().targetTime + 7*DAY;
     timeCollection.doc("targetWeek").update({targetTime: nextTime});
-    return onOutdated(0);
+    onOutdated(0);
   }
 
   if (compareMonth >= 0) {
     const thisMonth = now.getMonth();
-    let nextTime = new Date(now.getFullYear(), thisMonth+1, 1);
-    if ( nextTime.getTime() == refMonth.data().targetTime ) {
-      nextTime = new Date(now.getFullYear(), thisMonth+2, 1);
+    let nextTime = new Date(now.getFullYear(), thisMonth+1, 1).getTime();
+    if ( nextTime == targetMonth.data().targetTime ) {
+      nextTime = new Date(now.getFullYear(), thisMonth+2, 1).getTime();
     }
     timeCollection.doc("targetMonth").update({targetTime: nextTime});
-    return onOutdated(1);
+    onOutdated(1);
   }
 
   if (compareSeason >= 0) {
-    const thisMonth = now.getMonth();
-    let nextTime = new Date(now.getFullYear(), thisMonth+3, 1);
-    if ( nextTime.getTime() == refSeason.data().targetTime ) {
-      nextTime = new Date(now.getFullYear(), thisMonth+4, 1);
+    let thisMonth;
+    switch (now.getMonth()) {
+      case 11:
+      case 0:
+      case 1:
+        thisMonth = 11;
+        break;
+
+      case 2:
+      case 3:
+      case 4:
+        thisMonth = 2;
+        break;
+
+      case 5:
+      case 6:
+      case 7:
+        thisMonth = 5;
+        break;
+
+      case 8:
+      case 9:
+      case 10:
+        thisMonth = 8;
+        break;
+    }
+    let nextTime = new Date(now.getFullYear(), thisMonth+3, 1).getTime();
+    if ( nextTime == targetSeason.data().targetTime ) {
+      nextTime = new Date(now.getFullYear(), thisMonth+4, 1).getTime();
     }
     timeCollection.doc("targetSeason").update({targetTime: nextTime});
-    return onOutdated(2);
+    onOutdated(2);
   }
+  return;
 }
 
 export {
