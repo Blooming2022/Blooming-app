@@ -9,14 +9,14 @@ const MissionList = ({missionList, setMissionList}) => {
           <MissionItem
             mission={item}
             key={index}
-            setMissionList={setMissionList}
             missionList={missionList}
+            setMissionList={setMissionList}
           />
         ))
       ) : (
         <View style={styles.noItem}>
-          <Text>당신의 삶을 변화시킬</Text>
-          <Text>특별한 미션을 만들어보세요!</Text>
+          <Text style={styles.noItemText}>당신의 삶을 변화시킬</Text>
+          <Text style={styles.noItemText}>특별한 꽃을 피워보세요!</Text>
         </View>
       )}
     </ScrollView>
@@ -24,44 +24,13 @@ const MissionList = ({missionList, setMissionList}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    flexDirection: 'row',
-    width: 256,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderBottomColor: '#242424',
-    borderBottomWidth: 1,
-    marginBottom: 16,
-    paddingBottom: 3,
-    position: 'relative',
-  },
   noItem: {
     marginTop: 50,
     alignItems: 'center',
   },
-  mission: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 14,
+  noItemText: {
+    fontSize: 16,
     color: '#242424',
-    paddingLeft: 16,
-  },
-  missionMenu: {
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-  },
-  menu: {
-    backgroundColor: '#2C2C2C',
-    borderRadius: 10,
-    width: 80,
-  },
-  menuText: {
-    fontSize: 14,
-    color: '#ffffff',
   },
 });
 

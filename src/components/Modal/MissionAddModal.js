@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   },
   modalText: {
     fontSize: 16,
-    color: '#000000',
+    color: '#242424',
   },
 });
 
