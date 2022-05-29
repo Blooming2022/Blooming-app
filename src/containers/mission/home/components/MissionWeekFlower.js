@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {StyleSheet, View, Image, TouchableOpacity} from 'react-native';
 import MissionAddModal from '../../../../components/Modal/MissionAddModal';
 import MissionCount from './MissionCount';
+import {useNavigation} from '@react-navigation/native';
 
 const MissionWeekFlower = ({missionList, setMissionList}) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -10,10 +11,11 @@ const MissionWeekFlower = ({missionList, setMissionList}) => {
     setPicNum(num);
     setIsModalVisible(!isModalVisible);
   };
-
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <MissionAddModal
+        navigation={navigation}
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
         picNum={picNum}
@@ -24,19 +26,14 @@ const MissionWeekFlower = ({missionList, setMissionList}) => {
         !missionList.find(item => item.picNum == 0).isSuccess ? (
           <>
             {missionList.find(item => item.picNum == 0) == undefined && (
-              <TouchableOpacity
-                style={[styles.plusBtn, styles.btn0]}
-                onPress={() => showModal(0)}>
-                <Image
-                  source={require('../../../../assets/images/plusButton.png')}></Image>
+              <TouchableOpacity style={[styles.plusBtn, styles.btn0]} onPress={() => showModal(0)}>
+                <Image source={require('../../../../assets/images/plusButton.png')}></Image>
               </TouchableOpacity>
             )}
-            <Image
-              source={require('../../../../assets/images/week0.png')}></Image>
+            <Image source={require('../../../../assets/images/week0.png')}></Image>
           </>
         ) : (
-          <Image
-            source={require('../../../../assets/images/week0Active.png')}></Image>
+          <Image source={require('../../../../assets/images/week0Active.png')}></Image>
         )}
       </View>
       <View style={styles.petal1}>
@@ -44,19 +41,14 @@ const MissionWeekFlower = ({missionList, setMissionList}) => {
         !missionList.find(item => item.picNum == 1).isSuccess ? (
           <>
             {missionList.find(item => item.picNum == 1) == undefined && (
-              <TouchableOpacity
-                style={[styles.plusBtn, styles.btn1]}
-                onPress={() => showModal(1)}>
-                <Image
-                  source={require('../../../../assets/images/plusButton.png')}></Image>
+              <TouchableOpacity style={[styles.plusBtn, styles.btn1]} onPress={() => showModal(1)}>
+                <Image source={require('../../../../assets/images/plusButton.png')}></Image>
               </TouchableOpacity>
             )}
-            <Image
-              source={require('../../../../assets/images/week1.png')}></Image>
+            <Image source={require('../../../../assets/images/week1.png')}></Image>
           </>
         ) : (
-          <Image
-            source={require('../../../../assets/images/week1Active.png')}></Image>
+          <Image source={require('../../../../assets/images/week1Active.png')}></Image>
         )}
       </View>
       <View style={styles.petal2}>
@@ -64,19 +56,14 @@ const MissionWeekFlower = ({missionList, setMissionList}) => {
         !missionList.find(item => item.picNum == 2).isSuccess ? (
           <>
             {missionList.find(item => item.picNum == 2) == undefined && (
-              <TouchableOpacity
-                style={[styles.plusBtn, styles.btn2]}
-                onPress={() => showModal(2)}>
-                <Image
-                  source={require('../../../../assets/images/plusButton.png')}></Image>
+              <TouchableOpacity style={[styles.plusBtn, styles.btn2]} onPress={() => showModal(2)}>
+                <Image source={require('../../../../assets/images/plusButton.png')}></Image>
               </TouchableOpacity>
             )}
-            <Image
-              source={require('../../../../assets/images/week2.png')}></Image>
+            <Image source={require('../../../../assets/images/week2.png')}></Image>
           </>
         ) : (
-          <Image
-            source={require('../../../../assets/images/week2Active.png')}></Image>
+          <Image source={require('../../../../assets/images/week2Active.png')}></Image>
         )}
       </View>
       <View style={styles.petal3}>
@@ -84,29 +71,20 @@ const MissionWeekFlower = ({missionList, setMissionList}) => {
         !missionList.find(item => item.picNum == 3).isSuccess ? (
           <>
             {missionList.find(item => item.picNum == 3) == undefined && (
-              <TouchableOpacity
-                style={[styles.plusBtn, styles.btn3]}
-                onPress={() => showModal(3)}>
-                <Image
-                  source={require('../../../../assets/images/plusButton.png')}></Image>
+              <TouchableOpacity style={[styles.plusBtn, styles.btn3]} onPress={() => showModal(3)}>
+                <Image source={require('../../../../assets/images/plusButton.png')}></Image>
               </TouchableOpacity>
             )}
-            <Image
-              source={require('../../../../assets/images/week3.png')}></Image>
+            <Image source={require('../../../../assets/images/week3.png')}></Image>
           </>
         ) : (
-          <Image
-            source={require('../../../../assets/images/week3Active.png')}></Image>
+          <Image source={require('../../../../assets/images/week3Active.png')}></Image>
         )}
       </View>
       <Image
         source={require('../../../../assets/images/weekCenter.png')}
         style={styles.weekCenter}></Image>
-      <MissionCount
-        currentSelf={0}
-        maxSelf={2}
-        currentRandom={0}
-        maxRandom={2}></MissionCount>
+      <MissionCount currentSelf={0} maxSelf={2} currentRandom={0} maxRandom={2}></MissionCount>
     </View>
   );
 };

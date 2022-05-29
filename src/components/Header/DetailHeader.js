@@ -16,10 +16,8 @@ const DetailHeader = ({navigation, updateFunction, setIsModalVisible}) => {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'ReviewHome'}],
-          });
+          // 추후에 미션 디테일 헤더 추가 시 변경 예정.
+          navigation.navigate('MainTab', {screen: 'ReviewHome'});
         }}>
         <Image
           source={require('../../assets/images/backBtn.png')}

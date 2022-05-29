@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, Image, TouchableOpacity} from 'react-native';
 import MissionAddModal from '../../../../components/Modal/MissionAddModal';
 import MissionCount from './MissionCount';
+import {useNavigation} from '@react-navigation/native';
 
 const MissionMonthFlower = ({missionList, setMissionList}) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -10,10 +11,11 @@ const MissionMonthFlower = ({missionList, setMissionList}) => {
     setPicNum(num);
     setIsModalVisible(!isModalVisible);
   };
-
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <MissionAddModal
+        navigation={navigation}
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
         picNum={picNum}
@@ -24,19 +26,14 @@ const MissionMonthFlower = ({missionList, setMissionList}) => {
         !missionList.find(item => item.picNum == 0).isSuccess ? (
           <>
             {missionList.find(item => item.picNum == 0) == undefined && (
-              <TouchableOpacity
-                style={[styles.plusBtn, styles.btn0]}
-                onPress={() => showModal(0)}>
-                <Image
-                  source={require('../../../../assets/images/plusButton.png')}></Image>
+              <TouchableOpacity style={[styles.plusBtn, styles.btn0]} onPress={() => showModal(0)}>
+                <Image source={require('../../../../assets/images/plusButton.png')}></Image>
               </TouchableOpacity>
             )}
-            <Image
-              source={require('../../../../assets/images/month0.png')}></Image>
+            <Image source={require('../../../../assets/images/month0.png')}></Image>
           </>
         ) : (
-          <Image
-            source={require('../../../../assets/images/month0Active.png')}></Image>
+          <Image source={require('../../../../assets/images/month0Active.png')}></Image>
         )}
       </View>
       <View style={styles.petal1}>
@@ -44,26 +41,17 @@ const MissionMonthFlower = ({missionList, setMissionList}) => {
         !missionList.find(item => item.picNum == 1).isSuccess ? (
           <>
             {missionList.find(item => item.picNum == 1) == undefined && (
-              <TouchableOpacity
-                style={[styles.plusBtn, styles.btn1]}
-                onPress={() => showModal(1)}>
-                <Image
-                  source={require('../../../../assets/images/plusButton.png')}></Image>
+              <TouchableOpacity style={[styles.plusBtn, styles.btn1]} onPress={() => showModal(1)}>
+                <Image source={require('../../../../assets/images/plusButton.png')}></Image>
               </TouchableOpacity>
             )}
-            <Image
-              source={require('../../../../assets/images/month1.png')}></Image>
+            <Image source={require('../../../../assets/images/month1.png')}></Image>
           </>
         ) : (
-          <Image
-            source={require('../../../../assets/images/month1Active.png')}></Image>
+          <Image source={require('../../../../assets/images/month1Active.png')}></Image>
         )}
       </View>
-      <MissionCount
-        currentSelf={0}
-        maxSelf={1}
-        currentRandom={0}
-        maxRandom={1}></MissionCount>
+      <MissionCount currentSelf={0} maxSelf={1} currentRandom={0} maxRandom={1}></MissionCount>
     </View>
   );
 };
