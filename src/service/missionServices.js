@@ -104,7 +104,7 @@ const getCurrentMisList = async (period) => {
  * } updateMisInfo 
  * @returns 성공시 Promise | 실패시 -1
  */
-const updateCurrentMis = async (updateMisInfo) => {
+const updateCurrentMis = (updateMisInfo) => {
   let misRef = usersCollection.doc(curUser.uid).collection('currentMisList');
 
   try {
@@ -131,7 +131,6 @@ const updateCurrentMis = async (updateMisInfo) => {
         };
         updateSuccessMis(info);
       }
-      
       return misRef.doc(updateMisInfo.misID).update(updateMisInfo.updateInfo);
     }
   } catch (e) {
@@ -280,7 +279,6 @@ const getLatestSuccessMis = async () => {
 const updateSuccessMis = async (updateMisInfo) => {
   try {
     if ( updateMisInfo.isOutdated == false ) {
-      usersCollection.doc(curUser.uid).collection('currentMisList').doc(updateMisInfo.misID).update(updateMisInfo.misData);
       return usersCollection.doc(curUser.uid).collection('successMisList').doc(updateMisInfo.misID).update(updateMisInfo.misData);
     } else {
       console.log("This mission is outdated. You can't update it.");
@@ -325,7 +323,7 @@ const deleteSuccessMis = async (misID) => {
  * @param {int} period 기간,,
  * @returns 성공시 Promise<number> | 실패시 -1
  */
-const onOutdated = async (period) => {
+const clearCurrentMisList = async (period) => {
   try {
     const curMisList = await getCurrentMisList(period);
     curMisList.forEach(async (element) => {
@@ -357,7 +355,7 @@ const onOutdated = async (period) => {
  * 만약 기간이 끝났다면 현재 미션들을 모두 outdated로 바꾸고, currentMisList를 비운다.
  * @returns Promise<number>
  */
-const outdateCounter = async () => {
+const checkCurrentMisListValid = async () => {
   const HOUR = 1*60*60*1000;
   const DAY = 24*HOUR;
 
@@ -368,27 +366,27 @@ const outdateCounter = async () => {
   
   let now = new Date();
   let today = new Date().getTime() + 9*HOUR;
-  let compareWeek = today - targetWeek.data().targetTime;
-  let compareMonth = today - targetMonth.data().targetTime;
-  let compareSeason = today - targetSeason.data().targetTime;
+  let diffWeek = today - targetWeek.data().targetTime;
+  let diffMonth = today - targetMonth.data().targetTime;
+  let diffSeason = today - targetSeason.data().targetTime;
   
-  if (compareWeek >= 0) {
+  if (diffWeek >= 0) {
     const nextTime = targetWeek.data().targetTime + 7*DAY;
     timeCollection.doc("targetWeek").update({targetTime: nextTime});
-    onOutdated(0);
+    clearCurrentMisList(0);
   }
 
-  if (compareMonth >= 0) {
+  if (diffMonth >= 0) {
     const thisMonth = now.getMonth();
     let nextTime = new Date(now.getFullYear(), thisMonth+1, 1).getTime();
     if ( nextTime == targetMonth.data().targetTime ) {
       nextTime = new Date(now.getFullYear(), thisMonth+2, 1).getTime();
     }
     timeCollection.doc("targetMonth").update({targetTime: nextTime});
-    onOutdated(1);
+    clearCurrentMisList(1);
   }
 
-  if (compareSeason >= 0) {
+  if (diffSeason >= 0) {
     let thisMonth;
     switch (now.getMonth()) {
       case 11:
@@ -420,7 +418,7 @@ const outdateCounter = async () => {
       nextTime = new Date(now.getFullYear(), thisMonth+4, 1).getTime();
     }
     timeCollection.doc("targetSeason").update({targetTime: nextTime});
-    onOutdated(2);
+    clearCurrentMisList(2);
   }
   return;
 }
@@ -443,5 +441,5 @@ export {
   getSuccessMisList,
   getLatestSuccessMis,
 
-  outdateCounter
+  checkCurrentMisListValid
 }
