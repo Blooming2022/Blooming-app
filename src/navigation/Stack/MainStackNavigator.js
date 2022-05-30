@@ -28,7 +28,7 @@ const MainStackNavigator = () => {
         <Stack.Screen name="ReviewCreate" component={ReviewCreate} />
         <Stack.Screen name="ReviewDetail" component={ReviewDetail} />
         <Stack.Screen name="ReviewUpdate" component={ReviewUpdate} />
-        <Stack.Screen name="outdatedMissionDetail" component={OutdatedMissionDetail} />
+        <Stack.Screen name="OutdatedMissionDetail" component={OutdatedMissionDetail} />
         <Stack.Screen name="Login" component={Login} />
       </Stack.Navigator>
     </NavigationContainer>
