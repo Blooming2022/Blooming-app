@@ -13,10 +13,7 @@ const ReviewDetail = ({route, navigation}) => {
     navigation.navigate('ReviewUpdate', {review: review});
   };
   const deleteReview = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{name: 'ReviewHome'}],
-    });
+    navigation.navigate('MainTab', {screen: 'ReviewHome'});
   };
 
   return (

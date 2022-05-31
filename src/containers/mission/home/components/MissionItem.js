@@ -51,9 +51,7 @@ const MissionItem = ({mission, setMissionList, missionList}) => {
     setIsMenuVisible(false);
   };
   const checkMission = () => {
-    const oldInfoIndex = missionList.findIndex(
-      item => item.picNum == mission.picNum,
-    );
+    const oldInfoIndex = missionList.findIndex(item => item.picNum == mission.picNum);
     const updateList = [...missionList];
     updateList[oldInfoIndex].isSuccess = !updateList[oldInfoIndex].isSuccess;
     setMissionList(updateList);
@@ -76,8 +74,7 @@ const MissionItem = ({mission, setMissionList, missionList}) => {
         visible={isMenuVisible}
         anchor={
           <TouchableOpacity onPress={showMenu} style={styles.missionMenu}>
-            <Image
-              source={require('../../../../assets/images/missionMenu.png')}></Image>
+            <Image source={require('../../../../assets/images/missionMenu.png')}></Image>
           </TouchableOpacity>
         }
         onRequestClose={hideMenu}>

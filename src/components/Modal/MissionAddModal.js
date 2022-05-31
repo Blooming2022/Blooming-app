@@ -8,6 +8,7 @@ const MissionAddModal = ({
   picNum,
   missionList,
   setMissionList,
+  navigation,
 }) => {
   const addSelfMission = () => {
     const newInfo = {
@@ -41,6 +42,7 @@ const MissionAddModal = ({
       <View style={styles.modalView}>
         <TouchableOpacity
           onPress={() => {
+            navigation.navigate('MissionCreate');
             addSelfMission(picNum);
           }}>
           <Text style={styles.modalText}>셀프미션 추가</Text>

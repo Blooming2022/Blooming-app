@@ -1,11 +1,11 @@
 import * as React from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import MissionWeek from '../containers/mission/home/MissionWeek';
-import MissionMonth from '../containers/mission/home/MissionMonth';
-import MissionSeason from '../containers/mission/home/MissionSeason';
+import ReviewWeek from '../../containers/review/home/ReviewWeek';
+import ReviewMonth from '../../containers/review/home/ReviewMonth';
+import ReviewSeason from '../../containers/review/home/ReviewSeason';
 
 const Tab = createMaterialTopTabNavigator();
-const MissionTabNavigator = () => {
+const ReviewTabNavigator = () => {
   return (
     <Tab.Navigator
       tabBarShowLabel={false}
@@ -26,23 +26,11 @@ const MissionTabNavigator = () => {
           backgroundColor: '#242424',
         },
       }}>
-      <Tab.Screen
-        name="MissionWeek"
-        component={MissionWeek}
-        options={{tabBarLabel: '한주'}}
-      />
-      <Tab.Screen
-        name="MissionMonth"
-        component={MissionMonth}
-        options={{tabBarLabel: '한달'}}
-      />
-      <Tab.Screen
-        name="MissionSeason"
-        component={MissionSeason}
-        options={{tabBarLabel: '계절'}}
-      />
+      <Tab.Screen name="ReviewWeek" component={ReviewWeek} options={{tabBarLabel: '한주'}} />
+      <Tab.Screen name="ReviewMonth" component={ReviewMonth} options={{tabBarLabel: '한달'}} />
+      <Tab.Screen name="ReviewSeason" component={ReviewSeason} options={{tabBarLabel: '계절'}} />
     </Tab.Navigator>
   );
 };
 
-export default MissionTabNavigator;
+export default ReviewTabNavigator;
