@@ -423,6 +423,34 @@ const checkCurrentMisListValid = async () => {
   return;
 }
 
+/**
+ * 랜덤미션 생성하기를 눌렀을 때 랜덤미션 키워드 2개를 묶어 반환하는 함수
+ * '인테리어 / 캠핑' 형식으로 return
+ * @returns 성공시 Promise<str> | 실패시 -1
+ */
+const getRandomKeyword = async () => {
+  try {
+    const docRef = firestore().collection('crawlingData').doc('rawData');
+    const data = (await docRef.get()).data();
+    const targetList = data["220531"];
+    const range = (targetList).length;
+
+    const randNo1 = Math.floor(Math.random()*range)+1;
+    let randNo2 = Math.floor(Math.random()*range)+1;
+    while (randNo1 == randNo2) {
+      randNo2 = Math.floor(Math.random()*range)+1;
+    }
+
+    const result = targetList[randNo1] + ' / ' + targetList[randNo2];
+    console.log(result);
+    return result;
+
+  } catch (e) {
+    console.log(e.message);
+    return -1;
+  }
+}
+
 export {
   selfMaxWeek,
   randMaxWeek,
@@ -441,5 +469,6 @@ export {
   getSuccessMisList,
   getLatestSuccessMis,
 
-  checkCurrentMisListValid
+  checkCurrentMisListValid,
+  getRandomKeyword
 }
