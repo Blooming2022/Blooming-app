@@ -3,8 +3,8 @@ import {Image} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MissionTabNavigator from './MissionTabNavigator';
 import ReviewTabNavigator from './ReivewTabNavigator';
-import Report from '../../containers/report/Report';
-import MyPage from '../../containers/myPage/MyPage';
+import ReportStackNavigator from '../Stack/ReportStackNavigator';
+import MyPageStackNavigator from '../Stack/MypageStackNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -44,18 +44,22 @@ const MainTabNavigator = () => {
         },
         tabBarStyle: {height: 60, borderRadius: 8, paddingVertical: 4},
       })}>
-      <Tab.Screen
-        name="MissionHome"
-        component={MissionTabNavigator}
-        options={{tabBarLabel: '미션'}}
-      />
+      <Tab.Screen name="Mission" component={MissionTabNavigator} options={{tabBarLabel: '미션'}} />
       <Tab.Screen
         name="ReviewHome"
         component={ReviewTabNavigator}
         options={{tabBarLabel: '후기'}}
       />
-      <Tab.Screen name="Report" component={Report} options={{tabBarLabel: '분석'}} />
-      <Tab.Screen name="Mypage" component={MyPage} options={{tabBarLabel: 'My'}} />
+      <Tab.Screen
+        name="ReportHome"
+        component={ReportStackNavigator}
+        options={{tabBarLabel: '분석'}}
+      />
+      <Tab.Screen
+        name="MypageHome"
+        component={MyPageStackNavigator}
+        options={{tabBarLabel: 'My'}}
+      />
     </Tab.Navigator>
   );
 };

@@ -3,6 +3,7 @@ import {StyleSheet} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MainTabNavigator from '../Tab/MainTabNavigator';
 import MissionCreate from '../../containers/mission/create/MissionCreate';
+import RandomMissionGenerate from '../../containers/mission/create/RandomMissionGenerate';
 import MissionDetail from '../../containers/mission/detail/MissionDetail';
 import MissionUpdate from '../../containers/mission/update/MissionUpdate';
 import ReviewCreate from '../../containers/review/create/ReviewCreate';
