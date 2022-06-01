@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {TouchableOpacity, Image, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MainTabNavigator from '../Tab/MainTabNavigator';
 import MissionCreate from '../../containers/mission/create/MissionCreate';
@@ -23,6 +23,7 @@ const MainStackNavigator = () => {
         }}>
         <Stack.Screen name="MainTab" component={MainTabNavigator} />
         <Stack.Screen name="MissionCreate" component={MissionCreate} />
+        <Stack.Screen name="RandomMissionGenerate" component={RandomMissionGenerate} />
         <Stack.Screen name="MissionDetail" component={MissionDetail} />
         <Stack.Screen name="MissionUpdate" component={MissionUpdate} />
         <Stack.Screen name="ReviewCreate" component={ReviewCreate} />
