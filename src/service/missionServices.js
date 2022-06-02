@@ -425,12 +425,12 @@ const checkCurrentMisListValid = async () => {
 
 /**
  * 랜덤미션 생성하기를 눌렀을 때 랜덤미션 키워드 2개를 묶어 반환하는 함수
- * '인테리어 / 캠핑' 형식으로 return
- * @returns 성공시 Promise<str> | 실패시 -1
+ * {"result1": "인테리어", "result2": "캠핑"} 형식으로 return
+ * @returns 성공시 Promise <result1: str, result2: str> | 실패시 -1
  */
 const getRandomKeyword = async () => {
   try {
-    const docRef = firestore().collection('crawlingData').doc('rawData');
+    const docRef = firestore().collection('crawlingData').doc('randomKeyword');
     const data = (await docRef.get()).data();
     const targetList = data["220531"];
     const range = (targetList).length;
@@ -441,7 +441,10 @@ const getRandomKeyword = async () => {
       randNo2 = Math.floor(Math.random()*range)+1;
     }
 
-    const result = targetList[randNo1] + ' / ' + targetList[randNo2];
+    const result = {
+      result1: targetList[randNo1], 
+      result2: targetList[randNo2]
+    };
     console.log(result);
     return result;
 
