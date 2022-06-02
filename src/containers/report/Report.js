@@ -11,9 +11,9 @@ const Report = () => {
       <Button
         // test
         onPress={() => {
-          navigation.navigate('OutdatedMissionDetail');
+          navigation.navigate('PrevSuccessMissionList');
         }}
-        title="go OutdatedMissionDetail"></Button>
+        title="go PrevSuccessMissionList"></Button>
     </View>
   );
 };

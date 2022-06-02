@@ -1,12 +1,12 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 
-const OutdatedMissionDetail = () => {
+const PrevSuccessMissionDetail = () => {
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Outdated MissionDetail</Text>
+      <Text>PrevSuccessMissionDetail</Text>
     </View>
   );
 };
 
-export default OutdatedMissionDetail;
+export default PrevSuccessMissionDetail;

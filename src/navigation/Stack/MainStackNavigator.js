@@ -10,7 +10,8 @@ import ReviewCreate from '../../containers/review/create/ReviewCreate';
 import ReviewDetail from '../../containers/review/detail/ReviewDetail';
 import ReviewUpdate from '../../containers/review/update/ReviewUpdate';
 import Login from '../../containers/login/Login';
-import OutdatedMissionDetail from '../../containers/report/OutdatedMissionDetail';
+import PrevSuccessMissionList from '../../containers/report/PrevSuccessMissionList';
+import PrevSuccessMissionDetail from '../../containers/report/PrevSuccessMissionDetail';
 import {NavigationContainer} from '@react-navigation/native';
 
 const Stack = createNativeStackNavigator();
@@ -30,7 +31,8 @@ const MainStackNavigator = () => {
         <Stack.Screen name="ReviewCreate" component={ReviewCreate} />
         <Stack.Screen name="ReviewDetail" component={ReviewDetail} />
         <Stack.Screen name="ReviewUpdate" component={ReviewUpdate} />
-        <Stack.Screen name="OutdatedMissionDetail" component={OutdatedMissionDetail} />
+        <Stack.Screen name="PrevSuccessMissionList" component={PrevSuccessMissionList} />
+        <Stack.Screen name="PrevSuccessMissionDetail" component={PrevSuccessMissionDetail} />
         <Stack.Screen name="Login" component={Login} />
       </Stack.Navigator>
     </NavigationContainer>
