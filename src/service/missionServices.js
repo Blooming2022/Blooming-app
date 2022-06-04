@@ -1,6 +1,5 @@
 import firestore, { firebase } from '@react-native-firebase/firestore';
-import { updateUserProfile, getUserProfile, curUser, usersCollection } from './authServices';
-import auth from '@react-native-firebase/auth';
+import { getCurrentUser, updateUserProfile, getUserProfile, usersCollection } from './authServices';
 
 const WEEK = 0;
 const MONTH = 1;
@@ -12,6 +11,8 @@ const selfMaxMonth = 1;
 const randMaxMonth = 1;
 const selfMaxSeason = 1;
 const randMaxSeason = 1;
+
+let curUser = getCurrentUser();
 
 /** 
  * 새로운 미션을 생성하기 위해 호출하는 함수.

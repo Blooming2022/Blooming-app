@@ -17,6 +17,7 @@ const App = () => {
         }, 2000);
       } else {
         // getCurrentMisList();
+        setIsLoggedIn(true);
         setTimeout(() => {
           SplashScreen.hide();
         }, 1000);

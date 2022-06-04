@@ -25,16 +25,12 @@ const usersCollection = firestore().collection('users');
  *
  * @returns 성공시 FirebaseAuthTypes.User | 실패시 -1
  */
+let curUser = getCurrentUser();
+
  const getCurrentUser = () => {
-  try {
     return auth().currentUser;
-  } catch (e) {
-    console.log(e);
-    return -1;
-  }
 }
 
-let curUser = getCurrentUser();
 
 /** 구글 계정 로그인
  * 
@@ -43,11 +39,11 @@ let curUser = getCurrentUser();
 const googleSignIn = async () => {
   try {
     googleConfigure();
-
     const { idToken } = await GoogleSignin.signIn();
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
     const ret = await auth().signInWithCredential(googleCredential);
     const user = getCurrentUser();
+    console.log("[Auth] Successfully sign in with google credential.");
     await usersCollection.doc(user.uid)
     .set({
       displayName: user.displayName,
