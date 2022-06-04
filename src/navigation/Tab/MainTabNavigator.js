@@ -23,11 +23,11 @@ const MainTabNavigator = () => {
             src = focused
               ? require('../../assets/images/reviewTabActive.png')
               : require('../../assets/images/reviewTab.png');
-          } else if (route.name === 'Report') {
+          } else if (route.name === 'ReportHome') {
             src = focused
               ? require('../../assets/images/reportTabActive.png')
               : require('../../assets/images/reportTab.png');
-          } else if (route.name === 'Mypage') {
+          } else if (route.name === 'MypageHome') {
             src = focused
               ? require('../../assets/images/myTabActive.png')
               : require('../../assets/images/myTab.png');
@@ -44,7 +44,7 @@ const MainTabNavigator = () => {
         },
         tabBarStyle: {height: 60, borderRadius: 8, paddingVertical: 4},
       })}>
-      <Tab.Screen name="Mission" component={MissionTabNavigator} options={{tabBarLabel: '미션'}} />
+      <Tab.Screen name="MissionHome" component={MissionTabNavigator} options={{tabBarLabel: '미션'}} />
       <Tab.Screen
         name="ReviewHome"
         component={ReviewTabNavigator}
