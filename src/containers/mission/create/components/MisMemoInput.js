@@ -5,7 +5,7 @@ import {StyleSheet, View, TextInput} from 'react-native';
 // 실제 사용자가 입력힌 메모를 받아서 그 길이가 0보다 크면 placeholder 오른쪽에 구현된 아이콘이 플러스에서 체크로 바뀝니다.
 // 최대 메모의 글자 수는 14로 설정하였으나, 추후 변경애 용이하게끔 따로 수로 설정하였습니다.
 // 입력받은 메모값, 그 메모값을 변수에 저장하는 set, 그리고 메모 길이가 0보다 클 때 아이콘이 변경하도록 하기 위한 memosave버튼 활성화관련 state를 props로 받습니다.
-const MisMemoInput = ({setMisMemo}) => {
+const MisMemoInput = ({setMemo}) => {
   const maxLengthOfMisMemo = 14;
 
   return (
@@ -14,7 +14,7 @@ const MisMemoInput = ({setMisMemo}) => {
         <TextInput
           autoFocus={false} //오토포커스하면 자동으로 키보드가 올라와서 false처리함
           style={styles.textInput}
-          onChangeText={setMisMemo}
+          onChangeText={setMemo}
           placeholder="메모를 입력해주세요!"
           placeholderTextColor={'#999999'} //#CCCDD0은 닉네임색상, 피그마에 비해 연해서 임의로 바꿈
           maxLength={maxLengthOfMisMemo}></TextInput>

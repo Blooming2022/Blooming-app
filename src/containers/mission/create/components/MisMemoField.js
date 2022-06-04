@@ -3,11 +3,11 @@ import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
 
 import MisMemoInput from './MisMemoInput';
 
-const MisMemoField = ({misMemo, setMisMemo}) => {
+const MisMemoField = ({memo, setMemo}) => {
   return (
     <View style={styles.container}>
       <Image style={styles.memoIcon} source={require('../../../../assets/images/memo.png')}></Image>
-      <MisMemoInput misMemo={misMemo} setMisMemo={setMisMemo}></MisMemoInput>
+      <MisMemoInput setMemo={setMemo}></MisMemoInput>
     </View>
   );
 };

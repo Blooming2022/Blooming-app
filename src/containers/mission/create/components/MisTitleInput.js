@@ -9,11 +9,11 @@ const MisTitleInput = ({misTitle, setMisTitle, setButtonDisable}) => {
     <>
       <View style={[styles.container]}>
         <TextInput
-          autoFocus={false} //오토포커스하면 자동으로 키보드가 올라와서 false처리함
+          autoFocus={true}
           style={styles.textInput}
           onChangeText={setMisTitle}
-          placeholder="셀프 미션을 입력해주세요!"
-          placeholderTextColor={'#999999'} //#CCCDD0은 닉네임색상, 피그마에 비해 연해서 임의로 바꿈
+          placeholder="셀프 미션을 입력해주세요"
+          placeholderTextColor={'#5B5B5B'} //#CCCDD0은 닉네임색상, 피그마에 비해 연해서 임의로 바꿈
           maxLength={maxLengthOfMisTitle}></TextInput>
       </View>
     </>
