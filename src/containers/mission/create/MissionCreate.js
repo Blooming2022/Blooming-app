@@ -45,7 +45,7 @@ const MissionCreate = ({route}) => {
       misMemo : memo,
       hasReview : false,
     }
-    // createCurrentMis(misData);
+    createCurrentMis(misData);
     navigation.navigate('MissionDetail', {misData: misData});
   } 
   return (
@@ -57,7 +57,6 @@ const MissionCreate = ({route}) => {
       completeFunction={createMission}></CompleteHeader>
       <View style={styles.container}>
         <MisTitleInput
-          misTitle={title}
           setMisTitle={setTitle}
           ></MisTitleInput>
   

@@ -1,8 +1,7 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {StyleSheet, View, TextInput} from 'react-native';
 
-const MisTitleInput = ({misTitle, setMisTitle, setButtonDisable}) => {
-  var misTitleLength = misTitle.length;
+const MisTitleInput = ({setMisTitle}) => {
   const maxLengthOfMisTitle = 20;
 
   return (

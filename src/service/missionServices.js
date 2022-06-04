@@ -1,5 +1,6 @@
 import firestore, { firebase } from '@react-native-firebase/firestore';
 import { updateUserProfile, getUserProfile, curUser, usersCollection } from './authServices';
+import auth from '@react-native-firebase/auth';
 
 const WEEK = 0;
 const MONTH = 1;
@@ -36,7 +37,6 @@ const randMaxSeason = 1;
  */
 const createCurrentMis = (misData) => {
   let misRef = usersCollection.doc(curUser.uid).collection('currentMisList');
-
   try {
     return misRef.doc().set(misData);
   } catch (e) {
