@@ -1,5 +1,6 @@
 import firestore, { firebase } from '@react-native-firebase/firestore';
-import { updateUserProfile, getUserProfile, curUser, usersCollection } from './authServices';
+import { updateUserProfile, getUserProfile, getCurrentUser, usersCollection, checkUserLevel } from './authServices';
+import { deleteRev, getRevById } from './reviewServices';
 
 const WEEK = 0;
 const MONTH = 1;
@@ -28,14 +29,13 @@ const randMaxSeason = 1;
  *  misAlarmStart: Date,
  *  misAlarmStop: Date,
  *  misMemo: str,
- *  isOutdated: boolean,
  *  hasReview: boolean
  * }
  * @param {*} misData 미션 데이터 정보
  * @returns 성공시 Promise<misData> | 실패시 -1
  */
 const createCurrentMis = (misData) => {
-  let misRef = usersCollection.doc(curUser.uid).collection('currentMisList');
+  let misRef = usersCollection.doc(getCurrentUser().uid).collection('currentMisList');
 
   try {
     return misRef.doc().set(misData);
@@ -52,7 +52,7 @@ const createCurrentMis = (misData) => {
  */
 const getCurrentMisById = async (misID) => {
   try {
-    const misRef = usersCollection.doc(curUser.uid).collection('currentMisList');
+    const misRef = usersCollection.doc(getCurrentUser().uid).collection('currentMisList');
     const docRef = misRef.where(firebase.firestore.FieldPath.documentId(), '==', misID);
     let data = await docRef.get();
     const ret = data.docs.map(doc => ({ ...doc.data(), id: doc.id }));
@@ -69,7 +69,7 @@ const getCurrentMisById = async (misID) => {
  * @returns 성공시 Promise | 실패시 -1
  */
 const getCurrentMisList = async (period) => {
-  let misRef = usersCollection.doc(curUser.uid).collection('currentMisList');
+  let misRef = usersCollection.doc(getCurrentUser().uid).collection('currentMisList');
 
   if ( period == WEEK ) {
     misRef = misRef.where('misPeriod', '==', 0);
@@ -82,6 +82,7 @@ const getCurrentMisList = async (period) => {
   try {
     const data = await misRef.get();
     const ret = data.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+    console.log(ret);
     return ret;
   } catch (e) {
     console.log(e.message);
@@ -96,43 +97,32 @@ const getCurrentMisList = async (period) => {
  *   misTitle: 'fakeTItle',
  *   misMemo: 'newMemo'
  * }
- * 위와 같은 형식으로 updateInfo에는 수정할 정보만 넣어서 호출
+ * 위와 같은 형식으로 updateMisInfo.updateInfo에는 수정할 정보만 넣어서 호출
  * @param {
  *  misID: str,
- *  isSuccess: boolean,
  *  updateInfo: {object}
  * } updateMisInfo 
  * @returns 성공시 Promise | 실패시 -1
  */
-const updateCurrentMis = (updateMisInfo) => {
-  let misRef = usersCollection.doc(curUser.uid).collection('currentMisList');
+const updateCurrentMis = async (updateMisInfo) => {
+  let misRef = usersCollection.doc(getCurrentUser().uid).collection('currentMisList');
 
   try {
-    if ( updateMisInfo.updateInfo.misTitle ) {
-      usersCollection.doc(curUser.uid).collection('revList').doc(updateMisInfo.misID).update({misTitle: updateMisInfo.updateInfo.misTitle});
+    // 미션 title이 변경되면 후기탭에서 참조할 데이터의 미션 title도 변경해줌
+    if(updateMisInfo.updateInfo.misTitle){
+      const misData = await getCurrentMisById(updateMisInfo.misID);
+      if ( misData.hasReview == true ) {
+        usersCollection.doc(getCurrentUser().uid).collection('revList').doc(updateMisInfo.misID).update({misTitle: updateMisInfo.updateInfo.misTitle});
+      }
     }
-
+    
+    // 성공상태로 변화하면 성공시간을 변경, 실패상태로 변화하면 성공시간을 null로 다시 설정해줌
     if ( updateMisInfo.updateInfo.isSuccess == true ) {
       misRef.doc(updateMisInfo.misID).update({successDate: firestore.FieldValue.serverTimestamp()});
-      const ret = misRef.doc(updateMisInfo.misID).update(updateMisInfo.updateInfo);
-      createSuccessMis(updateMisInfo.misID);
-      return ret;
     } else if ( updateMisInfo.updateInfo.isSuccess == false ) {
       misRef.doc(updateMisInfo.misID).update({successDate: null});
-      const ret = misRef.doc(updateMisInfo.misID).update(updateMisInfo.updateInfo);
-      deleteSuccessMis(updateMisInfo.misID);
-      return ret;
-    } else {
-      if ( updateMisInfo.isSuccess == true ) {
-        const info = {
-          misID: updateMisInfo.misID,
-          misData: updateMisInfo.updateInfo,
-          isOutdated: false
-        };
-        updateSuccessMis(info);
-      }
-      return misRef.doc(updateMisInfo.misID).update(updateMisInfo.updateInfo);
     }
+    return misRef.doc(updateMisInfo.misID).update(updateMisInfo.updateInfo);
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -144,19 +134,24 @@ const updateCurrentMis = (updateMisInfo) => {
  * @param {*} misID 삭제하고자 하는 미션의 ID
  * @returns 성공시 Promise | 실패시 -1
  */
-const deleteCurrentMis = async (misID) => {
-  const misRef = usersCollection.doc(uscurUserer.uid).collection('currentMisList');
-  
-  // misID로 미션 조회 후 해당 미션의 성공여부를 읽어옴
-  let data = await getCurrentMisById(misID);
-  
+/**
+ * misID에 해당하는 진행미션을 삭제.
+ * @param {
+ *  misID: str
+ *  hasReview: boolean
+ * } delMisInfo 삭제하고자 하는 미션의 ID
+ * @returns 성공시 Promise | 실패시 -1
+ */
+const deleteCurrentMis = async (delMisInfo) => {
   try {
-    if ( data.isSuccess == true ) { // 성공미션 리스트에도 존재.
-      deleteSuccessMis(misID);
+
+    if (delMisInfo.hasReview == true) {
+      const revInfo = await getRevById(delMisInfo.misID);
+      await deleteRev({misID: delMisInfo.misID, revImg: revInfo.revImg, isOutdated: false});
     }
-    if ( data.isOutdated == true ){
-      console.log("This mission is outdated. You can't delete it.");
-    } else return misRef.doc(misID).delete();
+
+    const misRef = usersCollection.doc(getCurrentUser().uid).collection('currentMisList');
+    return misRef.doc(delMisInfo.misID).delete();  
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -164,18 +159,19 @@ const deleteCurrentMis = async (misID) => {
 }
 
 /** 
- * 성공미션 생성(미션이 성공상태가 되었을 때 자동으로 호출되는 함수)
+ * 성공미션 생성(해당 미션의 기간이 끝났을 때, 미션이 이미 성공상태라면 자동으로 호출되는 함수)
  * @param {*} misID currentMisList에서 successMisList로 추가할 미션의 ID
  * @returns 성공시 Promise<void> | 실패시 -1
  */
 const createSuccessMis = async (misID) => {
   try {
     const misData = await getCurrentMisById(misID);
-    const ret = usersCollection.doc(curUser.uid).collection('successMisList').doc(misID).set(misData);
+    const ret = usersCollection.doc(getCurrentUser().uid).collection('successMisList').doc(misID).set(misData);
     const userProfile = await getUserProfile();
     let successNum = userProfile.successNum;
     successNum = successNum + 1;
     updateUserProfile({'successNum': successNum});
+    checkUserLevel();
     return ret;
   } catch (e) {
     console.log(e.message);
@@ -191,7 +187,7 @@ const createSuccessMis = async (misID) => {
  */
 const getSuccessMisById = async (misID) => {
   try {
-    const misRef = usersCollection.doc(curUser.uid).collection('successMisList');
+    const misRef = usersCollection.doc(getCurrentUser().uid).collection('successMisList');
     const docRef = misRef.where(firebase.firestore.FieldPath.documentId(), '==', misID);
     const data = await docRef.get();
 
@@ -210,7 +206,7 @@ const getSuccessMisById = async (misID) => {
  * @returns 성공시 Promise | 실패시 -1
  */
 const getSuccessMisList = async (period) => {
-  let misRef = usersCollection.doc(curUser.uid).collection('successMisList');
+  let misRef = usersCollection.doc(getCurrentUser().uid).collection('successMisList');
 
   if ( period == WEEK ) {
     misRef = misRef.where('misPeriod', '==', 0);
@@ -227,6 +223,7 @@ const getSuccessMisList = async (period) => {
       console.log('There is no data.');
       return -1;
     }
+    console.log(ret);
     return ret;
   } catch (e) {
     console.log(e.message);
@@ -255,7 +252,7 @@ const getLatestSuccessMis = async () => {
       console.log('There is no Data.');
       return 0;
     }
-    const latestMis = await usersCollection.doc(curUser.uid).collection('successMisList').orderBy('successDate', 'desc').limit(limitNum).get();
+    const latestMis = await usersCollection.doc(getCurrentUser().uid).collection('successMisList').orderBy('successDate', 'desc').limit(limitNum).get();
     return latestMis.docs.map(doc => ({ ...doc.data(), id: doc.id }));
   } catch (e) {
     console.log(e.message);
@@ -264,53 +261,49 @@ const getLatestSuccessMis = async () => {
 }
 
 /** 
- * 성공미션 수정. 미션정보 중 isOutdated=true인 경우 수정되지 않음.
+ * 성공미션 수정.
  * misData = {
  *   misTitle: 'fakeTitle'
  * }
- * 위와 같은 형식으로 misData에는 수정할 정보만 넣어서 호출
+ * 위와 같은 형식으로 updateMisInfo.misData에는 수정할 정보만 넣어서 호출
  * @param {
- *  misID: str
+ *  misID: str,
  *  misData: {object}
- *  isOutdated: boolean
  * } updateMisInfo 
  * @returns 성공시 Promise | 실패시 -1
  */
-const updateSuccessMis = async (updateMisInfo) => {
+const updateSuccessMis = (updateMisInfo) => {
   try {
-    if ( updateMisInfo.isOutdated == false ) {
-      return usersCollection.doc(curUser.uid).collection('successMisList').doc(updateMisInfo.misID).update(updateMisInfo.misData);
-    } else {
-      console.log("This mission is outdated. You can't update it.");
-      return -1;
-    }
+    return usersCollection.doc(getCurrentUser().uid).collection('successMisList').doc(updateMisInfo.misID).update(updateMisInfo.misData);
   } catch(e) {
     console.log(e.message);
     return -1;
   }
 }
 
-/** 성공미션 삭제. 미션정보 중 isOutdated=true인 경우 삭제되지 않음.
+/**
  * misID에 해당하는 성공미션을 삭제.
- * @param {*} misID 삭제하고자 하는 미션의 ID
+ * @param {
+ *  misID: str
+ *  hasReview: boolean
+ * } delMisInfo 삭제하고자 하는 미션의 ID
  * @returns 성공시 Promise<void> | 실패시 -1
  */
-const deleteSuccessMis = async (misID) => {
+const deleteSuccessMis = async (delMisInfo) => {
   try {
-    const data = await getSuccessMisById(misID);
-    const isOutdated = data.isOutdated;
 
-    if ( isOutdated == false ) {
-      const ret = usersCollection.doc(curUser.uid).collection('successMisList').doc(misID).delete();
-      const userProfile = await getUserProfile();
-      let successNum = userProfile.successNum;
-      successNum = successNum - 1;
-      updateUserProfile({'successNum': successNum});
-      return ret;
-    } else {
-      console.log("This mission is outdated. You can't delete it.");
-      return -1;
+    if (delMisInfo.hasReview == true) {
+      const revInfo = await getRevById(delMisInfo.misID);
+      await deleteRev({misID: delMisInfo.misID, revImg: revInfo.revImg, isOutdated: true});
     }
+
+    const ret = usersCollection.doc(getCurrentUser().uid).collection('successMisList').doc(delMisInfo.misID).delete();
+    const userProfile = await getUserProfile();
+    let successNum = userProfile.successNum;
+    successNum = successNum - 1;
+    updateUserProfile({'successNum': successNum});
+    checkUserLevel();
+    return ret;
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -320,18 +313,17 @@ const deleteSuccessMis = async (misID) => {
 
 /**
  * 진행중인 미션의 기간이 끝났을 때 불려올 함수
- * @param {int} period 기간,,
+ * @param {int} period
  * @returns 성공시 Promise<number> | 실패시 -1
  */
-const clearCurrentMisList = async (period) => {
+export const clearCurrentMisList = async (period) => {
   try {
     const curMisList = await getCurrentMisList(period);
     curMisList.forEach(async (element) => {
-      const updateInfo = {
+      // 미션의 기간이 끝났을 때 저장해놓을 필요가 없는 필드들을 삭제
+      const updateMisInfo = {
         misID: element.id,
-        isSuccess: element.isSuccess,
         updateInfo: {
-          isOutdated: true,
           isAlarmSet: firebase.firestore.FieldValue.delete(),
           misAlarmHour: firebase.firestore.FieldValue.delete(),
           misAlarmMinute: firebase.firestore.FieldValue.delete(),
@@ -340,9 +332,15 @@ const clearCurrentMisList = async (period) => {
           picNum: firebase.firestore.FieldValue.delete()
         }
       }
-      await updateCurrentMis(updateInfo);
-      const misRef = usersCollection.doc(curUser.uid).collection('currentMisList');
-      return misRef.doc(element.id).delete();
+      await updateCurrentMis(updateMisInfo);
+
+      // 이때 성공상태인 미션들은 successMisList에 넣어줌
+      if (element.isSuccess == true) {
+        await createSuccessMis(element.id);
+      }
+  
+      // currentMisList를 비워줌
+      return await deleteCurrentMis({misID: element.id, hasReview: false});
     });
   } catch (e) {
     console.log(e.message);
@@ -467,10 +465,12 @@ export {
   getCurrentMisList,
   updateCurrentMis,
   deleteCurrentMis,
-
+  
   getSuccessMisById,
   getSuccessMisList,
   getLatestSuccessMis,
+  updateSuccessMis,
+  deleteSuccessMis,
 
   checkCurrentMisListValid,
   getRandomKeyword
