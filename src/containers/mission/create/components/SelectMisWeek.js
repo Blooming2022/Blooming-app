@@ -10,7 +10,7 @@ import CalendarPicker from 'react-native-calendar-picker';
 // 또한, 시작날짜 기준으로 6일 후만 선택이 되도록 되어있습니다.
 // 찾아놓은 레퍼런스 첨부합니다 : https://github.com/wix/react-native-calendars/issues/40
 
-const MisWeekCalendar = () => {
+const SelectMisWeek = () => {
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
 
@@ -71,4 +71,4 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
 });
-export default MisWeekCalendar;
+export default SelectMisWeek;
