@@ -108,7 +108,7 @@ const updateCurrentMis = async (updateMisInfo) => {
   let misRef = usersCollection.doc(getCurrentUser().uid).collection('currentMisList');
 
   try {
-    // 미션 title이 변경되면 후기탭에서 참조할 데이터의 미션 title도 변경해줌
+    // 미션 title이 변경되면 후기가 있는지 체크하고, 후기 데이터의 미션 title도 변경해줌
     if(updateMisInfo.updateInfo.misTitle){
       const misData = await getCurrentMisById(updateMisInfo.misID);
       if ( misData.hasReview == true ) {
@@ -129,11 +129,6 @@ const updateCurrentMis = async (updateMisInfo) => {
   }
 }
 
-/** 
- * misID에 해당하는 미션을 삭제하는 함수
- * @param {*} misID 삭제하고자 하는 미션의 ID
- * @returns 성공시 Promise | 실패시 -1
- */
 /**
  * misID에 해당하는 진행미션을 삭제.
  * @param {
