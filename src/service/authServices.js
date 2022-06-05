@@ -4,7 +4,6 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { googleConfigure } from './authService_security';
 
 const usersCollection = firestore().collection('users');
-let curUser = auth().currentUser;
 
 /** 구글 계정 로그인
  * 
@@ -22,7 +21,8 @@ const googleSignIn = async () => {
     .set({
       displayName: user.displayName,
       gmailAddr: user.email,
-      successNum: 0
+      successNum: 0,
+			level: 0
     });
     return ret;
   } catch (e) {
@@ -42,7 +42,8 @@ const guestSignIn = async () => {
     .set({
       displayName: user.displayName,
       gmailAddr: user.email,
-      successNum: 0
+      successNum: 0,
+			level: 0
     });
     return ret;
   } catch (e) {
@@ -97,10 +98,11 @@ const getCurrentUser = () => {
  * {
  * "displayName": str | null,
  * "gmailAddr": str | null,
- * "successNum": int
+ * "successNum": int,
+ * "level": int
  * }
- * userSimpleData = await getUserProfile();
- * successNum = userSimpleData.successNum;
+ * userProfileData = await getUserProfile();
+ * successNum = userProfileData.successNum;
  * 와 같은 형식으로 displayName, gmailAddr, successNum 을 조회할 수 있습니다.
  *
  * @returns 성공시 Promise<number> | 실패시 -1
@@ -108,10 +110,11 @@ const getCurrentUser = () => {
 const getUserProfile = async () => {
   try {
     let data;
-    await usersCollection.doc(curUser.uid).get()
+    await usersCollection.doc(getCurrentUser().uid).get()
     .then((docs) => {
       data = docs.data();
     });
+    console.log(data);
     return data;
   } catch (e) {
     console.log(e.message);
@@ -145,7 +148,7 @@ const updateUserProfile = async (data) => {
  */
 const deleteAccount = async () => {
   try {
-    const docPath = usersCollection.doc(curUser.uid);
+    const docPath = usersCollection.doc(getCurrentUser().uid);
     
     await docPath.collection('currentMisList').get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
@@ -164,7 +167,7 @@ const deleteAccount = async () => {
     });
 
     docPath.delete();
-    return await curUser.delete();
+    return await getCurrentUser().delete();
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -205,10 +208,40 @@ const isExistNickname = async (curNickname) => {
   }
 }
 
-export {
-  curUser,
-  usersCollection,
+const checkUserLevel = async () => {
+  try {
+    const userProfileData = await getUserProfile();
+    const successNum = userProfileData.successNum;
+  
+    if (successNum < 3) {
+      return await updateUserProfile({level: 0});
 
+    } else if (successNum >= 3 && successNum <6) {
+      return await updateUserProfile({level: 1});
+
+    } else if (successNum >= 6 && successNum <10) {
+      return await updateUserProfile({level: 2});
+
+    } else if (successNum >= 10 && successNum <15) {
+      return await updateUserProfile({level: 3});
+
+    } else if (successNum >= 15 && successNum <30) {
+      return await updateUserProfile({level: 4});
+
+    } else if (successNum >= 30) {
+      return await updateUserProfile({level: 5});
+    
+    }
+
+  } catch (e) {
+    console.log(e.message);
+    return -1;
+  }
+}
+
+export {
+  usersCollection,
+  
   googleSignIn,
   guestSignIn,
   signOut,
@@ -216,5 +249,6 @@ export {
   getUserProfile,
   updateUserProfile,
   deleteAccount,
-  isExistNickname
+  isExistNickname,
+  checkUserLevel
 }
