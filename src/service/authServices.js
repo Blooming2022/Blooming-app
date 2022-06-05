@@ -22,7 +22,7 @@ const googleSignIn = async () => {
       displayName: user.displayName,
       gmailAddr: user.email,
       successNum: 0,
-			level: 0
+      level: 0
     });
     return ret;
   } catch (e) {
@@ -43,7 +43,7 @@ const guestSignIn = async () => {
       displayName: user.displayName,
       gmailAddr: user.email,
       successNum: 0,
-			level: 0
+      level: 0
     });
     return ret;
   } catch (e) {
@@ -215,24 +215,17 @@ const checkUserLevel = async () => {
   
     if (successNum < 3) {
       return await updateUserProfile({level: 0});
-
     } else if (successNum >= 3 && successNum <6) {
       return await updateUserProfile({level: 1});
-
     } else if (successNum >= 6 && successNum <10) {
       return await updateUserProfile({level: 2});
-
     } else if (successNum >= 10 && successNum <15) {
       return await updateUserProfile({level: 3});
-
     } else if (successNum >= 15 && successNum <30) {
       return await updateUserProfile({level: 4});
-
     } else if (successNum >= 30) {
       return await updateUserProfile({level: 5});
-    
     }
-
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -241,7 +234,6 @@ const checkUserLevel = async () => {
 
 export {
   usersCollection,
-  
   googleSignIn,
   guestSignIn,
   signOut,
