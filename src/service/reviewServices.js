@@ -14,7 +14,7 @@ const SEASON = 2;
  *  misID: str
  *  misPeriod: int      // 0은 한주, 1은 한달, 2는 계절미션
  *  misSuccessDate: Date
- *  isOutdated: boolean   // currentMissionList에 있는 미션에 대해 후기를 생성하면 false, SuccessMissionList에 대해서 후기 생성하면 true
+ *  isOutdated: boolean   // prevSuccessMission에 대해 후기를 생성하면 false, SuccessMission에 대해 후기 생성하면 true
  *  revContent: str
  *  revImg: str        // 후기 이미지의 URI정보. 후기 이미지가 없을 경우 ''를 넣어 호출
  * } createRevInfo 

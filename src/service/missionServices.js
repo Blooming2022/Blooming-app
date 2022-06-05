@@ -91,7 +91,7 @@ const getCurrentMisList = async (period) => {
 }
 
 /**
- * misID와 misData를 받아 misID에 해당하는 미션을 수정하는 함수
+ * misID와 updateInfo가 담긴 object를 받아 misID에 해당하는 미션을 수정하는 함수
  * 
  * updateInfo = {
  *   misTitle: 'fakeTItle',
@@ -101,7 +101,7 @@ const getCurrentMisList = async (period) => {
  * @param {
  *  misID: str,
  *  updateInfo: {object}
- * } updateMisInfo 
+ * } updateMisInfo 미션을 수정할 정보를 담은 object
  * @returns 성공시 Promise | 실패시 -1
  */
 const updateCurrentMis = async (updateMisInfo) => {
@@ -109,10 +109,13 @@ const updateCurrentMis = async (updateMisInfo) => {
 
   try {
     // 미션 title이 변경되면 후기가 있는지 체크하고, 후기 데이터의 미션 title도 변경해줌
-    if(updateMisInfo.updateInfo.misTitle){
+    if (updateMisInfo.updateInfo.misTitle || updateMisInfo.updateInfo.successDate) {
       const misData = await getCurrentMisById(updateMisInfo.misID);
-      if ( misData.hasReview == true ) {
+      if ( misData.hasReview == true && updateMisInfo.updateInfo.misTitle) {
         usersCollection.doc(getCurrentUser().uid).collection('revList').doc(updateMisInfo.misID).update({misTitle: updateMisInfo.updateInfo.misTitle});
+      }
+      if (misData.hasReview == true && updateMisInfo.updateInfo.successDate) {
+        usersCollection.doc(getCurrentUser().uid).collection('revList').doc(updateMisInfo.misID).update({misSuccessDate: updateMisInfo.updateInfo.successDate});
       }
     }
     
@@ -134,7 +137,7 @@ const updateCurrentMis = async (updateMisInfo) => {
  * @param {
  *  misID: str
  *  hasReview: boolean
- * } delMisInfo 삭제하고자 하는 미션의 ID
+ * } delMisInfo 삭제하고자 하는 미션의 정보를 담은 object
  * @returns 성공시 Promise | 실패시 -1
  */
 const deleteCurrentMis = async (delMisInfo) => {
@@ -154,7 +157,7 @@ const deleteCurrentMis = async (delMisInfo) => {
 }
 
 /** 
- * 성공미션 생성(해당 미션의 기간이 끝났을 때, 미션이 이미 성공상태라면 자동으로 호출되는 함수)
+ * 성공미션 생성(해당 미션의 기간이 끝났을 때, 미션이 prevSuccessMission이라면 호출되는 함수)
  * @param {*} misID currentMisList에서 successMisList로 추가할 미션의 ID
  * @returns 성공시 Promise<void> | 실패시 -1
  */
@@ -311,7 +314,7 @@ const deleteSuccessMis = async (delMisInfo) => {
  * @param {int} period
  * @returns 성공시 Promise<number> | 실패시 -1
  */
-export const clearCurrentMisList = async (period) => {
+const clearCurrentMisList = async (period) => {
   try {
     const curMisList = await getCurrentMisList(period);
     curMisList.forEach(async (element) => {
@@ -329,7 +332,7 @@ export const clearCurrentMisList = async (period) => {
       }
       await updateCurrentMis(updateMisInfo);
 
-      // 이때 성공상태인 미션들은 successMisList에 넣어줌
+      // 이때 prevSuccessMission(성공상태인 미션)들은 successMisList에 넣어줌
       if (element.isSuccess == true) {
         await createSuccessMis(element.id);
       }
@@ -345,7 +348,7 @@ export const clearCurrentMisList = async (period) => {
 
 /**
  * 진행중인 미션의 기간이 끝났는지 아닌지 체크하는 함수.
- * 만약 기간이 끝났다면 현재 미션들을 모두 outdated로 바꾸고, currentMisList를 비운다.
+ * 만약 기간이 끝났다면 prevSuccessMission을 모두 successMissionList로 옮기고, currentMisList를 비운다.
  * @returns Promise<number>
  */
 const checkCurrentMisListValid = async () => {
