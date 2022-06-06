@@ -155,9 +155,9 @@ const deleteAccount = async () => {
         docPath.collection('currentMisList').doc(doc.id).delete();
       });
     });
-    await docPath.collection('PrevSuccessMisList').get().then((querySnapshot) => {
+    await docPath.collection('prevSuccessMisList').get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        docPath.collection('PrevSuccessMisList').doc(doc.id).delete();
+        docPath.collection('prevSuccessMisList').doc(doc.id).delete();
       });
     });
     await docPath.collection('revList').get().then((querySnapshot) => {
