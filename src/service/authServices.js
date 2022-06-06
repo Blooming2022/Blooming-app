@@ -57,7 +57,7 @@ const guestSignIn = async () => {
  */
 const signOut = () => {
   try {
-    return ret = auth().signOut();
+    return auth().signOut();
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -155,9 +155,9 @@ const deleteAccount = async () => {
         docPath.collection('currentMisList').doc(doc.id).delete();
       });
     });
-    await docPath.collection('successMisList').get().then((querySnapshot) => {
+    await docPath.collection('prevSuccessMisList').get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        docPath.collection('successMisList').doc(doc.id).delete();
+        docPath.collection('prevSuccessMisList').doc(doc.id).delete();
       });
     });
     await docPath.collection('revList').get().then((querySnapshot) => {
