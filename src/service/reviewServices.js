@@ -14,7 +14,7 @@ const SEASON = 2;
  *  misID: str
  *  misPeriod: int      // 0은 한주, 1은 한달, 2는 계절미션
  *  misSuccessDate: Date
- *  isOutdated: boolean   // prevSuccessMission에 대해 후기를 생성하면 false, SuccessMission에 대해 후기 생성하면 true
+ *  isOutdated: boolean   // currentMisList 내의 isSuccess:ture인 미션에 대해 후기를 생성하면 false, prevSuccessMission에 대해 후기 생성하면 true
  *  revContent: str
  *  revImg: str        // 후기 이미지의 URI정보. 후기 이미지가 없을 경우 ''를 넣어 호출
  * } createRevInfo 
@@ -34,7 +34,7 @@ const createRev = async (createRevInfo) => {
       });
     }
     if ( createRevInfo.isOutdated ) {
-      await usersCollection.doc(getCurrentUser().uid).collection('successMisList').doc(createRevInfo.misID).update({hasReview: true});
+      await usersCollection.doc(getCurrentUser().uid).collection('prevSuccessMisList').doc(createRevInfo.misID).update({hasReview: true});
     } else {
       const updateMisInfo = {
         misID: createRevInfo.misID,
@@ -146,7 +146,7 @@ const deleteRev = async (delRevInfo) => {
     }
     
     if ( delRevInfo.isOutdated ) {
-      await usersCollection.doc(getCurrentUser().uid).collection('successMisList').doc(delRevInfo.misID).update({hasReview: false});
+      await usersCollection.doc(getCurrentUser().uid).collection('prevSuccessMisList').doc(delRevInfo.misID).update({hasReview: false});
     } else {
       const updateMisInfo = {
         misID: delRevInfo.misID,
