@@ -1,7 +1,7 @@
 import { firebase } from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import { updateCurrentMis } from './missionServices';
-import { curUser, usersCollection } from './authServices';
+import { getCurrentUser, usersCollection } from './authServices';
 
 const WEEK = 0;
 const MONTH = 1;
@@ -14,7 +14,7 @@ const SEASON = 2;
  *  misID: str
  *  misPeriod: int      // 0은 한주, 1은 한달, 2는 계절미션
  *  misSuccessDate: Date
- *  isOutdated: boolean
+ *  isOutdated: boolean   // currentMisList 내의 isSuccess:ture인 미션에 대해 후기를 생성하면 false, prevSuccessMission에 대해 후기 생성하면 true
  *  revContent: str
  *  revImg: str        // 후기 이미지의 URI정보. 후기 이미지가 없을 경우 ''를 넣어 호출
  * } createRevInfo 
@@ -22,7 +22,7 @@ const SEASON = 2;
  */
 const createRev = async (createRevInfo) => {
   try {
-    const imgRef = storage().ref(`/revImg/${curUser.uid}/${createRevInfo.misID}.jpg`);
+    const imgRef = storage().ref(`/revImg/${getCurrentUser().uid}/${createRevInfo.misID}.jpg`);
     
     if ( createRevInfo.revImg != '' ) {
       const task = imgRef.putFile(createRevInfo.revImg);
@@ -34,17 +34,16 @@ const createRev = async (createRevInfo) => {
       });
     }
     if ( createRevInfo.isOutdated ) {
-      await usersCollection.doc(curUser.uid).collection('successMisList').doc(createRevInfo.misID).update({hasReview: true});
-    } else{
-      const updateInfo = {
+      await usersCollection.doc(getCurrentUser().uid).collection('prevSuccessMisList').doc(createRevInfo.misID).update({hasReview: true});
+    } else {
+      const updateMisInfo = {
         misID: createRevInfo.misID,
-        updateData: {hasReview: true},
-        isSuccess: true
+        updateInfo: {hasReview: true}
       };
-      updateCurrentMis(updateInfo);
+      updateCurrentMis(updateMisInfo);
     }
 
-    return await usersCollection.doc(curUser.uid).collection('revList').doc(createRevInfo.misID).set(createRevInfo);
+    return await usersCollection.doc(getCurrentUser().uid).collection('revList').doc(createRevInfo.misID).set(createRevInfo);
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -62,7 +61,7 @@ const createRev = async (createRevInfo) => {
  */
 const getRevById = async (misID) => {
   try {
-    const revRef = usersCollection.doc(curUser.uid).collection('revList');
+    const revRef = usersCollection.doc(getCurrentUser().uid).collection('revList');
     const docRef = revRef.where(firebase.firestore.FieldPath.documentId(), '==', misID);
     const data = await docRef.get();
     const ret = data.docs.map(doc => ({ ...doc.data(), id: doc.id }));
@@ -81,7 +80,7 @@ const getRevById = async (misID) => {
  */
 const getRevList = async (period) => {
   try {
-    let revRef = usersCollection.doc(curUser.uid).collection('revList');
+    let revRef = usersCollection.doc(getCurrentUser().uid).collection('revList');
     if ( period == WEEK ) {
       revRef = revRef.where('misPeriod', '==', 0);
     } else if ( period == MONTH ) {
@@ -111,7 +110,7 @@ const getRevList = async (period) => {
 const updateRev = async (updateRevInfo) => {
   try {
     if(updateRevInfo.isImgUpdated) {
-      const imgRef = storage().ref(`/revImg/${curUser.uid}/${updateRevInfo.misID}.jpg`);
+      const imgRef = storage().ref(`/revImg/${getCurrentUser().uid}/${updateRevInfo.misID}.jpg`);
       const revImg = updateRevInfo.revData.revImg;
       // 이미지 수정 - storage
       const task = imgRef.putFile(revImg);
@@ -122,7 +121,7 @@ const updateRev = async (updateRevInfo) => {
         console.log('img uploaded to the bucket!');
       });
     }
-    return await usersCollection.doc(curUser.uid).collection('revList').doc(updateRevInfo.misID).update(updateRevInfo.revData);
+    return await usersCollection.doc(getCurrentUser().uid).collection('revList').doc(updateRevInfo.misID).update(updateRevInfo.revData);
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -142,21 +141,20 @@ const deleteRev = async (delRevInfo) => {
   try {
 
     if ( delRevInfo.revImg ) { // revImg가 있을 때 실행돼야 함
-      const imgRef = storage().ref(`/revImg/${curUser.uid}/${delRevInfo.misID}.jpg`);
+      const imgRef = storage().ref(`/revImg/${getCurrentUser().uid}/${delRevInfo.misID}.jpg`);
       imgRef.delete().then().catch((e)=>console.log(e.message));
     }
     
     if ( delRevInfo.isOutdated ) {
-      await usersCollection.doc(curUser.uid).collection('successMisList').doc(delRevInfo.misID).update({hasReview: false});
+      await usersCollection.doc(getCurrentUser().uid).collection('prevSuccessMisList').doc(delRevInfo.misID).update({hasReview: false});
     } else {
-      const updateInfo = {
+      const updateMisInfo = {
         misID: delRevInfo.misID,
-        updateData: {hasReview: false},
-        isSuccess: true
+        updateInfo: {hasReview: false}
       };
-      updateCurrentMis(updateInfo);
+      updateCurrentMis(updateMisInfo);
     }
-    return await usersCollection.doc(curUser.uid).collection('revList').doc(delRevInfo.misID).delete();
+    return await usersCollection.doc(getCurrentUser().uid).collection('revList').doc(delRevInfo.misID).delete();
   } catch (e) {
     console.log(e.message);
     return -1;
