@@ -5906,10 +5906,10 @@ react-native-tab-view@^3.1.1:
   resolved "https://registry.npmjs.org/react-native-tab-view/-/react-native-tab-view-3.1.1.tgz"
   integrity sha512-M5pRN6utQfytKWoKlKVzg5NbkYu308qNoW1khGTtEOTs1k14p2dHJ/BWOJoJYHKbPVUyZldbG9MFT7gUl4YHnw==
 
-react-native-wheely@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.npmjs.org/react-native-wheely/-/react-native-wheely-0.4.1.tgz"
-  integrity sha512-fr4BTRy3YnnxmZeSHKGms4MPcvLC5rnGqfqes9lKDEYRmZTLwuCVOy5Lad/VH4MUI5VE+FM40AQ/JZldB2PFQw==
+react-native-wheel-scrollview-picker@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-wheel-scrollview-picker/-/react-native-wheel-scrollview-picker-2.0.1.tgz#130fb9c4c6080376d4166d53e626c67d65193931"
+  integrity sha512-jNhOU/gsw9TDumMev4vMaIfR9Coicc4Pgo3kizdam0UC0NQga1gpLWnXuZoYIwEIDElwbHXAEGINOoiF1MM5Hw==
 
 react-native@0.68.1:
   version "0.68.1"

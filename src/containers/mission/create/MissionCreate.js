@@ -15,16 +15,19 @@ const MissionCreate = ({route}) => {
   const misInfo = route.params.misInfo;
   const [period, setPeriod] = useState(misInfo.period);
   const [title, setTitle] = useState('');
-  //타이틀에 값이 입력된 경우 하단의 save버튼 활성화 체크를 위한 상태값
   const [memo, setMemo] = useState('');
+  const [misStartWeek, setMisStartWeek] = useState('');
+  const [misStopWeek, setMisStopWeek] = useState('');
+  const [misMonth, setMisMonth] = useState('');
+  const [misSeason, setMisSeason] = useState('');
   const [isAlarmSet, setIsAlarmSet] = useState(false);
-  const [misAlarmStop, setMisAlarmStop] = useState('');
-  const [misAlarmStart, setMisAlarmStart] = useState('');
-  const [misAlarmStopTime, setMisAlarmStopTime] = useState('');
-  const [misAlarmStartTime, setMisAlarmStartTime] = useState('');
-  let isMisSelfText = misInfo.isMisSelf? "셀프" : "랜덤";
+  const [alarmStart, setAlarmStart] = useState('');
+  const [alarmStop, setAlarmStop] = useState('');
+  // const [alarmStartTime, setAlarmStartTime] = useState('');
+  // const [alarmStopTime, setAlarmStopTime] = useState('');
   const [isValid, setIsValid] = useState(false);
   const navigation = useNavigation();
+  let isMisSelfText = misInfo.isMisSelf? "셀프" : "랜덤";
 
   useEffect(() => {
     if (title !== '')  {
@@ -42,6 +45,10 @@ const MissionCreate = ({route}) => {
       successDate : null,
       isMisSelf : misInfo.isMisSelf,
       isAlarmSet : isAlarmSet,
+      // misAlarmHour
+      // misAlarmMinute
+      // misAlarmStart
+      // misAlarmStop
       misMemo : memo,
       hasReview : false,
     }
@@ -55,7 +62,7 @@ const MissionCreate = ({route}) => {
       title= {isMisSelfText + " 미션 추가"}
       isValid={isValid}
       completeFunction={createMission}></CompleteHeader>
-      <View style={styles.container}>
+      <ScrollView style={styles.container} nestedScrollEnabled={true}>
         <MisTitleInput
           setMisTitle={setTitle}
           ></MisTitleInput>
@@ -78,13 +85,11 @@ const MissionCreate = ({route}) => {
             setPeriod={setPeriod}></MisPeriodSelectBtn>
         </View>
         {period == 0 && <SelectMisWeek />}
-        {period == 1 && <SelectMisMonth />}
-        {period == 2 && <SelectMisSeason />}
+        {period == 1 && <SelectMisMonth setMisMonth={setMisMonth}/>}
+        {period == 2 && <SelectMisSeason setMisSeason={setMisSeason}/>}
   
         <View style={styles.separator}></View>
-  
         <MisMemoField memo={memo} setMemo={setMemo} />
-  
         <View style={styles.separator}></View>
   
         {/* 알람 on/off 여부 및 알람 설정하는 모듈 */}
@@ -97,10 +102,10 @@ const MissionCreate = ({route}) => {
             setMisAlarmStop={setMisAlarmStop}
             misAlarmStartTime={misAlarmStartTime}
             setMisAlarmStartTime={setMisAlarmStartTime}
-            misAlarmStopTime={misAlarmStopTime}
-            setMisAlarmStopTime={setMisAlarmStopTime}
+            AlarmStopTime={AlarmStopTime}
+            setAlarmStopTime={setAlarmStopTime}
           /> */}
-      </View>
+      </ScrollView>
     </>
   );
 };

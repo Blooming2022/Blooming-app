@@ -25,11 +25,11 @@ const usersCollection = firestore().collection('users');
  *
  * @returns 성공시 FirebaseAuthTypes.User | 실패시 -1
  */
-let curUser = getCurrentUser();
 
- const getCurrentUser = () => {
-    return auth().currentUser;
+const getCurrentUser = () => {
+  return auth().currentUser;
 }
+let curUser = getCurrentUser();
 
 /** 구글 계정 로그인
  * 
