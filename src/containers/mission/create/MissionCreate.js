@@ -89,7 +89,7 @@ const MissionCreate = ({route}) => {
         {period == 2 && <SelectMisSeason setMisSeason={setMisSeason}/>}
   
         <View style={styles.separator}></View>
-        <MisMemoField memo={memo} setMemo={setMemo} />
+        <MisMemoField setMemo={setMemo} />
         <View style={styles.separator}></View>
   
         {/* 알람 on/off 여부 및 알람 설정하는 모듈 */}

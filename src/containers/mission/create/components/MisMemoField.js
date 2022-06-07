@@ -1,9 +1,9 @@
 import React from 'react';
-import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, Image} from 'react-native';
 
 import MisMemoInput from './MisMemoInput';
 
-const MisMemoField = ({memo, setMemo}) => {
+const MisMemoField = ({setMemo}) => {
   return (
     <View style={styles.container}>
       <Image style={styles.memoIcon} source={require('../../../../assets/images/memo.png')}></Image>
