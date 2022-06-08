@@ -9,21 +9,19 @@ const SelectMisSeason = ({setMisSeason}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>2022</Text>
-      <View style={styles.weelBox}>
+      <View style={styles.wheelBox}>
           <ScrollPicker
           dataSource={wheelPickerData}
           selectedIndex={0}
           renderItem={(dataSource) => {
             return (
               <Text>{dataSource}</Text>
-            )
+            );
           }}
           onValueChange={(data, selectedIndex) => {
             setMisSeason(selectedIndex) // 계절에 대한 필드값 필요. 인덱스값 보낼게요
           }}
-          itemTextStyle = {{fontSize: 24, color: '#ffffff'}}
           wrapperHeight={150}
-          wrapperWidth={50}
           wrapperColor='#ffffff'
           itemHeight={50}
           highlightColor='#efefef'
@@ -47,15 +45,10 @@ const styles = StyleSheet.create({
     color: '#242424',
     marginRight: 15
   },
-  weelBox: {
+  wheelBox: {
     width: 200,
     marginHorizontal: 5,
-  },
-  weelText: {
-    fontWeight: 'bold',
-    fontSize: 18,
-    color: '#242424',
-  },
+  }
 });
 
 export default SelectMisSeason;

@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 10,
+    paddingBottom: 20
   },
   memoIcon: {
     marginRight: 15,

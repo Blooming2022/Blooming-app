@@ -11,7 +11,7 @@ const SelectMisMonth = ({setMisMonth}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.yearText}>{nowYear}년</Text>
-        <View style={styles.weelBox}>
+        <View style={styles.wheelBox}>
           <ScrollPicker
           dataSource={wheelPickerData}
           selectedIndex={nowMonth}
@@ -23,9 +23,7 @@ const SelectMisMonth = ({setMisMonth}) => {
           onValueChange={(data) => {
             setMisMonth(data) // 월 정보가 저장
           }}
-          itemTextStyle = {{fontSize: 24, color: '#ffffff'}}
           wrapperHeight={150}
-          wrapperWidth={50}
           wrapperColor='#ffffff'
           itemHeight={50}
           highlightColor='#efefef'
@@ -57,7 +55,7 @@ const styles = StyleSheet.create({
     color: '#242424',
     marginLeft: 100
   },
-  weelBox: {
+  wheelBox: {
     position: 'absolute',
     bottom:-10,
     left: 80,

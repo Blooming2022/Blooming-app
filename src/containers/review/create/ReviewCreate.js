@@ -9,14 +9,8 @@ import ReviewContentInput from './components/ReviewContentInput';
 import ReviewImageInput from './components/ReviewImageInput';
 
 const ReviewCreate = ({route, navigation}) => {
-  // const mission = route.params.mission;
+  const mission = route.params.mission;
   // 미션 생성 화면 구현 후 위처럼 route.params로 받을 예정. 임시 데이터.
-  const mission = {
-    id: 0,
-    misPeriod: 0,
-    misTitle: '아하하',
-    successDate: getKSTTime(),
-  };
   const isInitialMount = useRef(true);
   // 완료 버튼 색 변경 조건
   const [isValid, setIsValid] = useState(false);
