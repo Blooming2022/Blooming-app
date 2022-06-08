@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, ScrollView, Image} from 'react-native';
 import DetailHeader from '../../../components/Header/DetailHeader';
 import MissionInfoBox from '../create/components/MissionInfoBox';
-import MissionTitleBox from '../create/components/MissionTitleBox';
+import MissionTitleBox from '../../../components/Text/MissionTitleBox';
 import DeleteModal from '../../../components/Modal/DeleteModal';
 
 const ReviewDetail = ({route, navigation}) => {
@@ -21,7 +21,8 @@ const ReviewDetail = ({route, navigation}) => {
       <DetailHeader
         navigation={navigation}
         updateFunction={goToReviewUpdate}
-        setIsModalVisible={setIsModalVisible}></DetailHeader>
+        setIsModalVisible={setIsModalVisible}
+        from="review"></DetailHeader>
       <ScrollView style={styles.container}>
         <DeleteModal
           isModalVisible={isModalVisible}

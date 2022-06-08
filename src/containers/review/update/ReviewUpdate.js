@@ -4,7 +4,7 @@ import CompleteHeader from '../../../components/Header/CompleteHeader';
 import PhotoModal from '../create/components/PhotoModal';
 import MissionInfoBox from '../create/components/MissionInfoBox';
 import ReviewImageInput from '../create/components/ReviewImageInput';
-import MissionTitleBox from '../create/components/MissionTitleBox';
+import MissionTitleBox from '../../../components/Text/MissionTitleBox';
 import ReviewContentInput from '../create/components/ReviewContentInput';
 
 const ReviewUpdate = ({route, navigation}) => {

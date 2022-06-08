@@ -1,11 +1,14 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {Menu, MenuItem} from 'react-native-material-menu';
+import { deleteCurrentMis } from '../../../../service/missionServices';
+import {useNavigation} from '@react-navigation/native';
 
 const MissionItem = ({mission, setMissionList, missionList}) => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   let imageSource;
   let addNum;
+  const navigation = useNavigation();
 
   if (mission.misPeriod == 0) {
     imageSource = [
@@ -47,9 +50,17 @@ const MissionItem = ({mission, setMissionList, missionList}) => {
     setIsMenuVisible(false);
   };
   const deleteMission = () => {
-    setMissionList(missionList.filter(item => item.picNum !== mission.picNum));
     setIsMenuVisible(false);
+    const delMisInfo = {
+      misID : mission.id,
+      hasReview : mission.hasReview
+    }
+    deleteCurrentMis(delMisInfo);
   };
+  const goToMissionDetail = () => {
+    console.log(goToMissionDetail)
+    navigation.navigate('MissionDetail', {mission: mission});
+  }
   const checkMission = () => {
     const oldInfoIndex = missionList.findIndex(item => item.picNum == mission.picNum);
     const updateList = [...missionList];
@@ -67,7 +78,10 @@ const MissionItem = ({mission, setMissionList, missionList}) => {
             <Image source={imageSource[mission.picNum].image}></Image>
           )}
         </TouchableOpacity>
-        <Text style={styles.title}>{mission.misTitle}</Text>
+        <TouchableOpacity onPress={goToMissionDetail}>
+          <Text style={styles.title}>{mission.misTitle}</Text>
+        </TouchableOpacity>
+
       </View>
       <Menu
         style={styles.menu}

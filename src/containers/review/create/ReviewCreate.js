@@ -2,8 +2,9 @@ import React, {useState, useEffect, useRef} from 'react';
 import {StyleSheet, ScrollView, View} from 'react-native';
 import CompleteHeader from '../../../components/Header/CompleteHeader';
 import {getKSTTime} from '../../../service/commonServices';
+import { createRev } from '../../../service/reviewServices';
 import MissionInfoBox from './components/MissionInfoBox';
-import MissionTitleBox from './components/MissionTitleBox';
+import MissionTitleBox from '../../../components/Text/MissionTitleBox';
 import PhotoModal from './components/PhotoModal';
 import ReviewContentInput from './components/ReviewContentInput';
 import ReviewImageInput from './components/ReviewImageInput';
@@ -27,7 +28,16 @@ const ReviewCreate = ({route, navigation}) => {
 
   // createReview는 서버 연동 후 변경할 예정입니다. 지금은 화면 흐름만 구현했어요.
   const createReview = () => {
-    console.log(review);
+    const createRevInfo = {
+      misTitle: review.misTitle,
+      misID : review.misID,
+      misPeriod: review.misPeriod,
+      misSuccessDate: review.misSuccessDate,
+      revContent: review.revContent,
+      revImg: review.revImg,
+      isOutdated: false,
+    }
+    createRev(createRevInfo);
     navigation.navigate('ReviewDetail', {review: review});
   };
   const deleteImage = () => {

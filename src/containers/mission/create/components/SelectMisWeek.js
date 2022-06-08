@@ -3,7 +3,7 @@ import {StyleSheet, View} from 'react-native';
 
 import CalendarPicker from 'react-native-calendar-picker';
 
-const MisWeekCalendar = ({misWeekStart, setMisWeekStart, setMisWeekEnd}) => {
+const SelectMisWeek = ({misWeekStart, setMisWeekStart, setMisWeekEnd}) => {
   const [selectedStartDate, setSelectedStartDate] = useState();
   const [selectedEndDate, setSelectedEndDate] = useState();
   var remainDay = [0, 6, 5, 4, 3, 2, 1];

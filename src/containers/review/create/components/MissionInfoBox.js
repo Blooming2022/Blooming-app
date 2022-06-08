@@ -35,11 +35,13 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   periodBox: {
+    width: 57,
+    height: 37,
     borderColor: '#999999',
     borderWidth: 1,
     borderRadius: 35,
-    paddingHorizontal: 13,
-    paddingVertical: 6,
+    justifyContent:'center',
+    alignItems: 'center'
   },
   misPeriod: {
     fontSize: 14,
