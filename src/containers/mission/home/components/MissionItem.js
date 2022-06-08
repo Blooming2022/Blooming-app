@@ -7,7 +7,7 @@ const MissionItem = ({mission, setMissionList, missionList}) => {
   let imageSource;
   let addNum;
 
-  if (mission.period == 0) {
+  if (mission.misPeriod == 0) {
     imageSource = [
       {image: require('../../../../assets/images/missionPink.png')},
       {image: require('../../../../assets/images/missionBlue.png')},
@@ -19,7 +19,7 @@ const MissionItem = ({mission, setMissionList, missionList}) => {
       {image: require('../../../../assets/images/missionVioletActive.png')},
     ];
     addNum = 4;
-  } else if (mission.period == 1) {
+  } else if (mission.misPeriod == 1) {
     imageSource = [
       {image: require('../../../../assets/images/missionPink.png')},
       {image: require('../../../../assets/images/missionViolet.png')},
@@ -67,7 +67,7 @@ const MissionItem = ({mission, setMissionList, missionList}) => {
             <Image source={imageSource[mission.picNum].image}></Image>
           )}
         </TouchableOpacity>
-        <Text style={styles.title}>{mission.title}</Text>
+        <Text style={styles.title}>{mission.misTitle}</Text>
       </View>
       <Menu
         style={styles.menu}

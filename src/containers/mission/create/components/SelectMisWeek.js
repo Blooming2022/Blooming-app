@@ -18,7 +18,8 @@ const MisWeekCalendar = ({misWeekStart, setMisWeekStart, setMisWeekEnd}) => {
     setSelectedEndDate(selectedEndDate);
     }, [duRange])
 
-  const onDateChange = (date, type) => { // 현재는 낮 12시를 기준으로 만들어짐.
+  const onDateChange = (date, type) => {
+
     //function to handle the date change
     if (type == 'END_STATE') {
       setSelectedEndDate(date);
@@ -83,4 +84,4 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
 });
-export default MisWeekCalendar;
+export default SelectMisWeek;
