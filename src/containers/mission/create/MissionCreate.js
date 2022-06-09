@@ -60,7 +60,6 @@ const MissionCreate = ({route}) => {
         completeFunction={createMission}></CompleteHeader>
       <ScrollView style={styles.container} nestedScrollEnabled={true}>
         <MisTitleInput setMisTitle={setTitle}></MisTitleInput>
-
         <View style={styles.periodButtonContainer}>
           <MisPeriodSelectBtn
             buttontext={'한주'}
@@ -78,10 +77,16 @@ const MissionCreate = ({route}) => {
             period={period}
             setPeriod={setPeriod}></MisPeriodSelectBtn>
         </View>
-        {period == 0 && <SelectMisWeek />}
+        {period == 0 && (
+          <SelectMisWeek
+            misWeekStart={misWeekStart}
+            setMisWeekStart={setMisWeekStart}
+            misWeekEnd={setMisWeekEnd}
+            setMisWeekEnd={setMisWeekEnd}
+          />
+        )}
         {period == 1 && <SelectMisMonth setMisMonth={setMisMonth} />}
         {period == 2 && <SelectMisSeason setMisSeason={setMisSeason} />}
-
         <View style={styles.separator}></View>
         <MisMemoField setMemo={setMemo} />
       </ScrollView>

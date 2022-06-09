@@ -2,8 +2,7 @@ import React from 'react';
 import {View, Image, Text, TouchableOpacity, StyleSheet} from 'react-native';
 
 const MisDetailReview = ({showInfoModal, navigation, mission}) => {
-  // const hasReview = mission.hasReview;
-  const hasReview = true;
+  const hasReview = mission.hasReview;
 
   return (
     <View style={styles.reviewBox}>

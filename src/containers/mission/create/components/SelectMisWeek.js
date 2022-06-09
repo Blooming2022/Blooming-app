@@ -1,80 +1,66 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
+import {Calendar, LocaleConfig} from 'react-native-calendars';
 
-import CalendarPicker from 'react-native-calendar-picker';
+LocaleConfig.locales['ko'] = {
+  // prettier-ignore
+  monthNames: ['01월','02월','03월','04월','05월','06월','07월','08월','09월','10월','11월','12월'],
+  dayNames: ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'],
+  dayNamesShort: ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'],
+  today: "Aujourd'hui",
+};
+LocaleConfig.defaultLocale = 'ko';
 
-const SelectMisWeek = ({misWeekStart, setMisWeekStart, setMisWeekEnd}) => {
-  const [selectedStartDate, setSelectedStartDate] = useState();
-  const [selectedEndDate, setSelectedEndDate] = useState();
+const Arrow = ({direction}) => {
+  return (
+    <TouchableOpacity>
+      {direction == 'left' ? (
+        <Image
+          style={styles.backImage}
+          source={require('../../../../assets/images/backBtn.png')}></Image>
+      ) : (
+        <Image source={require('../../../../assets/images/backBtn.png')}></Image>
+      )}
+    </TouchableOpacity>
+  );
+};
+
+const SelectMisWeek = ({misWeekStart, setMisWeekStart, misWeekEnd, setMisWeekEnd}) => {
   var remainDay = [0, 6, 5, 4, 3, 2, 1];
   let startDate;
-  const [duRange, setDuRange] = useState(0)
-  useEffect(()=>{
-    // selectedStartDate.setHours(i.getHours()-12)
-    // setTimeout(()=>console.log('start :' + selectedStartDate.getHours()), 1000);
-    // console.log(typeof selectedStartDate);
-    // setTimeout(()=>console.log('end :' + selectedEndDate.getHours()), 1000)
-    setSelectedStartDate(selectedStartDate);
-    setSelectedEndDate(selectedEndDate);
-    }, [duRange])
-
-  const onDateChange = (date, type) => {
-
-    //function to handle the date change
-    if (type == 'END_STATE') {
-      setSelectedEndDate(date);
-      // console.log('selectedEndDate: ' + selectedEndDate); // 콘솔에 출력해보면서 상태값에 올바른 값이 할당되고 있는 지 체크했습니다.
-    } else {
-      setSelectedStartDate(date);
-      setTimeout(()=> {startDate = new Date(date); setDuRange(remainDay[startDate.getDay()]);console.log(startDate);
-        console.log(duRange);}, 1000);
-      // setDuRange(remainDay[startDate.getDay()]);
-      // console.log(startDate)
-      // console.log(duRange)
-      // setSelectedEndDate(endDate)
-    }
-    // console.log('selectedStartDate: ' + selectedStartDate);
-  };
+  const [duRange, setDuRange] = useState(0);
 
   return (
     <View style={styles.calender}>
-      <CalendarPicker
-        startFromMonday={true} //한주를 월요일에 시작하는지, 일요일에 시작하는 지 여부
-        allowRangeSelection={true} //달력을 사용할 때 구간을 선택할 수 있는지의 여부
-        restrictMonthNavigation={true} // 이전달 다음달 이동을 제한하는 지의 여부
-        minRangeDuration={duRange} //선택한 시작날짜 기준으로 최소 몇 일 이후부터 선택 가능한 지
-        maxRangeDuration={duRange} //선택한 시작날짜 기준으로 최소 몇 일 까지만 선택 가능한 지
-        minDate={new Date()} //선택가능한 최소날짜를 오늘로 설정, 오늘 이전 날짜는 선택불가능한 비활성화 상태
-        // maxDate={new Date(2022, 5, 100)} //대략 5월 기준으로 8월까지만 되도록 선택한 값
-        weekdays={['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']} // 일주일은 월요일부터 시작
-        // prettier-ignore
-        months={['01월','02월','03월','04월','05월','06월','07월','08월','09월','10월','11월','12월']}
-        previousTitle="<"
-        previousTitleStyle={{
-          color: '#C5C5C7',
-          paddingLeft: 80,
-          fontSize: 30
-        }} //이전달로 넘어가는 버튼의 스타일 지정
-        nextTitle=">"
-        nextTitleStyle={{
-          color: '#C5C5C7',
-          paddingRight: 80,
-          fontSize: 30
-        }} //다음달로 넘어가는 버튼의 스타일 지정
-        todayBackgroundColor="#ffffff"
-        todayTextStyle="#242424"
-        selectedDayColor="#242424" // 선택된 날자의 스타일
-        selectedDayTextColor="#ffffff"
-        selectedDayStyle={{
-          fontWeight: 'bold',
+      <Calendar
+        minDate={'2012-05-10'}
+        // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
+        maxDate={'2022-08-30'}
+        // Handler which gets executed on day press. Default = undefined
+        onDayPress={day => {
+          console.log('selected day', day);
         }}
-        width={360}
-        // scaleFactor={375} // 캘린더 자체의 크기, 375권장
-        textStyle={{
-          color: '#242424',
+        // Handler which gets executed on day long press. Default = undefined
+        onDayLongPress={day => {
+          console.log('selected day', day);
         }}
-        // 데이터가 변화할 때 시작날, 마지막날 상태값에 어떻게 그 값을 전달할 건지를 나타내는 함수, 맨 위에 함수 정의되어있음
-        onDateChange={onDateChange}></CalendarPicker>
+        // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
+        monthFormat={'yyyy MM'}
+        // Handler which gets executed when visible month changes in calendar. Default = undefined
+        onMonthChange={month => {
+          console.log('month changed', month);
+        }}
+        // Replace default arrows with custom ones (direction can be 'left' or 'right')
+        renderArrow={direction => <Arrow direction={direction} />}
+        // Handler which gets executed when press arrow icon left. It receive a callback can go back month
+        onPressArrowLeft={subtractMonth => subtractMonth()}
+        // Handler which gets executed when press arrow icon right. It receive a callback can go next month
+        onPressArrowRight={addMonth => addMonth()}
+        // Disable all touch events for disabled days. can be override with disableTouchEvent in markedDates
+        disableAllTouchEventsForDisabledDays={false}
+        // Enable the option to swipe between months. Default = false
+        enableSwipeMonths={true}
+      />
     </View>
   );
 };
@@ -82,6 +68,10 @@ const SelectMisWeek = ({misWeekStart, setMisWeekStart, setMisWeekEnd}) => {
 const styles = StyleSheet.create({
   calender: {
     marginVertical: 15,
+  },
+  backImage: {
+    width: 10,
+    resizeMode: 'contain',
   },
 });
 export default SelectMisWeek;
