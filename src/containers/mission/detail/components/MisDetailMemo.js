@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   separator: {
-    borderBottomWidth: 0.8,
+    borderBottomWidth: 1,
     borderBottomColor: '#C5C5C7',
     marginBottom: 15,
   },

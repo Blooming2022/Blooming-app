@@ -1,12 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
+import { getKSTTime } from '../../../../service/commonServices';
 
 LocaleConfig.locales['ko'] = {
   // prettier-ignore
   monthNames: ['01월','02월','03월','04월','05월','06월','07월','08월','09월','10월','11월','12월'],
-  dayNames: ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'],
-  dayNamesShort: ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'],
+  dayNames: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
+  dayNamesShort: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
   today: "Aujourd'hui",
 };
 LocaleConfig.defaultLocale = 'ko';
@@ -25,40 +26,41 @@ const Arrow = ({direction}) => {
   );
 };
 
+
 const SelectMisWeek = ({misWeekStart, setMisWeekStart, misWeekEnd, setMisWeekEnd}) => {
-  var remainDay = [0, 6, 5, 4, 3, 2, 1];
-  let startDate;
-  const [duRange, setDuRange] = useState(0);
+  const now = new Date(getKSTTime());
+  const minDate = now.toISOString().substring(0,10);
+  const maxDate = new Date(now.setFullYear(now.getFullYear()+1)).toISOString().substring(0,10);
+  const [markedDates, setMarkedDates] = useState({});
+  const remainDay = [0, 6, 5, 4, 3, 2, 1, 0];
+  let data = {};
+
+  const markDates = (day) => {
+    data[day] = {startingDay: true, color: '#8752FF', textColor: '#ffffff'};
+    let startDay = new Date(day);
+    let endDay = new Date(startDay.setDate(startDay.getDate() + remainDay[startDay.getDay()]));
+    let endDayKey = endDay.toISOString().substring(0, 10);
+    data[endDayKey] = {color: '#8752FF', textColor: '#ffffff', endingDay: true};
+    setMarkedDates({...data});
+    console.log(JSON.stringify(Object.entries(markedDates)));
+  }
 
   return (
     <View style={styles.calender}>
       <Calendar
-        minDate={'2012-05-10'}
-        // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
-        maxDate={'2022-08-30'}
-        // Handler which gets executed on day press. Default = undefined
+        minDate={minDate}
+        maxDate={maxDate}
+        markingType={'period'}
+        markedDates={markedDates}
         onDayPress={day => {
-          console.log('selected day', day);
+          markDates(day.dateString);
         }}
-        // Handler which gets executed on day long press. Default = undefined
-        onDayLongPress={day => {
-          console.log('selected day', day);
-        }}
-        // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
-        monthFormat={'yyyy MM'}
-        // Handler which gets executed when visible month changes in calendar. Default = undefined
-        onMonthChange={month => {
-          console.log('month changed', month);
-        }}
-        // Replace default arrows with custom ones (direction can be 'left' or 'right')
-        renderArrow={direction => <Arrow direction={direction} />}
-        // Handler which gets executed when press arrow icon left. It receive a callback can go back month
+        firstDay={1} // start Monday
+        monthFormat={'yyyy.MM'}
+        // renderArrow={direction => <Arrow direction={direction} />}
         onPressArrowLeft={subtractMonth => subtractMonth()}
-        // Handler which gets executed when press arrow icon right. It receive a callback can go next month
         onPressArrowRight={addMonth => addMonth()}
-        // Disable all touch events for disabled days. can be override with disableTouchEvent in markedDates
-        disableAllTouchEventsForDisabledDays={false}
-        // Enable the option to swipe between months. Default = false
+        disableAllTouchEventsForDisabledDays={true}
         enableSwipeMonths={true}
       />
     </View>
