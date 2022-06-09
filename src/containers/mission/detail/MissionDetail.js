@@ -6,6 +6,8 @@ import MissionTitleBox from '../../../components/Text/MissionTitleBox';
 import {deleteCurrentMis} from '../../../service/missionServices';
 import {useNavigation} from '@react-navigation/native';
 import InfoModal from '../../../components/Modal/InfoModal';
+import MisDetailMemo from './components/MisDetailMemo';
+import MisDetailReview from './components/MisDetailReview';
 
 const MissionDetail = ({route}) => {
   const mission = route.params.mission;
@@ -61,28 +63,11 @@ const MissionDetail = ({route}) => {
           </View>
         </View>
         <MissionTitleBox misTitle={mission.misTitle}></MissionTitleBox>
-        {isMemoExist && (
-          <>
-            <View style={styles.memoBox}>
-              <Image
-                style={styles.memoIcon}
-                source={require('../../../assets/images/memo.png')}></Image>
-              <Text style={styles.memoText}>{mission.misMemo}</Text>
-            </View>
-            <View style={styles.separator}></View>
-          </>
-        )}
-        <View style={styles.reviewBox}>
-          <View style={styles.reviewTextBox}>
-            <Text style={styles.reviewText}>후기</Text>
-            <TouchableOpacity style={styles.infoBtn} onPress={showInfoModal}>
-              <Image source={require('../../../assets/images/infoBtn.png')}></Image>
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity onPress={() => navigation.navigate('ReviewCreate', {mission: mission})}>
-            <Image source={require('../../../assets/images/addReviewBtnDisable.png')}></Image>
-          </TouchableOpacity>
-        </View>
+        {isMemoExist && <MisDetailMemo misMemo={mission.misMemo}></MisDetailMemo>}
+        <MisDetailReview
+          showInfoModal={showInfoModal}
+          navigation={navigation}
+          mission={mission}></MisDetailReview>
       </ScrollView>
     </>
   );
@@ -110,36 +95,6 @@ const styles = StyleSheet.create({
   misPeriod: {
     fontSize: 14,
     color: '#888888',
-  },
-  memoBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    marginBottom: 15,
-  },
-  memoIcon: {
-    marginRight: 15,
-  },
-  separator: {
-    borderBottomWidth: 0.8,
-    borderBottomColor: '#C5C5C7',
-    marginBottom: 15,
-  },
-  reviewBox: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-  },
-  reviewTextBox: {
-    flexDirection: 'row',
-  },
-  reviewText: {
-    fontSize: 16,
-    color: '#242424',
-  },
-  infoBtn: {
-    paddingHorizontal: 8,
   },
 });
 

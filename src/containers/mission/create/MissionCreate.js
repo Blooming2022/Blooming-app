@@ -12,7 +12,7 @@ import {useNavigation} from '@react-navigation/native';
 
 const MissionCreate = ({route}) => {
   const misInfo = route.params.misInfo;
-  const [period, setPeriod] = useState(misInfo.period); //period에 따라 다른 시간 설정값을 보내야함.
+  const [period, setPeriod] = useState(misInfo.period);
   const [title, setTitle] = useState('');
   const [memo, setMemo] = useState('');
   const [misWeekStart, setMisWeekStart] = useState('');

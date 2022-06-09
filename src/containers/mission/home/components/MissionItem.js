@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {Menu, MenuItem} from 'react-native-material-menu';
-import { deleteCurrentMis } from '../../../../service/missionServices';
+import {deleteCurrentMis} from '../../../../service/missionServices';
 import {useNavigation} from '@react-navigation/native';
 
 const MissionItem = ({mission, setMissionList, missionList}) => {
@@ -52,15 +52,14 @@ const MissionItem = ({mission, setMissionList, missionList}) => {
   const deleteMission = () => {
     setIsMenuVisible(false);
     const delMisInfo = {
-      misID : mission.id,
-      hasReview : mission.hasReview
-    }
+      misID: mission.id,
+      hasReview: mission.hasReview,
+    };
     deleteCurrentMis(delMisInfo);
   };
   const goToMissionDetail = () => {
-    console.log(goToMissionDetail)
     navigation.navigate('MissionDetail', {mission: mission});
-  }
+  };
   const checkMission = () => {
     const oldInfoIndex = missionList.findIndex(item => item.picNum == mission.picNum);
     const updateList = [...missionList];
@@ -81,7 +80,6 @@ const MissionItem = ({mission, setMissionList, missionList}) => {
         <TouchableOpacity onPress={goToMissionDetail}>
           <Text style={styles.title}>{mission.misTitle}</Text>
         </TouchableOpacity>
-
       </View>
       <Menu
         style={styles.menu}
