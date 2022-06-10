@@ -1,9 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {View, Image, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import { getRevById } from '../../../../service/reviewServices';
 
 const MisDetailReview = ({showInfoModal, navigation, mission}) => {
   const isSuccess = mission.isSuccess;
   const hasReview = mission.hasReview;
+  let review;
+
+  useEffect(() => {
+    async function fetchData() {
+      review = await getRevById(mission.id);
+    }
+    fetchData();
+  }, [])
 
   return (
     <View style={styles.reviewBox}>
@@ -16,7 +25,7 @@ const MisDetailReview = ({showInfoModal, navigation, mission}) => {
       {hasReview ? (
         <TouchableOpacity
           style={styles.addReviewBtn}
-          onPress={() => navigation.navigate('ReviewDetail', {mission: mission})}>
+          onPress={() => navigation.navigate('ReviewDetail', {review: review})}>
           <Image source={require('../../../../assets/images/goReview.png')}></Image>
         </TouchableOpacity>
       ) : isSuccess ? (
