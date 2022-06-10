@@ -6,13 +6,13 @@ const MissionAddModal = ({
   isModalVisible,
   setIsModalVisible,
   picNum,
-  period,
+  misPeriod,
   missionList,
   setMissionList,
   navigation,
 }) => {
   const addSelfMission = () => {
-    navigation.navigate('MissionCreate', {misInfo : {picNum : picNum, period : period, isMisSelf: true}})
+    navigation.navigate('MissionCreate', {misInfo : {picNum : picNum, misPeriod : misPeriod, isMisSelf: true}})
     setIsModalVisible(false);
   };
   const addRandomMission = () => {

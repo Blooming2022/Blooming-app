@@ -27,7 +27,7 @@ const MissionMonthFlower = ({missionList, setMissionList}) => {
         navigation={navigation}
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
-        period={1}
+        misPeriod={1}
         picNum={picNum}
         setMissionList={setMissionList}
         missionList={missionList}></MissionAddModal>

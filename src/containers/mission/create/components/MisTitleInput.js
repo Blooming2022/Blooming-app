@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, TextInput} from 'react-native';
 
-const MisTitleInput = ({setMisTitle}) => {
+const MisTitleInput = ({misTitle, setMisTitle}) => {
   const maxLengthOfMisTitle = 20;
 
   return (
@@ -13,7 +13,7 @@ const MisTitleInput = ({setMisTitle}) => {
           onChangeText={setMisTitle}
           placeholder="셀프 미션을 입력해주세요"
           placeholderTextColor={'#5B5B5B'} //#CCCDD0은 닉네임색상, 피그마에 비해 연해서 임의로 바꿈
-          maxLength={maxLengthOfMisTitle}></TextInput>
+          maxLength={maxLengthOfMisTitle}>{misTitle}</TextInput>
       </View>
     </>
   );

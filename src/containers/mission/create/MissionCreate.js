@@ -12,9 +12,9 @@ import {useNavigation} from '@react-navigation/native';
 
 const MissionCreate = ({route}) => {
   const misInfo = route.params.misInfo;
-  const [period, setPeriod] = useState(misInfo.period);
-  const [title, setTitle] = useState('');
-  const [memo, setMemo] = useState('');
+  const [misPeriod, setMisPeriod] = useState(misInfo.misPeriod);
+  const [misTitle, setMisTitle] = useState('');
+  const [misMemo, setMisMemo] = useState('');
   const [misWeekStart, setMisWeekStart] = useState(''); // timestamp
   const [misWeekEnd, setMisWeekEnd] = useState(''); // timestamp
   const [misMonth, setMisMonth] = useState(''); // 0 is January
@@ -25,31 +25,31 @@ const MissionCreate = ({route}) => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    if (period === 0) setMisTime([misWeekStart, misWeekEnd]);
-    else if (period === 1) setMisTime(misMonth);
+    if (misPeriod === 0) setMisTime([misWeekStart, misWeekEnd]);
+    else if (misPeriod === 1) setMisTime(misMonth);
     else setMisTime(misSeason);
-  }, [period]);
+  }, [misPeriod]);
 
   useEffect(() => {
-    if (title !== '') {
+    if (misTitle !== '') {
       setIsValid(true);
     } else setIsValid(false);
-  }, [title]);
+  }, [misTitle]);
 
   const createMission = () => {
     let mission = {
-      misTitle: title,
-      misPeriod: period,
+      misTitle: misTitle,
+      misPeriod: misPeriod,
       picNum: misInfo.picNum,
       isSuccess: false,
       successDate: null,
       isMisSelf: misInfo.isMisSelf,
       misTime: misTime,
-      misMemo: memo,
+      misMemo: misMemo,
       hasReview: false,
     };
-    createCurrentMis(mission);
-    navigation.navigate('MissionDetail', {mission: mission});
+    createCurrentMis(mission); // 여기서 id를 포함한 미션 정보를 받아오고 싶은데 비동기 처리를 해도 null입니당...back에서 promise가 제대로 안 넘어오네요.
+    navigation.navigate('MissionDetail', {mission: mission}); // id를 받지 못했기에 여기서 이동한 디테일 페이지에서는 수정 시 오류가 납니다.
   };
 
   return (
@@ -60,31 +60,31 @@ const MissionCreate = ({route}) => {
         isValid={isValid}
         completeFunction={createMission}></CompleteHeader>
       <ScrollView style={styles.container} nestedScrollEnabled={true}>
-        <MisTitleInput setMisTitle={setTitle}></MisTitleInput>
+        <MisTitleInput misTitle={misTitle} setMisTitle={setMisTitle}></MisTitleInput>
         <View style={styles.periodButtonContainer}>
           <MisPeriodSelectBtn
             buttontext={'한주'}
             selectedId={0}
-            period={period}
-            setPeriod={setPeriod}></MisPeriodSelectBtn>
+            misPeriod={misPeriod}
+            setMisPeriod={setMisPeriod}></MisPeriodSelectBtn>
           <MisPeriodSelectBtn
             buttontext={'한달'}
             selectedId={1}
-            period={period}
-            setPeriod={setPeriod}></MisPeriodSelectBtn>
+            misPeriod={misPeriod}
+            setMisPeriod={setMisPeriod}></MisPeriodSelectBtn>
           <MisPeriodSelectBtn
             buttontext={'계절'}
             selectedId={2}
-            period={period}
-            setPeriod={setPeriod}></MisPeriodSelectBtn>
+            misPeriod={misPeriod}
+            setMisPeriod={setMisPeriod}></MisPeriodSelectBtn>
         </View>
-        {period == 0 && (
+        {misPeriod == 0 && (
           <SelectMisWeek setMisWeekStart={setMisWeekStart} setMisWeekEnd={setMisWeekEnd} />
         )}
-        {period == 1 && <SelectMisMonth setMisMonth={setMisMonth} />}
-        {period == 2 && <SelectMisSeason setMisSeason={setMisSeason} />}
+        {misPeriod == 1 && <SelectMisMonth setMisMonth={setMisMonth} />}
+        {misPeriod == 2 && <SelectMisSeason setMisSeason={setMisSeason} />}
         <View style={styles.separator}></View>
-        <MisMemoField setMemo={setMemo} />
+        <MisMemoField misMemo={misMemo} setMisMemo={setMisMemo} />
       </ScrollView>
     </>
   );

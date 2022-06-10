@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, TextInput} from 'react-native';
 
-const MisMemoInput = ({setMemo}) => {
+const MisMemoInput = ({misMemo, setMisMemo}) => {
   const maxLengthOfMisMemo = 50;
 
   return (
@@ -10,10 +10,10 @@ const MisMemoInput = ({setMemo}) => {
         <TextInput
           multiline={true}
           style={styles.textInput}
-          onChangeText={setMemo}
+          onChangeText={setMisMemo}
           placeholder="메모를 입력해주세요"
           placeholderTextColor={'#999999'}
-          maxLength={maxLengthOfMisMemo}></TextInput>
+          maxLength={maxLengthOfMisMemo}>{misMemo}</TextInput>
       </View>
     </>
   );

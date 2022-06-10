@@ -1,19 +1,19 @@
 import React, {useState, useEffect} from 'react';
 import {TouchableOpacity, Text, StyleSheet} from 'react-native';
 
-const MisPeriodSelectBtn = ({buttontext, selectedId, period, setPeriod}) => {
+const MisPeriodSelectBtn = ({buttontext, selectedId, misPeriod, setMisPeriod}) => {
   const [isActive, setIsActive] = useState();
 
   useEffect(() => {
-    period === selectedId ? setIsActive(true) : setIsActive(false);
-  }, [period]);
+    misPeriod === selectedId ? setIsActive(true) : setIsActive(false);
+  }, [misPeriod]);
 
   return (
     <TouchableOpacity
       activeOpacity={0.3}
       style={[styles.button, isActive ? styles.selected : styles.notSelected]}
       onPress={() => {
-        setPeriod(selectedId);
+        setMisPeriod(selectedId);
       }}>
       <Text style={[styles.buttontext, isActive ? styles.selectedtext : styles.notSelectedtext]}>
         {buttontext}

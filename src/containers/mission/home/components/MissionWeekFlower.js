@@ -28,7 +28,7 @@ const MissionWeekFlower = ({missionList, setMissionList}) => {
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
         picNum={picNum}
-        period={0}
+        misPeriod={0}
         setMissionList={setMissionList}
         missionList={missionList}></MissionAddModal>
       <View style={styles.petal0}>

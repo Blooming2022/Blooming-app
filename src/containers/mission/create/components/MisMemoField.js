@@ -3,11 +3,11 @@ import {StyleSheet, View, Image} from 'react-native';
 
 import MisMemoInput from './MisMemoInput';
 
-const MisMemoField = ({setMemo}) => {
+const MisMemoField = ({misMemo, setMisMemo}) => {
   return (
     <View style={styles.container}>
       <Image style={styles.memoIcon} source={require('../../../../assets/images/memo.png')}></Image>
-      <MisMemoInput setMemo={setMemo}></MisMemoInput>
+      <MisMemoInput misMemo={misMemo} setMisMemo={setMisMemo}></MisMemoInput>
     </View>
   );
 };
