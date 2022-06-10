@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Image, Text, TouchableOpacity, StyleSheet} from 'react-native';
 
 const MisDetailReview = ({showInfoModal, navigation, mission}) => {
+  const isSuccess = mission.isSuccess;
   const hasReview = mission.hasReview;
 
   return (
@@ -13,6 +14,12 @@ const MisDetailReview = ({showInfoModal, navigation, mission}) => {
         </TouchableOpacity>
       </View>
       {hasReview ? (
+        <TouchableOpacity
+          style={styles.addReviewBtn}
+          onPress={() => navigation.navigate('ReviewDetail', {mission: mission})}>
+          <Image source={require('../../../../assets/images/goReview.png')}></Image>
+        </TouchableOpacity>
+      ) : isSuccess ? (
         <TouchableOpacity
           style={styles.addReviewBtn}
           onPress={() => navigation.navigate('ReviewCreate', {mission: mission})}>

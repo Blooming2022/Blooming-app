@@ -49,6 +49,8 @@ const ReviewCreate = ({route, navigation}) => {
     if (review.revImg !== '') setIsImageExist(true);
     if (isInitialMount.current) {
       isInitialMount.current = false;
+    } else if(review.revImg == '' && review.revContent == '') {
+      setIsValid(false);
     } else {
       setIsValid(true);
     }

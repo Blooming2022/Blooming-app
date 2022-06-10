@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {Menu, MenuItem} from 'react-native-material-menu';
-import {deleteCurrentMis} from '../../../../service/missionServices';
+import {deleteCurrentMis, updateCurrentMis} from '../../../../service/missionServices';
 import {useNavigation} from '@react-navigation/native';
+import { getKSTTime } from '../../../../service/commonServices';
 
 const MissionItem = ({mission, setMissionList, missionList}) => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
@@ -61,10 +62,14 @@ const MissionItem = ({mission, setMissionList, missionList}) => {
     navigation.navigate('MissionDetail', {mission: mission});
   };
   const checkMission = () => {
-    const oldInfoIndex = missionList.findIndex(item => item.picNum == mission.picNum);
-    const updateList = [...missionList];
-    updateList[oldInfoIndex].isSuccess = !updateList[oldInfoIndex].isSuccess;
-    setMissionList(updateList);
+    const updateMisInfo = {
+      misID: mission.id,
+      updateInfo: {
+        isSuccess: !mission.isSuccess,
+        successDate: getKSTTime()
+      }
+    };
+    updateCurrentMis(updateMisInfo);
   };
 
   return (

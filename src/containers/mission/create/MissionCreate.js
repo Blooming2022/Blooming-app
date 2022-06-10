@@ -21,7 +21,7 @@ const MissionCreate = ({route}) => {
   const [misSeason, setMisSeason] = useState(0); // 0 is Spring
   const [isValid, setIsValid] = useState(false);
   let isMisSelfText = misInfo.isMisSelf ? '셀프' : '랜덤';
-  const [misTime, setMisTime] = useState([]); // Different values depending on the period
+  const [misTime, setMisTime] = useState([]); // Different values depending on the misPeriod
   const navigation = useNavigation();
 
   useEffect(() => {
