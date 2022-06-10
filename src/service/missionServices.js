@@ -13,8 +13,6 @@ const randMaxMonth = 1;
 const selfMaxSeason = 1;
 const randMaxSeason = 1;
 
-let curUser = getCurrentUser();
-
 /** 
  * 새로운 미션을 생성하기 위해 호출하는 함수.
  * misData는 아래와 같은 형식입니다.
@@ -33,8 +31,7 @@ let curUser = getCurrentUser();
  * @returns 성공시 Promise<misData> | 실패시 -1
  */
 const createCurrentMis = (misData) => {
-  let misRef = usersCollection.doc(curUser.uid).collection('currentMisList');
-  // let misRef = usersCollection.doc(getCurrentUser().uid).collection('currentMisList');
+  let misRef = usersCollection.doc(getCurrentUser().uid).collection('currentMisList');
 
   try {
     return misRef.doc().set(misData);
