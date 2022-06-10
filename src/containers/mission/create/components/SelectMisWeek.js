@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
-import { getKSTTime } from '../../../../service/commonServices';
+import {getKSTTime} from '../../../../service/commonServices';
 
 LocaleConfig.locales['ko'] = {
   // prettier-ignore
@@ -26,24 +26,38 @@ const Arrow = ({direction}) => {
   );
 };
 
-
-const SelectMisWeek = ({misWeekStart, setMisWeekStart, misWeekEnd, setMisWeekEnd}) => {
+const SelectMisWeek = ({setMisWeekStart, setMisWeekEnd}) => {
   const now = new Date(getKSTTime());
-  const minDate = now.toISOString().substring(0,10);
-  const maxDate = new Date(now.setFullYear(now.getFullYear()+1)).toISOString().substring(0,10);
+  const minDate = now.toISOString().substring(0, 10);
+  const maxDate = new Date(now.setFullYear(now.getFullYear() + 1)).toISOString().substring(0, 10);
   const [markedDates, setMarkedDates] = useState({});
-  const remainDay = [0, 6, 5, 4, 3, 2, 1, 0];
-  let data = {};
+  const prevDay = [6, 0, 1, 2, 3, 4, 5]; // calculate previous day
+  const remainDay = [0, 6, 5, 4, 3, 2, 1, 0]; // calculate remain day
 
-  const markDates = (day) => {
-    data[day] = {startingDay: true, color: '#8752FF', textColor: '#ffffff'};
+  const markDates = day => {
+    let data = {};
     let startDay = new Date(day);
+    let tempDay = new Date(startDay.setDate(startDay.getDate() - prevDay[startDay.getDay()]));
     let endDay = new Date(startDay.setDate(startDay.getDate() + remainDay[startDay.getDay()]));
-    let endDayKey = endDay.toISOString().substring(0, 10);
-    data[endDayKey] = {color: '#8752FF', textColor: '#ffffff', endingDay: true};
+    let diff = Math.abs((endDay - tempDay) / (24 * 60 * 60 * 1000)); // difference of start day and end day
+    let tempDayKey = tempDay.toISOString().substring(0, 10);
+
+    data[tempDayKey] = {startingDay: true, color: '#8752FF', textColor: '#ffffff'}; // add start day
+    setMisWeekStart(new Date(tempDayKey).getTime());
+    // fill a gap
+    while (diff > 0) {
+      tempDay = new Date(tempDay.setDate(tempDay.getDate() + 1)); // update tempDay
+      tempDayKey = tempDay.toISOString().substring(0, 10); // update tempDayKey
+      data[tempDayKey] = {
+        color: '#8752FF',
+        textColor: '#ffffff',
+      };
+      diff--;
+    }
+    data[tempDayKey] = {color: '#8752FF', textColor: '#ffffff', endingDay: true}; // add end day
+    setMisWeekEnd(new Date(tempDayKey).getTime());
     setMarkedDates({...data});
-    console.log(JSON.stringify(Object.entries(markedDates)));
-  }
+  };
 
   return (
     <View style={styles.calender}>

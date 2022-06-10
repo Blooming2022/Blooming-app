@@ -8,7 +8,7 @@ const MisMemoInput = ({setMemo}) => {
     <>
       <View style={styles.container}>
         <TextInput
-          multiline = {true}
+          multiline={true}
           style={styles.textInput}
           onChangeText={setMemo}
           placeholder="메모를 입력해주세요"

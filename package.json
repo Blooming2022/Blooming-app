@@ -20,7 +20,6 @@
     "@react-navigation/material-top-tabs": "^6.2.1",
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/native-stack": "^6.6.1",
-    "moment": "^2.29.3",
     "react": "17.0.2",
     "react-native": "0.68.1",
     "react-native-calendars": "^1.1284.0",

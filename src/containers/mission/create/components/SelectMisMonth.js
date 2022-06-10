@@ -3,7 +3,7 @@ import {StyleSheet, View, Text} from 'react-native';
 import ScrollPicker from 'react-native-wheel-scrollview-picker';
 
 // prettier-ignore
-const wheelPickerData = ['1', '2','3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+const wheelPickerData = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
 
 const SelectMisMonth = ({setMisMonth}) => {
   const nowMonth = new Date().getMonth();
@@ -11,25 +11,23 @@ const SelectMisMonth = ({setMisMonth}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.yearText}>{nowYear}년</Text>
-        <View style={styles.wheelBox}>
-          <ScrollPicker
+      <View style={styles.wheelBox}>
+        <ScrollPicker
           dataSource={wheelPickerData}
           selectedIndex={nowMonth}
-          renderItem={(dataSource) => {
-            return (
-              <Text>{dataSource}</Text>
-            )
+          renderItem={dataSource => {
+            return <Text>{dataSource}</Text>;
           }}
-          onValueChange={(data) => {
-            setMisMonth(data) // 월 정보가 저장
+          onValueChange={(data, selectedIndex) => {
+            setMisMonth(selectedIndex); // 0 is spring
           }}
           wrapperHeight={150}
-          wrapperColor='#ffffff'
+          wrapperColor="#ffffff"
           itemHeight={50}
-          highlightColor='#efefef'
+          highlightColor="#efefef"
           highlightBorderWidth={25}
-          />
-        </View>
+        />
+      </View>
       <Text style={styles.monthText}>월</Text>
     </View>
   );
@@ -53,13 +51,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     color: '#242424',
-    marginLeft: 100
+    marginLeft: 100,
   },
   wheelBox: {
     position: 'absolute',
-    bottom:-10,
+    bottom: -10,
     left: 80,
-    width: 50
+    width: 50,
   },
 });
 

@@ -15,14 +15,14 @@ const MissionCreate = ({route}) => {
   const [period, setPeriod] = useState(misInfo.period);
   const [title, setTitle] = useState('');
   const [memo, setMemo] = useState('');
-  const [misWeekStart, setMisWeekStart] = useState('');
-  const [misWeekEnd, setMisWeekEnd] = useState('');
-  const [misMonth, setMisMonth] = useState(''); // 월이 들어감. ex.1,2,3..
-  const [misSeason, setMisSeason] = useState(0); // 0은 봄, 1은 여름, 2는 가을, 3은 겨울
+  const [misWeekStart, setMisWeekStart] = useState(''); // timestamp
+  const [misWeekEnd, setMisWeekEnd] = useState(''); // timestamp
+  const [misMonth, setMisMonth] = useState(''); // 0 is January
+  const [misSeason, setMisSeason] = useState(0); // 0 is Spring
   const [isValid, setIsValid] = useState(false);
-  const navigation = useNavigation();
   let isMisSelfText = misInfo.isMisSelf ? '셀프' : '랜덤';
-  const [misTime, setMisTime] = useState([]); // period에 따라 다른 값을 보내줌
+  const [misTime, setMisTime] = useState([]); // Different values depending on the period
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (period === 0) setMisTime([misWeekStart, misWeekEnd]);
@@ -51,6 +51,7 @@ const MissionCreate = ({route}) => {
     createCurrentMis(mission);
     navigation.navigate('MissionDetail', {mission: mission});
   };
+
   return (
     <>
       <CompleteHeader
@@ -78,12 +79,7 @@ const MissionCreate = ({route}) => {
             setPeriod={setPeriod}></MisPeriodSelectBtn>
         </View>
         {period == 0 && (
-          <SelectMisWeek
-            misWeekStart={misWeekStart}
-            setMisWeekStart={setMisWeekStart}
-            misWeekEnd={setMisWeekEnd}
-            setMisWeekEnd={setMisWeekEnd}
-          />
+          <SelectMisWeek setMisWeekStart={setMisWeekStart} setMisWeekEnd={setMisWeekEnd} />
         )}
         {period == 1 && <SelectMisMonth setMisMonth={setMisMonth} />}
         {period == 2 && <SelectMisSeason setMisSeason={setMisSeason} />}

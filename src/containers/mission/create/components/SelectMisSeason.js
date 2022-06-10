@@ -10,23 +10,21 @@ const SelectMisSeason = ({setMisSeason}) => {
     <View style={styles.container}>
       <Text style={styles.text}>2022</Text>
       <View style={styles.wheelBox}>
-          <ScrollPicker
+        <ScrollPicker
           dataSource={wheelPickerData}
           selectedIndex={0}
-          renderItem={(dataSource) => {
-            return (
-              <Text>{dataSource}</Text>
-            );
+          renderItem={dataSource => {
+            return <Text>{dataSource}</Text>;
           }}
           onValueChange={(data, selectedIndex) => {
-            setMisSeason(selectedIndex) // 계절에 대한 필드값 필요. 인덱스값 보낼게요
+            setMisSeason(selectedIndex); // 0 is Spring
           }}
           wrapperHeight={150}
-          wrapperColor='#ffffff'
+          wrapperColor="#ffffff"
           itemHeight={50}
-          highlightColor='#efefef'
+          highlightColor="#efefef"
           highlightBorderWidth={25}
-          />
+        />
       </View>
     </View>
   );
@@ -43,12 +41,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     color: '#242424',
-    marginRight: 15
+    marginRight: 15,
   },
   wheelBox: {
     width: 200,
     marginHorizontal: 5,
-  }
+  },
 });
 
 export default SelectMisSeason;
