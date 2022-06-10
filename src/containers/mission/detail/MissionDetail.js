@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, ScrollView, TouchableOpacity, Image} from 'react-native';
+import {StyleSheet, View, Text, ScrollView} from 'react-native';
 import DetailHeader from '../../../components/Header/DetailHeader';
 import DeleteModal from '../../../components/Modal/DeleteModal';
 import MissionTitleBox from '../../../components/Text/MissionTitleBox';
