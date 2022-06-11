@@ -422,24 +422,59 @@ const checkCurrentMisListValid = async () => {
 /**
  * 랜덤미션 생성하기를 눌렀을 때 랜덤미션 키워드 2개를 묶어 반환하는 함수
  * {"result1": "인테리어", "result2": "캠핑"} 형식으로 return
+ * @param {
+ *  isSeason: boolean   // 계절 랜덤미션을 생성하면 true, 아니면 false 넣어 호출
+ *  misTime: int        // 계절 랜덤미션이라면 misTime값 넣어 호출. 계절 아니라면 안 넣어도 됨
+ * } seasonInfo 계절 랜덤미션을 생성하기 위해 필요한 정보를 담은 object
  * @returns 성공시 Promise <result1: str, result2: str> | 실패시 -1
  */
-const getRandomKeyword = async () => {
+const getRandomKeywords = async (seasonInfo) => {
   try {
-    const docRef = firestore().collection('crawlingData').doc('randomKeyword');
+    const docRef = firestore().collection('crawlingData').doc('randomKeywords');
     const data = (await docRef.get()).data();
-    const targetList = data["220531"];
-    const range = (targetList).length;
+    let seasonDocRef;
+    let seasonData;
 
-    const randNo1 = Math.floor(Math.random()*range)+1;
-    let randNo2 = Math.floor(Math.random()*range)+1;
-    while (randNo1 == randNo2) {
-      randNo2 = Math.floor(Math.random()*range)+1;
+    const getLengthOfObject = (obj) => Object.keys(obj).length;
+    
+    const range = getLengthOfObject(data);
+    let seasonRange;
+
+    let randNo1, randNo2;
+    let keyword1, keyword2;
+
+    if (!seasonInfo.isSeason) {
+      randNo1 = Math.floor(Math.random()*range);
+      randNo2 = Math.floor(Math.random()*range);
+      while (randNo1 == randNo2) {
+        randNo2 = Math.floor(Math.random()*range);
+      }
+      keyword1 = data[randNo1];
+      keyword2 = data[randNo2];
+    } else {
+      if (seasonInfo.misTime == 0) {
+        seasonDocRef = firestore().collection('crawlingData').doc('springKeywords');
+        seasonData = (await seasonDocRef.get()).data();
+      } else if (seasonInfo.misTime == 1) {
+        seasonDocRef = firestore().collection('crawlingData').doc('summerKeywords');
+        seasonData = (await seasonDocRef.get()).data();
+      } else if (seasonInfo.misTime == 2) {
+        seasonDocRef = firestore().collection('crawlingData').doc('autumnKeywords');
+        seasonData = (await seasonDocRef.get()).data();
+      } else if (seasonInfo.misTime == 3) {
+        seasonDocRef = firestore().collection('crawlingData').doc('winterKeywords');
+        seasonData = (await seasonDocRef.get()).data();
+      }
+      seasonRange = getLengthOfObject(seasonData);
+
+      randNo1 = Math.floor(Math.random()*range);
+      randNo2 = Math.floor(Math.random()*seasonRange);
+      keyword1 = data[randNo1];
+      keyword2 = seasonData[randNo2];
     }
-
     const result = {
-      result1: targetList[randNo1], 
-      result2: targetList[randNo2]
+      result1: keyword1,
+      result2: keyword2
     };
     console.log(result);
     return result;
@@ -471,5 +506,5 @@ export {
   deletePrevSuccessMis,
 
   checkCurrentMisListValid,
-  getRandomKeyword
+  getRandomKeywords
 }
