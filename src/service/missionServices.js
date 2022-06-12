@@ -21,7 +21,7 @@ const randMaxSeason = 1;
  *  misPeriod: int,
  *  picNum: int,
  *  isSuccess: boolean,
- *  successDate: Date,
+ *  misSuccessDate: timeStamp,
  *  isMisSelf: boolean,
  *  misTime : array or int (Different values depending on the misPeriod. if misPeriod is 0, misTime is array.)
  *  misMemo: str,
@@ -92,7 +92,7 @@ const getCurrentMisList = async (period) => {
  * updateInfo = {
  *   misTitle: 'fakeTItle',
  *   misMemo: 'newMemo',
- *   successDate: timeStamp,
+ *   misSuccessDate: timeStamp,
  * }
  * 위와 같은 형식으로 updateMisInfo.updateInfo에는 수정할 정보만 넣어서 호출
  * @param {

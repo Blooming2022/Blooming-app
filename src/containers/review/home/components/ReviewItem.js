@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginVertical: 10,
     maxWidth: 300,
+    maxHeight: 150,
     borderRadius: 12,
     overflow: 'hidden',
   },
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
   },
   gradient: {
     width: '100%',
-    height: '80%',
+    height: '100%',
     resizeMode: 'contain',
   },
 });

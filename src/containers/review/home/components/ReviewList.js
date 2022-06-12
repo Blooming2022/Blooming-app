@@ -21,8 +21,8 @@ const ReviewList = ({reviewList}) => {
           keyExtractor={item => item.id}></FlatList>
       ) : (
         <View style={styles.noItem}>
-          <Text style={styles.noItemText}>당신이 피워낸 꽃을</Text>
-          <Text style={styles.noItemText}>확인해보세요!</Text>
+          <Text style={styles.noItemText}>아직 피워낸 꽃이</Text>
+          <Text style={styles.noItemText}>없습니다</Text>
         </View>
       )}
     </>

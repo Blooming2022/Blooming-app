@@ -42,7 +42,7 @@ const MissionCreate = ({route}) => {
       misPeriod: misPeriod,
       picNum: misInfo.picNum,
       isSuccess: false,
-      successDate: null,
+      misSuccessDate: null,
       isMisSelf: misInfo.isMisSelf,
       misTime: misTime,
       misMemo: misMemo,

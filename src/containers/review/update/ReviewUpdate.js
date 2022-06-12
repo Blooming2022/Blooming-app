@@ -6,18 +6,30 @@ import MissionInfoBox from '../create/components/MissionInfoBox';
 import ReviewImageInput from '../create/components/ReviewImageInput';
 import MissionTitleBox from '../../../components/Text/MissionTitleBox';
 import ReviewContentInput from '../create/components/ReviewContentInput';
+import {updateRev} from '../../../service/reviewServices';
 
 const ReviewUpdate = ({route, navigation}) => {
+  const initialReview = route.params.review;
   const [review, setReview] = useState(route.params.review);
-  const isInitialMount = useRef(true);
-  // 완료 버튼 색 변경 조건
-  const [isValid, setIsValid] = useState(false);
+  const isInitialMount = useRef(true); // To disable the complete button on the first rendering
+  const [isValid, setIsValid] = useState(false); // Conditions for changing color of complete buttons
   const [isImageExist, setIsImageExist] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
 
-  // updateReview는 서버 연동 후 변경할 예정입니다. 지금은 화면 흐름만 구현했어요.
   const updateReview = () => {
-    console.log(review);
+    const updateRevInfo = {
+      misID: initialReview.misID,
+    };
+    const revData = {};
+    if (initialReview.revContent !== review.revContent) revData.revContent = review.revContent;
+    if (initialReview.revImg !== review.revImg) {
+      revData.revImg = review.revImg;
+      updateRevInfo.isImgUpdate = true;
+    } else {
+      updateRevInfo.isImgUpdate = false;
+    }
+    updateRevInfo.revData = revData;
+    updateRev(updateRevInfo);
     navigation.navigate('ReviewDetail', {review: review});
   };
   const deleteImage = () => {
@@ -26,13 +38,16 @@ const ReviewUpdate = ({route, navigation}) => {
   };
 
   useEffect(() => {
-    if (review.revImg !== '') setIsImageExist(true);
     if (isInitialMount.current) {
       isInitialMount.current = false;
     } else {
-      setIsValid(true);
+      if (review.revContent !== '' || review.revImg !== '') setIsValid(true);
+      else setIsValid(false);
     }
   }, [review]);
+  useEffect(() => {
+    if (review.revImg !== '') setIsImageExist(true);
+  }, [review.revImg]);
 
   return (
     <>
