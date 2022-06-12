@@ -2,21 +2,15 @@ import React, {useState, useEffect, useRef} from 'react';
 import {StyleSheet, ScrollView, View} from 'react-native';
 import CompleteHeader from '../../../components/Header/CompleteHeader';
 import {getKSTTime} from '../../../service/commonServices';
+import { createRev } from '../../../service/reviewServices';
 import MissionInfoBox from './components/MissionInfoBox';
-import MissionTitleBox from './components/MissionTitleBox';
+import MissionTitleBox from '../../../components/Text/MissionTitleBox';
 import PhotoModal from './components/PhotoModal';
 import ReviewContentInput from './components/ReviewContentInput';
 import ReviewImageInput from './components/ReviewImageInput';
 
 const ReviewCreate = ({route, navigation}) => {
-  // const mission = route.params.mission;
-  // 미션 생성 화면 구현 후 위처럼 route.params로 받을 예정. 임시 데이터.
-  const mission = {
-    id: 0,
-    misPeriod: 0,
-    misTitle: '아하하',
-    successDate: getKSTTime(),
-  };
+  const mission = route.params.mission;
   const isInitialMount = useRef(true);
   // 완료 버튼 색 변경 조건
   const [isValid, setIsValid] = useState(false);
@@ -33,7 +27,16 @@ const ReviewCreate = ({route, navigation}) => {
 
   // createReview는 서버 연동 후 변경할 예정입니다. 지금은 화면 흐름만 구현했어요.
   const createReview = () => {
-    console.log(review);
+    const createRevInfo = {
+      misTitle: review.misTitle,
+      misID : review.misID,
+      misPeriod: review.misPeriod,
+      misSuccessDate: review.misSuccessDate,
+      revContent: review.revContent,
+      revImg: review.revImg,
+      isOutdated: false,
+    }
+    createRev(createRevInfo);
     navigation.navigate('ReviewDetail', {review: review});
   };
   const deleteImage = () => {
@@ -45,6 +48,8 @@ const ReviewCreate = ({route, navigation}) => {
     if (review.revImg !== '') setIsImageExist(true);
     if (isInitialMount.current) {
       isInitialMount.current = false;
+    } else if(review.revImg == '' && review.revContent == '') {
+      setIsValid(false);
     } else {
       setIsValid(true);
     }

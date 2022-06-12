@@ -16,13 +16,13 @@ const styles = StyleSheet.create({
   },
   misTitle: {
     flexWrap: 'wrap',
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '900',
     color: '#242424',
   },
   line: {
-    height: 1,
-    backgroundColor: '#999999',
+    borderBottomWidth: 1.5,
+    borderBottomColor: '#C5C5C7',
     marginTop: 15,
   },
 });

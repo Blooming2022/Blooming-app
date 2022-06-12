@@ -1,13 +1,19 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {Menu, MenuItem} from 'react-native-material-menu';
+import {deleteCurrentMis, updateCurrentMis} from '../../../../service/missionServices';
+import {useNavigation} from '@react-navigation/native';
+import { getKSTTime } from '../../../../service/commonServices';
+import DeleteModal from '../../../../components/Modal/DeleteModal';
 
-const MissionItem = ({mission, setMissionList, missionList}) => {
+const MissionItem = ({mission}) => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
+  const [isDelModalVisible, setIsDelModalVisible] = useState(false);
   let imageSource;
   let addNum;
+  const navigation = useNavigation();
 
-  if (mission.period == 0) {
+  if (mission.misPeriod == 0) {
     imageSource = [
       {image: require('../../../../assets/images/missionPink.png')},
       {image: require('../../../../assets/images/missionBlue.png')},
@@ -19,7 +25,7 @@ const MissionItem = ({mission, setMissionList, missionList}) => {
       {image: require('../../../../assets/images/missionVioletActive.png')},
     ];
     addNum = 4;
-  } else if (mission.period == 1) {
+  } else if (mission.misPeriod == 1) {
     imageSource = [
       {image: require('../../../../assets/images/missionPink.png')},
       {image: require('../../../../assets/images/missionViolet.png')},
@@ -45,20 +51,40 @@ const MissionItem = ({mission, setMissionList, missionList}) => {
   };
   const updateMission = () => {
     setIsMenuVisible(false);
+    navigation.navigate('MissionUpdate', {mission: mission});
   };
+  const showDelModal = () => {
+    hideMenu();
+    setIsDelModalVisible(true);
+  }
   const deleteMission = () => {
-    setMissionList(missionList.filter(item => item.picNum !== mission.picNum));
-    setIsMenuVisible(false);
+    setIsDelModalVisible(false);
+    const delMisInfo = {
+      misID: mission.id,
+      hasReview: mission.hasReview,
+    };
+    deleteCurrentMis(delMisInfo);
+  };
+  const goToMissionDetail = () => {
+    navigation.navigate('MissionDetail', {mission: mission});
   };
   const checkMission = () => {
-    const oldInfoIndex = missionList.findIndex(item => item.picNum == mission.picNum);
-    const updateList = [...missionList];
-    updateList[oldInfoIndex].isSuccess = !updateList[oldInfoIndex].isSuccess;
-    setMissionList(updateList);
+    const updateMisInfo = {
+      misID: mission.id,
+      updateInfo: {
+        isSuccess: !mission.isSuccess,
+        successDate: getKSTTime()
+      }
+    };
+    updateCurrentMis(updateMisInfo);
   };
 
   return (
     <View style={styles.container}>
+      <DeleteModal
+        isModalVisible={isDelModalVisible}
+        setIsModalVisible={setIsDelModalVisible}
+        deleteFunction={deleteMission}></DeleteModal>
       <View style={styles.mission}>
         <TouchableOpacity onPress={checkMission}>
           {mission.isSuccess ? (
@@ -67,7 +93,9 @@ const MissionItem = ({mission, setMissionList, missionList}) => {
             <Image source={imageSource[mission.picNum].image}></Image>
           )}
         </TouchableOpacity>
-        <Text style={styles.title}>{mission.title}</Text>
+        <TouchableOpacity onPress={goToMissionDetail}>
+          <Text style={styles.title}>{mission.misTitle}</Text>
+        </TouchableOpacity>
       </View>
       <Menu
         style={styles.menu}
@@ -81,7 +109,7 @@ const MissionItem = ({mission, setMissionList, missionList}) => {
         <MenuItem onPress={updateMission} textStyle={styles.menuText}>
           수정
         </MenuItem>
-        <MenuItem onPress={deleteMission} textStyle={styles.menuText}>
+        <MenuItem onPress={showDelModal} textStyle={styles.menuText}>
           삭제
         </MenuItem>
       </Menu>

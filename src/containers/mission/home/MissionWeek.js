@@ -1,11 +1,18 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
+import {getCurrentMisList} from '../../../service/missionServices';
 import DdayCount from './components/DdayCount';
 import MissionList from './components/MissionList';
 import MissionWeekFlower from './components/MissionWeekFlower';
 
 const MissionWeek = () => {
   const [missionList, setMissionList] = useState([]);
+
+  useEffect(() => {
+    getCurrentMisList(0).then(missionList => {
+      setMissionList(missionList);
+    });
+  }, []);
 
   return (
     <View style={styles.container}>

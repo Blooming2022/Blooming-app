@@ -23,11 +23,7 @@ const randMaxSeason = 1;
  *  isSuccess: boolean,
  *  successDate: Date,
  *  isMisSelf: boolean,
- *  isAlarmSet: boolean,
- *  misAlarmHour: Date,
- *  misAlarmMinute: int,
- *  misAlarmStart: Date,
- *  misAlarmStop: Date,
+ *  misTime : array or int (Different values depending on the misPeriod. if misPeriod is 0, misTime is array.)
  *  misMemo: str,
  *  hasReview: boolean
  * }
@@ -95,7 +91,8 @@ const getCurrentMisList = async (period) => {
  * 
  * updateInfo = {
  *   misTitle: 'fakeTItle',
- *   misMemo: 'newMemo'
+ *   misMemo: 'newMemo',
+ *   successDate: timeStamp,
  * }
  * 위와 같은 형식으로 updateMisInfo.updateInfo에는 수정할 정보만 넣어서 호출
  * @param {

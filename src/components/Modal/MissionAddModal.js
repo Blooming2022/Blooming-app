@@ -6,20 +6,13 @@ const MissionAddModal = ({
   isModalVisible,
   setIsModalVisible,
   picNum,
+  misPeriod,
   missionList,
   setMissionList,
   navigation,
 }) => {
   const addSelfMission = () => {
-    const newInfo = {
-      title: '자고싶다',
-      picNum: picNum,
-      type: 0,
-      period: 0, // 한주 기준으로 임시 생성. 한달, 계절미션 동작 확인 시 해당 필드의 숫자 바꿀 것.
-      misMemo: '',
-      isSuccess: false,
-    };
-    setMissionList([...missionList, newInfo]);
+    navigation.navigate('MissionCreate', {misInfo : {picNum : picNum, misPeriod : misPeriod, isMisSelf: true}})
     setIsModalVisible(false);
   };
   const addRandomMission = () => {

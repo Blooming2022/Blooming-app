@@ -5,6 +5,32 @@ import { googleConfigure } from './authService_security';
 
 const usersCollection = firestore().collection('users');
 
+/** 현재 유저의 인증 정보 조회
+ * 인증 정보는 아래와 같은 형식입니다.
+ * {
+ * "displayName": str | null,
+ * "email": str | null,
+ * "emailVerified": boolean,
+ * "isAnonymous": boolean,
+ * "metadata": {"creationTime": str, "lastSignInTime": str},
+ * "phoneNumber": str | null,
+ * "photoURL": str | null,
+ * "providerData": UserInfo[],
+ * "providerId": str,
+ * "tenantId": str | null,
+ * "uid": str
+ * }
+ * userData = getCurrentUser().uid
+ * 와 같은 형식으로 uid, displayName, email 등을 조회할 수 있습니다.
+ *
+ * @returns 성공시 FirebaseAuthTypes.User | 실패시 -1
+ */
+
+const getCurrentUser = () => {
+  return auth().currentUser;
+}
+let curUser = getCurrentUser();
+
 /** 구글 계정 로그인
  * 
  * @returns 성공시 Promise <FirebaseAuthTypes.UserCredential> | 실패시 -1
@@ -12,11 +38,11 @@ const usersCollection = firestore().collection('users');
 const googleSignIn = async () => {
   try {
     googleConfigure();
-
     const { idToken } = await GoogleSignin.signIn();
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
     const ret = await auth().signInWithCredential(googleCredential);
     const user = getCurrentUser();
+    console.log("[Auth] Successfully sign in with google credential.");
     await usersCollection.doc(user.uid)
     .set({
       displayName: user.displayName,
@@ -58,35 +84,6 @@ const guestSignIn = async () => {
 const signOut = () => {
   try {
     return auth().signOut();
-  } catch (e) {
-    console.log(e.message);
-    return -1;
-  }
-}
-
-/** 현재 유저의 인증 정보 조회
- * 인증 정보는 아래와 같은 형식입니다.
- * {
- * "displayName": str | null,
- * "email": str | null,
- * "emailVerified": boolean,
- * "isAnonymous": boolean,
- * "metadata": {"creationTime": str, "lastSignInTime": str},
- * "phoneNumber": str | null,
- * "photoURL": str | null,
- * "providerData": UserInfo[], 
- * "providerId": str,
- * "tenantId": str | null,
- * "uid": str
- * }
- * userData = getCurrentUser().uid
- * 와 같은 형식으로 uid, displayName, email 등을 조회할 수 있습니다.
- * 
- * @returns 성공시 FirebaseAuthTypes.User | 실패시 -1
- */
-const getCurrentUser = () => {
-  try {
-    return auth().currentUser;
   } catch (e) {
     console.log(e.message);
     return -1;

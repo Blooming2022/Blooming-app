@@ -2,16 +2,25 @@ import React, {useState} from 'react';
 import {StyleSheet, View, Image, TouchableOpacity} from 'react-native';
 import MissionAddModal from '../../../../components/Modal/MissionAddModal';
 import MissionCount from './MissionCount';
+import {selfMaxMonth, randMaxMonth} from '../../../../service/missionServices';
 import {useNavigation} from '@react-navigation/native';
 
 const MissionSeasonFlower = ({missionList, setMissionList}) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [picNum, setPicNum] = useState(0);
+  const navigation = useNavigation();
+
   const showModal = num => {
     setPicNum(num);
     setIsModalVisible(!isModalVisible);
   };
-  const navigation = useNavigation();
+  const currentSelf = () => {
+    return missionList.filter((misPeriod, isMisSelf) => misPeriod !== 2 && !isMisSelf).length;
+  };
+  const currentRand = () => {
+    return missionList.filter((misPeriod, isMisSelf) => misPeriod !== 2 && isMisSelf).length;
+  };
+
   return (
     <View style={styles.container}>
       <MissionAddModal
@@ -19,6 +28,7 @@ const MissionSeasonFlower = ({missionList, setMissionList}) => {
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
         picNum={picNum}
+        misPeriod={2}
         setMissionList={setMissionList}
         missionList={missionList}></MissionAddModal>
       <View style={styles.petal0}>
@@ -51,7 +61,11 @@ const MissionSeasonFlower = ({missionList, setMissionList}) => {
           <Image source={require('../../../../assets/images/season1Active.png')}></Image>
         )}
       </View>
-      <MissionCount currentSelf={0} maxSelf={1} currentRandom={0} maxRandom={1}></MissionCount>
+      <MissionCount
+        currentSelf={currentSelf()}
+        maxSelf={selfMaxMonth}
+        currentRandom={currentRand()}
+        maxRandom={randMaxMonth}></MissionCount>
     </View>
   );
 };

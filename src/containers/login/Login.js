@@ -1,7 +1,17 @@
 import React from 'react';
 import {StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
+import {guestSignIn, googleSignIn} from '../../service/authServices';
 
-const Login = () => {
+const Login = ({setIsLoggedIn}) => {
+
+  const guestLogin = () => {
+    guestSignIn().then(() => setIsLoggedIn(true))
+  }
+
+  const googleLogin = () => {
+    googleSignIn().then(() => setIsLoggedIn(true))
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.titleBox}>
@@ -15,10 +25,10 @@ const Login = () => {
         source={require('../../assets/images/logo.png')}
         style={styles.logo}
         resizeMode="contain"></Image>
-      <TouchableOpacity style={[styles.button, styles.btn1]}>
+      <TouchableOpacity style={[styles.button, styles.btn1]} onPress={guestLogin}>
         <Text style={styles.btnText1}>게스트로 로그인</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.button, styles.btn2]}>
+      <TouchableOpacity style={[styles.button, styles.btn2]} onPress={googleLogin}>
         <View style={styles.googleLogin}>
           <Image
             source={require('../../assets/images/logo_googleg_48dp.png')}></Image>

@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View, Image, StyleSheet, TouchableOpacity, BackHandler} from 'react-native';
 import {Menu, MenuItem} from 'react-native-material-menu';
 
-const DetailHeader = ({navigation, updateFunction, setIsModalVisible}) => {
+const DetailHeader = ({navigation, updateFunction, setIsModalVisible, from}) => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const showMenu = () => {
     setIsMenuVisible(true);
@@ -13,8 +13,10 @@ const DetailHeader = ({navigation, updateFunction, setIsModalVisible}) => {
   useEffect(() => {
     // backButton
     const backButton = () => {
-      // 추후에 미션 디테일 헤더 추가 시 변경 예정.
-      navigation.navigate('MainTab', {screen: 'ReviewHome'});
+      if(from ==='mission')
+        navigation.navigate('MainTab', {screen: 'MissionHome'});
+      else if(from ==='review')
+        navigation.navigate('MainTab', {screen: 'ReviewHome'});
       return true;
     };
     const backHandler = BackHandler.addEventListener('hardwareBackPress', backButton);
@@ -26,8 +28,10 @@ const DetailHeader = ({navigation, updateFunction, setIsModalVisible}) => {
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          // 추후에 미션 디테일 헤더 추가 시 변경 예정.
-          navigation.navigate('MainTab', {screen: 'ReviewHome'});
+          if(from ==='mission')
+            navigation.navigate('MainTab', {screen: 'MissionHome'});
+          else if(from ==='review')
+            navigation.navigate('MainTab', {screen: 'ReviewHome'});
         }}>
         <Image
           source={require('../../assets/images/backBtn.png')}
