@@ -3,8 +3,8 @@ import {SafeAreaView, StyleSheet} from 'react-native';
 import MainStackNavigator from './src/navigation/Stack/MainStackNavigator';
 import SplashScreen from 'react-native-splash-screen';
 import Login from './src/containers/login/Login';
-import { getCurrentUser } from './src/service/authServices';
-// import { getCurrentMisList } from './src/service/missionServices';
+import {getCurrentUser} from './src/service/authServices';
+// import {getCurrentMisList} from './src/service/missionServices';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

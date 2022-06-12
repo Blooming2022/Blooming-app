@@ -11,7 +11,7 @@ const MisMemoInput = ({misMemo, setMisMemo}) => {
           multiline={true}
           style={styles.textInput}
           onChangeText={setMisMemo}
-          placeholder="메모를 입력해주세요"
+          placeholder="메모를 입력해주세요(최대 50자)"
           placeholderTextColor={'#999999'}
           maxLength={maxLengthOfMisMemo}>{misMemo}</TextInput>
       </View>

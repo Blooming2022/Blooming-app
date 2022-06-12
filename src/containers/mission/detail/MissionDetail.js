@@ -8,6 +8,7 @@ import {useNavigation} from '@react-navigation/native';
 import InfoModal from '../../../components/Modal/InfoModal';
 import MisDetailMemo from './components/MisDetailMemo';
 import MisDetailReview from './components/MisDetailReview';
+import MisPeriodText from '../../../components/Text/MisPeriodText';
 
 const MissionDetail = ({route}) => {
   const mission = route.params.mission;
@@ -16,14 +17,6 @@ const MissionDetail = ({route}) => {
   const navigation = useNavigation();
   const isMemoExist = mission.misMemo !== '';
 
-  let misPeriodText;
-  if (mission.misPeriod == 0) {
-    misPeriodText = '한주';
-  } else if (mission.misPeriod == 1) {
-    misPeriodText = '한달';
-  } else {
-    misPeriodText = '계절';
-  }
   const goToMissionUpdate = () => {
     navigation.navigate('MissionUpdate', {mission: mission});
   };
@@ -57,11 +50,7 @@ const MissionDetail = ({route}) => {
           title="안내"
           text1="후기는 성공한 미션인 경우"
           text2="생성 가능합니다"></InfoModal>
-        <View style={styles.periodBoxWrapper}>
-          <View style={styles.periodBox}>
-            <Text style={styles.misPeriod}>{misPeriodText}</Text>
-          </View>
-        </View>
+        <MisPeriodText misPeriod={mission.misPeriod}></MisPeriodText>
         <MissionTitleBox misTitle={mission.misTitle}></MissionTitleBox>
         {isMemoExist && <MisDetailMemo misMemo={mission.misMemo}></MisDetailMemo>}
         <MisDetailReview

@@ -1,13 +1,15 @@
 import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import ScrollPicker from 'react-native-wheel-scrollview-picker';
+import {getKSTTime} from '../../../../service/commonServices';
 
 // prettier-ignore
 const wheelPickerData = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
 
 const SelectMisMonth = ({setMisMonth}) => {
-  const nowMonth = new Date().getMonth();
-  const nowYear = new Date().getFullYear();
+  const nowMonth = new Date(getKSTTime()).getMonth();
+  const nowYear = new Date(getKSTTime()).getFullYear();
+
   return (
     <View style={styles.container}>
       <Text style={styles.yearText}>{nowYear}년</Text>
@@ -19,7 +21,7 @@ const SelectMisMonth = ({setMisMonth}) => {
             return <Text>{dataSource}</Text>;
           }}
           onValueChange={(data, selectedIndex) => {
-            setMisMonth(selectedIndex); // 0 is spring
+            setMisMonth(selectedIndex); // 0 is January
           }}
           wrapperHeight={150}
           wrapperColor="#ffffff"

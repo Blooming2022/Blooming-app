@@ -1,35 +1,20 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, ScrollView, View} from 'react-native';
+import {StyleSheet, ScrollView, View, Text} from 'react-native';
 import CompleteHeader from '../../../components/Header/CompleteHeader';
-import MisPeriodSelectBtn from '../create/components/MisPeriodSelectBtn';
 import MisTitleInput from '../create/components/MisTitleInput';
-import SelectMisWeek from '../create/components/SelectMisWeek';
-import SelectMisMonth from '../create/components/SelectMisMonth';
-import SelectMisSeason from '../create/components/SelectMisSeason';
 import MisMemoField from '../create/components/MisMemoField';
 import {updateCurrentMis} from '../../../service/missionServices';
 import {useNavigation} from '@react-navigation/native';
+import MisPeriodText from '../../../components/Text/MisPeriodText';
 
 const MissionUpdate = ({route}) => {
   const initialMisInfo = route.params.mission;
   let updateInfo = {};
-  const [misPeriod, setMisPeriod] = useState(initialMisInfo.misPeriod);
   const [misTitle, setTitle] = useState(initialMisInfo.misTitle);
   const [misMemo, setMisMemo] = useState(initialMisInfo.misMemo);
-  const [misWeekStart, setMisWeekStart] = useState(''); // timestamp
-  const [misWeekEnd, setMisWeekEnd] = useState(''); // timestamp
-  const [misMonth, setMisMonth] = useState(''); // 0 is January
-  const [misSeason, setMisSeason] = useState(0); // 0 is Spring
   const [isValid, setIsValid] = useState(false);
   let isMisSelfText = initialMisInfo.isMisSelf ? '셀프' : '랜덤';
-  const [misTime, setMisTime] = useState([]); // Different values depending on the misPeriod
   const navigation = useNavigation();
-
-  useEffect(() => {
-    if (misPeriod === 0) setMisTime([misWeekStart, misWeekEnd]);
-    else if (misPeriod === 1) setMisTime(misMonth);
-    else setMisTime(misSeason);
-  }, [misPeriod]);
 
   useEffect(() => {
     if (misTitle !== '') {
@@ -71,30 +56,8 @@ const MissionUpdate = ({route}) => {
         isValid={isValid}
         completeFunction={updateMission}></CompleteHeader>
       <ScrollView style={styles.container} nestedScrollEnabled={true}>
+        <MisPeriodText misPeriod={initialMisInfo.misPeriod}></MisPeriodText>
         <MisTitleInput misTitle={misTitle} setMisTitle={setTitle}></MisTitleInput>
-        <View style={styles.periodButtonContainer}>
-          <MisPeriodSelectBtn
-            buttontext={'한주'}
-            selectedId={0}
-            misPeriod={misPeriod}
-            setMisPeriod={setMisPeriod}></MisPeriodSelectBtn>
-          <MisPeriodSelectBtn
-            buttontext={'한달'}
-            selectedId={1}
-            misPeriod={misPeriod}
-            setMisPeriod={setMisPeriod}></MisPeriodSelectBtn>
-          <MisPeriodSelectBtn
-            buttontext={'계절'}
-            selectedId={2}
-            misPeriod={misPeriod}
-            setMisPeriod={setMisPeriod}></MisPeriodSelectBtn>
-        </View>
-        {misPeriod == 0 && (
-          <SelectMisWeek setMisWeekStart={setMisWeekStart} setMisWeekEnd={setMisWeekEnd} />
-        )}
-        {misPeriod == 1 && <SelectMisMonth setMisMonth={setMisMonth} />}
-        {misPeriod == 2 && <SelectMisSeason setMisSeason={setMisSeason} />}
-        <View style={styles.separator}></View>
         <MisMemoField misMemo={misMemo} setMisMemo={setMisMemo} />
       </ScrollView>
     </>
@@ -104,14 +67,26 @@ const MissionUpdate = ({route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingHorizontal: 20,
+    paddingTop: 20,
     backgroundColor: '#ffffff',
   },
   periodButtonContainer: {
     marginTop: 18,
-    flexDirection: 'row',
+    width: 55,
+    height: 37,
+    justifyContent: 'center',
     alignItems: 'center',
+    marginLeft: 10,
+    marginRight: 0,
+    padding: 8,
+    borderRadius: 20,
+    backgroundColor: '#242424',
+  },
+  periodButtonText: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: '#ffffff'
   },
   separator: {
     borderBottomWidth: 1,

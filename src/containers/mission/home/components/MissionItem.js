@@ -81,10 +81,10 @@ const MissionItem = ({mission}) => {
 
   return (
     <View style={styles.container}>
-              <DeleteModal
-          isModalVisible={isDelModalVisible}
-          setIsModalVisible={setIsDelModalVisible}
-          deleteFunction={deleteMission}></DeleteModal>
+      <DeleteModal
+        isModalVisible={isDelModalVisible}
+        setIsModalVisible={setIsDelModalVisible}
+        deleteFunction={deleteMission}></DeleteModal>
       <View style={styles.mission}>
         <TouchableOpacity onPress={checkMission}>
           {mission.isSuccess ? (

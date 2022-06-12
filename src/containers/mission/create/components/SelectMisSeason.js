@@ -1,14 +1,17 @@
 import React from 'react';
 import ScrollPicker from 'react-native-wheel-scrollview-picker';
 import {StyleSheet, View, Text} from 'react-native';
+import {getKSTTime} from '../../../../service/commonServices';
 
 // prettier-ignore
 const wheelPickerData = ['봄(3월-5월)', '여름(6월-8월)','가을(9월-11월)', '겨울(12월-2월)'];
 
 const SelectMisSeason = ({setMisSeason}) => {
+  const nowYear = new Date(getKSTTime()).getFullYear();
+
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>2022</Text>
+      <Text style={styles.text}>{nowYear}년</Text>
       <View style={styles.wheelBox}>
         <ScrollPicker
           dataSource={wheelPickerData}
