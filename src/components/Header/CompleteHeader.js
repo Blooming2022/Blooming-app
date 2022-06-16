@@ -14,7 +14,7 @@ const CompleteHeader = ({navigation, title, isValid, completeFunction}) => {
           style={styles.backButtonImage}></Image>
       </TouchableOpacity>
       <Text style={styles.title}>{title}</Text>
-      <TouchableOpacity style={styles.button} onPress={completeFunction}>
+      <TouchableOpacity style={styles.button} onPress={isValid ? completeFunction : () => {}}>
         <Text style={[styles.completeText, isValid && styles.violet]}>완료</Text>
       </TouchableOpacity>
     </View>

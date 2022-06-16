@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, ScrollView, View, Text} from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import {StyleSheet, ScrollView} from 'react-native';
 import CompleteHeader from '../../../components/Header/CompleteHeader';
 import MisTitleInput from '../create/components/MisTitleInput';
 import MisMemoField from '../create/components/MisMemoField';
@@ -9,44 +9,45 @@ import MisPeriodText from '../../../components/Text/MisPeriodText';
 
 const MissionUpdate = ({route}) => {
   const initialMisInfo = route.params.mission;
-  let updateInfo = {};
+  const isInitialMount = useRef(true); // To disable the complete button on the first rendering
+  const [misPeriod, setMisPeriod] = useState(initialMisInfo.misPeriod);
   const [misTitle, setTitle] = useState(initialMisInfo.misTitle);
   const [misMemo, setMisMemo] = useState(initialMisInfo.misMemo);
-  const [isValid, setIsValid] = useState(false);
+  const [isValid, setIsValid] = useState(false); // Conditions for changing color of complete buttons
   let isMisSelfText = initialMisInfo.isMisSelf ? '셀프' : '랜덤';
   const navigation = useNavigation();
 
-  useEffect(() => {
-    if (misTitle !== '') {
-      setIsValid(true);
-    } else setIsValid(false);
-  }, [misTitle]);
-
   const updateMission = () => {
-    if(initialMisInfo.misTitle !== misTitle) updateInfo.misTitle = misTitle;
-    // if(initialMisInfo.misPeriod !== misPeriod) updateInfo.misPeriod = misPeriod; this is issue...
-    // if(initialMisInfo.picNum !== picNum) updateInfo.picNum = picNum; this is issue...
-    // if(initialMisInfo.misTime !== misTime) updateInfo.misTime = misTime; this is issue...
-    if(initialMisInfo.misMemo !== misMemo) updateInfo.misMemo = misMemo;
+    let updateInfo = {};
+    if (initialMisInfo.misTitle !== misTitle) updateInfo.misTitle = misTitle;
+    if (initialMisInfo.misMemo !== misMemo) updateInfo.misMemo = misMemo;
     let updateMisInfo = {
-      misID : initialMisInfo.id,
-      updateInfo: updateInfo
+      misID: initialMisInfo.id,
+      updateInfo: updateInfo,
     };
     updateCurrentMis(updateMisInfo);
     let mission = {
-      id : initialMisInfo.id,
+      id: initialMisInfo.id,
       misTitle: misTitle,
       misPeriod: misPeriod,
       picNum: initialMisInfo.picNum,
-      isSuccess: false,
-      successDate: null,
+      isSuccess: initialMisInfo.isSuccess,
+      misSuccessDate: initialMisInfo.misSuccessDate,
       isMisSelf: initialMisInfo.isMisSelf,
-      misTime: misTime,
       misMemo: misMemo,
-      hasReview: false,
+      hasReview: initialMisInfo.hasReview,
     };
     navigation.navigate('MissionDetail', {mission: mission});
   };
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      if (misTitle !== '') setIsValid(true);
+      else setIsValid(false);
+    }
+  }, [misTitle]);
 
   return (
     <>

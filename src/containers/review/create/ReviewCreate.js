@@ -20,7 +20,7 @@ const ReviewCreate = ({route, navigation}) => {
     misID: mission.id,
     misPeriod: mission.misPeriod,
     misTitle: mission.misTitle,
-    misSuccessDate: mission.successDate,
+    misSuccessDate: mission.misSuccessDate,
     revContent: '',
     revImg: '',
   });

@@ -73,7 +73,7 @@ const MissionItem = ({mission}) => {
       misID: mission.id,
       updateInfo: {
         isSuccess: !mission.isSuccess,
-        successDate: getKSTTime()
+        misSuccessDate: getKSTTime()
       }
     };
     updateCurrentMis(updateMisInfo);
