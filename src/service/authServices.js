@@ -235,10 +235,10 @@ const checkUserLevel = async () => {
 
 export {
   usersCollection,
+  getCurrentUser,
   googleSignIn,
   guestSignIn,
   signOut,
-  getCurrentUser,
   getUserProfile,
   updateUserProfile,
   deleteAccount,
