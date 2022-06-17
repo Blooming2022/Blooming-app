@@ -24,7 +24,6 @@ const randMaxSeason = 1;
  *  isSuccess: boolean,
  *  misSuccessDate: timeStamp,
  *  isMisSelf: boolean,
- *  misTime : array or int (Different values depending on the misPeriod. if misPeriod is 0, misTime is array.)
  *  misMemo: str,
  *  hasReview: boolean
  * }
