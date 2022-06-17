@@ -9,20 +9,23 @@ const SEASON = 2;
 
 /** 
  * 후기 생성
+ * const newRevInfo = await createRev(createRevInfo);
+ * 와 같이 await를 사용해서 호출해주셔야 새로 생성된 후기 정보를 읽어올 수 있습니다.
  * @param {
  *  misTitle: str
  *  misID: str
  *  misPeriod: int      // 0은 한주, 1은 한달, 2는 계절미션
- *  misSuccessDate: Date
+ *  misSuccessDate: timeStamp
  *  isOutdated: boolean   // currentMisList 내의 isSuccess:ture인 미션에 대해 후기를 생성하면 false, prevSuccessMission에 대해 후기 생성하면 true
  *  revContent: str
  *  revImg: str        // 후기 이미지의 URI정보. 후기 이미지가 없을 경우 ''를 넣어 호출
  * } createRevInfo 
- * @returns 성공시 Promise<void> | 실패시 -1
+ * @returns 성공시 Promise<FirebaseFirestoreTypes.DocumentData> | 실패시 -1
  */
 const createRev = async (createRevInfo) => {
   try {
-    const imgRef = storage().ref(`/revImg/${getCurrentUser().uid}/${createRevInfo.misID}.jpg`);
+    const uid = getCurrentUser().uid;
+    const imgRef = storage().ref(`/revImg/${uid}/${createRevInfo.misID}.jpg`);
     
     if ( createRevInfo.revImg != '' ) {
       const task = imgRef.putFile(createRevInfo.revImg);
@@ -34,7 +37,7 @@ const createRev = async (createRevInfo) => {
       });
     }
     if ( createRevInfo.isOutdated ) {
-      await usersCollection.doc(getCurrentUser().uid).collection('prevSuccessMisList').doc(createRevInfo.misID).update({hasReview: true});
+      await usersCollection.doc(uid).collection('prevSuccessMisList').doc(createRevInfo.misID).update({hasReview: true});
     } else {
       const updateMisInfo = {
         misID: createRevInfo.misID,
@@ -42,8 +45,9 @@ const createRev = async (createRevInfo) => {
       };
       updateCurrentMis(updateMisInfo);
     }
-
-    return await usersCollection.doc(getCurrentUser().uid).collection('revList').doc(createRevInfo.misID).set(createRevInfo);
+    const revRef = usersCollection.doc(uid).collection('revList');
+    await revRef.doc(createRevInfo.misID).set(createRevInfo);
+    return (await (revRef.doc(createRevInfo.misID).get())).data(); 
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -100,17 +104,20 @@ const getRevList = async (period) => {
 
 /** 
  * 후기 수정
+ * const updatedRevInfo = await updateRev(updateRevInfo);
+ * 와 같이 await를 사용해서 호출해주셔야 수정된 후기 정보를 읽어올 수 있습니다.
  * @param {
  *  misID: str
  *  isImgUpdated: boolean    // 이미지도 함께 수정하는 경우에 true
  *  revData: {object}        // 수정할 정보만 담아서 호출
  * } updateRevInfo 
- * @returns 성공시 Promise<void> | 실패시 -1
+ * @returns 성공시 Promise<FirebaseFirestoreTypes.DocumentData> | 실패시 -1
  */
 const updateRev = async (updateRevInfo) => {
   try {
+    const uid = getCurrentUser().uid;
     if(updateRevInfo.isImgUpdated) {
-      const imgRef = storage().ref(`/revImg/${getCurrentUser().uid}/${updateRevInfo.misID}.jpg`);
+      const imgRef = storage().ref(`/revImg/${uid}/${updateRevInfo.misID}.jpg`);
       const revImg = updateRevInfo.revData.revImg;
       // 이미지 수정 - storage
       const task = imgRef.putFile(revImg);
@@ -121,7 +128,9 @@ const updateRev = async (updateRevInfo) => {
         console.log('img uploaded to the bucket!');
       });
     }
-    return await usersCollection.doc(getCurrentUser().uid).collection('revList').doc(updateRevInfo.misID).update(updateRevInfo.revData);
+    const docRef = usersCollection.doc(uid).collection('revList').doc(updateRevInfo.misID);
+    await docRef.update(updateRevInfo.revData);
+    return (await docRef.get()).data();
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -139,14 +148,14 @@ const updateRev = async (updateRevInfo) => {
  */
 const deleteRev = async (delRevInfo) => {
   try {
-
+    const uid = getCurrentUser().uid;
     if ( delRevInfo.revImg ) { // revImg가 있을 때 실행돼야 함
-      const imgRef = storage().ref(`/revImg/${getCurrentUser().uid}/${delRevInfo.misID}.jpg`);
+      const imgRef = storage().ref(`/revImg/${uid}/${delRevInfo.misID}.jpg`);
       imgRef.delete().then().catch((e)=>console.log(e.message));
     }
     
     if ( delRevInfo.isOutdated ) {
-      await usersCollection.doc(getCurrentUser().uid).collection('prevSuccessMisList').doc(delRevInfo.misID).update({hasReview: false});
+      await usersCollection.doc(uid).collection('prevSuccessMisList').doc(delRevInfo.misID).update({hasReview: false});
     } else {
       const updateMisInfo = {
         misID: delRevInfo.misID,
@@ -154,7 +163,7 @@ const deleteRev = async (delRevInfo) => {
       };
       updateCurrentMis(updateMisInfo);
     }
-    return await usersCollection.doc(getCurrentUser().uid).collection('revList').doc(delRevInfo.misID).delete();
+    return await usersCollection.doc(uid).collection('revList').doc(delRevInfo.misID).delete();
   } catch (e) {
     console.log(e.message);
     return -1;
