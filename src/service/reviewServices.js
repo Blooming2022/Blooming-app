@@ -57,7 +57,7 @@ const createRev = async (createRevInfo) => {
 /** 
  * 후기 한 개 조회
  * misID를 파라미터로 받아 해당 미션의 후기를 조회합니다.
- * `getRevById(misID).revContent`
+ * `(await getRevById(misID)).revContent`
  * 와 같은 방식으로 후기 내용을 참조할 수 있습니다.
  * 
  * @param {str} misID 어떤 미션에 대한 후기를 조회하고자 하는지 misID로 식별

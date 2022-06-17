@@ -111,27 +111,36 @@ const getCurrentMisList = async (period) => {
  * @returns 성공시 Promise<FirebaseFirestoreTypes.DocumentData> | 실패시 -1
  */
 const updateCurrentMis = async (updateMisInfo) => {
-  let misRef = usersCollection.doc(getCurrentUser().uid).collection('currentMisList');
-
   try {
-    console.log('update current mission');
-    // 미션 title, 성공 날짜가 변경되면 후기가 있는지 체크하고, 후기 데이터에서도 변경해줌
-    if (updateMisInfo.updateInfo.misTitle || updateMisInfo.updateInfo.misSuccessDate) {
+    const uid = getCurrentUser().uid;
+    let misRef = usersCollection.doc(uid).collection('currentMisList');
+
+    // misTitle, misSuccessDate가 변경되면 후기가 있는지 체크하고, 후기 데이터에서도 변경해줌. 실패상태로 변하면 후기를 삭제함
+    if (updateMisInfo.updateInfo.misTitle || updateMisInfo.updateInfo.misSuccessDate || updateMisInfo.updateInfo.isSuccess == false) {
       const misData = await getCurrentMisById(updateMisInfo.misID);
-      if ( misData.hasReview == true && updateMisInfo.updateInfo.misTitle) {
-        usersCollection.doc(getCurrentUser().uid).collection('revList').doc(updateMisInfo.misID).update({misTitle: updateMisInfo.updateInfo.misTitle});
-      }
-      if (misData.hasReview == true && updateMisInfo.updateInfo.misSuccessDate) {
-        usersCollection.doc(getCurrentUser().uid).collection('revList').doc(updateMisInfo.misID).update({misSuccessDate: updateMisInfo.updateInfo.misSuccessDate});
+      let updateRevInfo = {
+        misID: updateMisInfo.misID,
+      };
+      if ( misData.hasReview == true ) {
+        if ( updateMisInfo.updateInfo.misTitle ) updateRevInfo.misTitle = updateMisInfo.updateInfo.misTitle;
+        if ( updateMisInfo.updateInfo.misSuccessDate ) updateRevInfo.misSuccessDate = updateMisInfo.updateInfo.misSuccessDate;
+        await usersCollection.doc(uid).collection('revList').doc(updateMisInfo.misID).update(updateRevInfo);
+        if ( updateMisInfo.updateInfo.isSuccess == false ) {
+          const delRevInfo = {
+            misID: updateMisInfo.misID,
+            revImg: (await getRevById(updateMisInfo.misID)).revImg,
+            isOutdated: false,
+          };
+          deleteRev(delRevInfo);
+        }
       }
     }
     
-    // 성공상태로 변화하면 성공날짜를 변경, 실패상태로 변화하면 성공날짜를 다시 null로 설정해줌
-    if ( updateMisInfo.updateInfo.isSuccess == true ) {
-      misRef.doc(updateMisInfo.misID).update({misSuccessDate: firestore.FieldValue.serverTimestamp()});
-    } else if ( updateMisInfo.updateInfo.isSuccess == false ) {
-      misRef.doc(updateMisInfo.misID).update({misSuccessDate: null});
+    // 이미 성공했던 미션을 실패상태로 바꾸면 misSuccessDate 필드값을 null로 재설정
+    if ( updateMisInfo.updateInfo.isSuccess == false ) {
+      updateMisInfo.updateInfo.misSuccessDate = null;
     }
+    console.log((await (misRef.doc(updateMisInfo.misID).get())).data());
     await misRef.doc(updateMisInfo.misID).update(updateMisInfo.updateInfo);
     return (await (misRef.doc(updateMisInfo.misID).get())).data();
   } catch (e) {
@@ -150,12 +159,10 @@ const updateCurrentMis = async (updateMisInfo) => {
  */
 const deleteCurrentMis = async (delMisInfo) => {
   try {
-
     if (delMisInfo.hasReview == true) {
       const revInfo = await getRevById(delMisInfo.misID);
       await deleteRev({misID: delMisInfo.misID, revImg: revInfo.revImg, isOutdated: false});
     }
-
     const misRef = usersCollection.doc(getCurrentUser().uid).collection('currentMisList');
     return misRef.doc(delMisInfo.misID).delete();  
   } catch (e) {
@@ -283,6 +290,26 @@ const getLatestPrevSuccessMis = async () => {
  */
 const updatePrevSuccessMis = async (updateMisInfo) => {
   try {
+    // misTitle, misSuccessDate가 변경되면 후기가 있는지 체크하고, 후기 데이터에서도 변경해줌. 실패상태로 변하면 후기를 삭제함
+    if (updateMisInfo.misData.misTitle || updateMisInfo.misData.misSuccessDate || updateMisInfo.misData.isSuccess == false) {
+      const prevMisData = await getPrevSuccessMisById(updateMisInfo.misID);
+      let updateRevInfo = {
+        misID: updateMisInfo.misID,
+      };
+      if ( prevMisData.hasReview == true ) {
+        if ( updateMisInfo.misData.misTitle ) updateRevInfo.misTitle = updateMisInfo.misData.misTitle;
+        if ( updateMisInfo.misData.misSuccessDate ) updateRevInfo.misSuccessDate = updateMisInfo.misData.misSuccessDate;
+        await usersCollection.doc(uid).collection('revList').doc(updateMisInfo.misID).update(updateRevInfo);
+        if ( updateMisInfo.misData.isSuccess == false ) {
+          const delRevInfo = {
+            misID: updateMisInfo.misID,
+            revImg: (await getRevById(updateMisInfo.misID)).revImg,
+            isOutdated: true,
+          };
+          deleteRev(delRevInfo);
+        }
+      }
+    }
     const misRef = usersCollection.doc(getCurrentUser().uid).collection('prevSuccessMisList').doc(updateMisInfo.misID);
     await misRef.update(updateMisInfo.misData);
     return (await misRef.get()).data();
