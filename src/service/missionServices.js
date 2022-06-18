@@ -361,11 +361,6 @@ const clearCurrentMisList = async (period) => {
       const updateMisInfo = {
         misID: element.id,
         updateInfo: {
-          isAlarmSet: firebase.firestore.FieldValue.delete(),
-          misAlarmHour: firebase.firestore.FieldValue.delete(),
-          misAlarmMinute: firebase.firestore.FieldValue.delete(),
-          misAlarmStart: firebase.firestore.FieldValue.delete(),
-          misAlarmStop: firebase.firestore.FieldValue.delete(),
           picNum: firebase.firestore.FieldValue.delete()
         }
       }
