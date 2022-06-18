@@ -17,7 +17,6 @@ const randMaxSeason = 1;
  * 새로운 미션을 생성하기 위해 호출하는 함수.
  * misData는 아래와 같은 형식입니다.
  * {
- *  misID: str,
  *  misTitle: str,
  *  misPeriod: int,
  *  picNum: int,
@@ -36,7 +35,6 @@ const createCurrentMis = async (misData) => {
   let misRef = usersCollection.doc(getCurrentUser().uid).collection('currentMisList');
   try {
     const doc = misRef.doc();
-    misData.misID = doc.id;
     await doc.set(misData);
     return (await (doc.get())).data();
   } catch (e) {
@@ -154,7 +152,7 @@ const updateCurrentMis = async (updateMisInfo) => {
  *  misID: str
  *  hasReview: boolean
  * } delMisInfo 삭제하고자 하는 미션의 정보를 담은 object
- * @returns 성공시 Promise | 실패시 -1
+ * @returns 성공시 Promise<void> | 실패시 -1
  */
 const deleteCurrentMis = async (delMisInfo) => {
   try {
@@ -383,7 +381,7 @@ const clearCurrentMisList = async (period) => {
 /**
  * 진행중인 미션의 기간이 끝났는지 아닌지 체크하는 함수.
  * 만약 기간이 끝났다면 currentMisList 내의 isSuccess:true인 미션을 모두 prevSuccessMissionList로 옮기고, currentMisList를 비운다.
- * @returns Promise<number>
+ * @returns Promise<void>
  */
 const checkCurrentMisListValid = async () => {
   const HOUR = 1*60*60*1000;
