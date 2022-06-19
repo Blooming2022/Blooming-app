@@ -3,6 +3,7 @@ import {StyleSheet, View, TextInput} from 'react-native';
 
 const MisTitleInput = ({misTitle, setMisTitle}) => {
   const maxLengthOfMisTitle = 20;
+  const placeholderStr = `미션 제목 (최대 ${maxLengthOfMisTitle}자)`;
 
   return (
     <>
@@ -11,9 +12,11 @@ const MisTitleInput = ({misTitle, setMisTitle}) => {
           autoFocus={true}
           style={styles.textInput}
           onChangeText={setMisTitle}
-          placeholder="미션 제목 (최대 20자)"
-          placeholderTextColor={'#5B5B5B'}
-          maxLength={maxLengthOfMisTitle}>{misTitle}</TextInput>
+          placeholder={placeholderStr}
+          placeholderTextColor={'#999999'}
+          maxLength={maxLengthOfMisTitle}>
+          {misTitle}
+        </TextInput>
       </View>
     </>
   );
@@ -25,7 +28,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     marginTop: 20,
     paddingLeft: 10,
-    paddingBottom: 10,
+    paddingBottom: 2,
   },
   buttonContainerRight: {
     alignItems: 'flex-end',
@@ -42,7 +45,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontWeight: 'bold',
     fontSize: 20,
-  }
+  },
 });
 
 export default MisTitleInput;

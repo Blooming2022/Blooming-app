@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '900',
     color: '#242424',
+    paddingLeft: 10,
   },
   line: {
     borderBottomWidth: 1.5,

@@ -22,7 +22,7 @@ const MisPeriodText = ({misPeriod}) => {
 
 const styles = StyleSheet.create({
   periodBoxWrapper: {
-    alignItems: 'flex-end',
+    alignItems: 'flex-start',
   },
   periodBox: {
     width: 57,
