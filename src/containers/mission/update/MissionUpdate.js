@@ -44,7 +44,7 @@ const MissionUpdate = ({route}) => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
     } else {
-      if (misTitle == '') setIsValid(false);
+      if (misTitle == '') setIsValid(false); // an essential condition
       else if (initialMisInfo.misTitle !== misTitle) setIsValid(true);
       else if (initialMisInfo.misMemo !== misMemo) setIsValid(true);
       else setIsValid(false); // If there is no change in the misTitle, misMemo

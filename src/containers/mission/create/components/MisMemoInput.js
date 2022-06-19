@@ -14,8 +14,8 @@ const MisMemoInput = ({misMemo, setMisMemo}) => {
           onChangeText={setMisMemo}
           placeholder={placeholderStr}
           placeholderTextColor={'#999999'}
+          value={misMemo}
           maxLength={maxLengthOfMisMemo}>
-          {misMemo}
         </TextInput>
       </View>
     </>

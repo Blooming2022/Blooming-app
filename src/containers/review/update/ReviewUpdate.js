@@ -41,8 +41,11 @@ const ReviewUpdate = ({route, navigation}) => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
     } else {
-      if (review.revContent !== '' || review.revImg !== '') setIsValid(true);
-      else setIsValid(false);
+      if (review.revContent == '' && review.revImg == '')
+        setIsValid(false); // an essential condition
+      else if (initialReview.revContent !== review.revContent) setIsValid(true);
+      else if (initialReview.revImg !== review.revImg) setIsValid(true);
+      else setIsValid(false); // If there is no change in the revContent, revImg
     }
   }, [review]);
   useEffect(() => {

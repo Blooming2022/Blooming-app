@@ -1,7 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {StyleSheet, ScrollView, View} from 'react-native';
+import {StyleSheet, ScrollView} from 'react-native';
 import CompleteHeader from '../../../components/Header/CompleteHeader';
-import {getKSTTime} from '../../../service/commonServices';
 import { createRev } from '../../../service/reviewServices';
 import MissionInfoBox from './components/MissionInfoBox';
 import MissionTitleBox from '../../../components/Text/MissionTitleBox';
@@ -11,9 +10,8 @@ import ReviewImageInput from './components/ReviewImageInput';
 
 const ReviewCreate = ({route, navigation}) => {
   const mission = route.params.mission;
-  const isInitialMount = useRef(true);
-  // 완료 버튼 색 변경 조건
-  const [isValid, setIsValid] = useState(false);
+  const isInitialMount = useRef(true); // To disable the complete button on the first rendering
+  const [isValid, setIsValid] = useState(false); // Conditions for changing color of complete buttons
   const [isImageExist, setIsImageExist] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [review, setReview] = useState({
@@ -25,16 +23,10 @@ const ReviewCreate = ({route, navigation}) => {
     revImg: '',
   });
 
-  // createReview는 서버 연동 후 변경할 예정입니다. 지금은 화면 흐름만 구현했어요.
   const createReview = () => {
     const createRevInfo = {
-      misTitle: review.misTitle,
-      misID : review.misID,
-      misPeriod: review.misPeriod,
-      misSuccessDate: review.misSuccessDate,
-      revContent: review.revContent,
-      revImg: review.revImg,
-      isOutdated: false,
+      ...review,
+      ...{isOutdated: false},
     }
     createRev(createRevInfo);
     navigation.navigate('ReviewDetail', {review: review});
