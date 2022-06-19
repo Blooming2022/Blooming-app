@@ -1,8 +1,6 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Image, TouchableOpacity} from 'react-native';
 import MissionAddModal from '../../../../components/Modal/MissionAddModal';
-import MissionCount from './MissionCount';
-import {selfMaxWeek, randMaxWeek} from '../../../../service/missionServices';
 import {useNavigation} from '@react-navigation/native';
 
 const MissionWeekFlower = ({missionList, setMissionList}) => {
@@ -13,12 +11,6 @@ const MissionWeekFlower = ({missionList, setMissionList}) => {
   const showModal = num => {
     setPicNum(num);
     setIsModalVisible(!isModalVisible);
-  };
-  const currentSelf = () => {
-    return missionList.filter((misPeriod, isMisSelf) => misPeriod !== 0 && !isMisSelf).length;
-  };
-  const currentRand = () => {
-    return missionList.filter((misPeriod, isMisSelf) => misPeriod !== 0 && isMisSelf).length;
   };
 
   return (
@@ -94,11 +86,6 @@ const MissionWeekFlower = ({missionList, setMissionList}) => {
       <Image
         source={require('../../../../assets/images/weekCenter.png')}
         style={styles.weekCenter}></Image>
-      <MissionCount
-        currentSelf={currentSelf()}
-        maxSelf={selfMaxWeek}
-        currentRandom={currentRand()}
-        maxRandom={randMaxWeek}></MissionCount>
     </View>
   );
 };
