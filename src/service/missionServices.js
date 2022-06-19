@@ -270,52 +270,6 @@ const getLatestPrevSuccessMis = async () => {
   }
 }
 
-/** 
- * PrevSuccessMission 수정.
- * misData = {
- *   misTitle: 'fakeTitle'
- * }
- * 위와 같은 형식으로 updateMisInfo.misData에는 수정할 정보만 넣어서 호출해주세요.
- * 
- * const updatedPrevSuccessMisInfo = await updatePrevSuccessMis(updateMisInfo);
- * 와 같이 await를 사용해서 호출해주셔야 수정된 prevSuccessMission 정보를 읽어올 수 있습니다.
- * @param {
- *  misID: str,
- *  misData: {object}
- * } updateMisInfo 
- * @returns 성공시 Promise<FirebaseFirestoreTypes.DocumentData> | 실패시 -1
- */
-const updatePrevSuccessMis = async (updateMisInfo) => {
-  try {
-    // misTitle, misSuccessDate가 변경되면 후기가 있는지 체크하고, 후기 데이터에서도 변경해줌. 실패상태로 변하면 후기를 삭제함
-    if (updateMisInfo.misData.misTitle || updateMisInfo.misData.misSuccessDate || updateMisInfo.misData.isSuccess == false) {
-      const prevMisData = await getPrevSuccessMisById(updateMisInfo.misID);
-      let updateRevInfo = {
-        misID: updateMisInfo.misID,
-      };
-      if ( prevMisData.hasReview == true ) {
-        if ( updateMisInfo.misData.misTitle ) updateRevInfo.misTitle = updateMisInfo.misData.misTitle;
-        if ( updateMisInfo.misData.misSuccessDate ) updateRevInfo.misSuccessDate = updateMisInfo.misData.misSuccessDate;
-        await usersCollection.doc(uid).collection('revList').doc(updateMisInfo.misID).update(updateRevInfo);
-        if ( updateMisInfo.misData.isSuccess == false ) {
-          const delRevInfo = {
-            misID: updateMisInfo.misID,
-            revImg: (await getRevById(updateMisInfo.misID)).revImg,
-            isOutdated: true,
-          };
-          deleteRev(delRevInfo);
-        }
-      }
-    }
-    const misRef = usersCollection.doc(getCurrentUser().uid).collection('prevSuccessMisList').doc(updateMisInfo.misID);
-    await misRef.update(updateMisInfo.misData);
-    return (await misRef.get()).data();
-  } catch(e) {
-    console.log(e.message);
-    return -1;
-  }
-}
-
 /**
  * misID에 해당하는 PrevSuccessMission을 삭제.
  * @param {
@@ -359,7 +313,8 @@ const clearCurrentMisList = async (period) => {
       const updateMisInfo = {
         misID: element.id,
         updateInfo: {
-          picNum: firebase.firestore.FieldValue.delete()
+          picNum: firebase.firestore.FieldValue.delete(),
+          isSuccess: firebase.firestore.FieldValue.delete()
         }
       }
       await updateCurrentMis(updateMisInfo);
@@ -534,7 +489,6 @@ export {
   getPrevSuccessMisById,
   getPrevSuccessMisList,
   getLatestPrevSuccessMis,
-  updatePrevSuccessMis,
   deletePrevSuccessMis,
 
   checkCurrentMisListValid,
