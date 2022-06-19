@@ -11,7 +11,7 @@ const MisMemoInput = ({misMemo, setMisMemo}) => {
           multiline={true}
           style={styles.textInput}
           onChangeText={setMisMemo}
-          placeholder="메모를 입력해주세요(최대 50자)"
+          placeholder="메모 (최대 50자)"
           placeholderTextColor={'#999999'}
           maxLength={maxLengthOfMisMemo}>{misMemo}</TextInput>
       </View>
@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
   textInput: {
     paddingBottom: 8,
     alignItems: 'center',
+    fontSize: 16,
   },
 });
 

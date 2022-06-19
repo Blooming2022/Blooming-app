@@ -11,8 +11,8 @@ const MisTitleInput = ({misTitle, setMisTitle}) => {
           autoFocus={true}
           style={styles.textInput}
           onChangeText={setMisTitle}
-          placeholder="셀프 미션을 입력해주세요"
-          placeholderTextColor={'#5B5B5B'} //#CCCDD0은 닉네임색상, 피그마에 비해 연해서 임의로 바꿈
+          placeholder="미션 제목 (최대 20자)"
+          placeholderTextColor={'#5B5B5B'}
           maxLength={maxLengthOfMisTitle}>{misTitle}</TextInput>
       </View>
     </>
@@ -42,12 +42,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontWeight: 'bold',
     fontSize: 20,
-  },
-  failText: {
-    marginTop: 5,
-    fontSize: 12,
-    color: '#F54D3F',
-  },
+  }
 });
 
 export default MisTitleInput;
