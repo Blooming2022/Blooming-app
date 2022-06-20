@@ -41,7 +41,7 @@ const googleSignIn = async () => {
     const { idToken } = await GoogleSignin.signIn();
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
     const ret = await auth().signInWithCredential(googleCredential);
-    const user = getCurrentUser();
+    const user = curUser;
     console.log("[Auth] Successfully sign in with google credential.");
     await usersCollection.doc(user.uid)
     .set({
@@ -63,7 +63,7 @@ const googleSignIn = async () => {
 const guestSignIn = async () => {
   try {
     const ret = await auth().signInAnonymously();
-    const user = getCurrentUser();
+    const user = curUser;
     await usersCollection.doc(user.uid)
     .set({
       displayName: user.displayName,
@@ -107,7 +107,7 @@ const signOut = () => {
 const getUserProfile = async () => {
   try {
     let data;
-    await usersCollection.doc(getCurrentUser().uid).get()
+    await usersCollection.doc(curUser.uid).get()
     .then((docs) => {
       data = docs.data();
     });
@@ -131,8 +131,7 @@ const getUserProfile = async () => {
  */
 const updateUserProfile = async (data) => {
   try {
-    const user = getCurrentUser();
-    return await usersCollection.doc(user.uid).update(data);
+    return await usersCollection.doc(curUser.uid).update(data);
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -145,7 +144,7 @@ const updateUserProfile = async (data) => {
  */
 const deleteAccount = async () => {
   try {
-    const docPath = usersCollection.doc(getCurrentUser().uid);
+    const docPath = usersCollection.doc(curUser.uid);
     
     await docPath.collection('currentMisList').get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
@@ -164,7 +163,7 @@ const deleteAccount = async () => {
     });
 
     docPath.delete();
-    return await getCurrentUser().delete();
+    return await curUser.delete();
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -205,6 +204,11 @@ const isExistNickname = async (curNickname) => {
   }
 }
 
+/**
+ * 유저의 현재 successNum을 이용해 레벨을 체크해주는 함수
+ * 미션의 성공이나 실패로 인해 successNum이 변경될 수 있는 곳에서 호출해 사용합니다.
+ * @returns 성공시 Promise<void> | 실패시 -1
+ */
 const checkUserLevel = async () => {
   try {
     const userProfileData = await getUserProfile();
@@ -231,10 +235,10 @@ const checkUserLevel = async () => {
 
 export {
   usersCollection,
+  getCurrentUser,
   googleSignIn,
   guestSignIn,
   signOut,
-  getCurrentUser,
   getUserProfile,
   updateUserProfile,
   deleteAccount,

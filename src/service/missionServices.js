@@ -23,18 +23,20 @@ const randMaxSeason = 1;
  *  isSuccess: boolean,
  *  misSuccessDate: timeStamp,
  *  isMisSelf: boolean,
- *  misTime : array or int (Different values depending on the misPeriod. if misPeriod is 0, misTime is array.)
  *  misMemo: str,
  *  hasReview: boolean
  * }
+ * const newMisInfo = await createCurrentMis(misData);
+ * 와 같이 await를 사용해서 호출해주셔야 새로 생성된 미션 정보를 읽어올 수 있습니다.
  * @param {*} misData 미션 데이터 정보
- * @returns 성공시 Promise<misData> | 실패시 -1
+ * @returns 성공시 Promise<FirebaseFirestoreTypes.DocumentData> | 실패시 -1
  */
-const createCurrentMis = (misData) => {
+const createCurrentMis = async (misData) => {
   let misRef = usersCollection.doc(getCurrentUser().uid).collection('currentMisList');
-
   try {
-    return misRef.doc().set(misData);
+    const doc = misRef.doc();
+    await doc.set(misData);
+    return (await (doc.get())).data();
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -94,35 +96,50 @@ const getCurrentMisList = async (period) => {
  *   misMemo: 'newMemo',
  *   misSuccessDate: timeStamp,
  * }
- * 위와 같은 형식으로 updateMisInfo.updateInfo에는 수정할 정보만 넣어서 호출
+ * 위와 같은 형식으로 updateMisInfo.updateInfo에는 수정할 정보만 넣어서 호출해주세요.
+ * 
+ * const updatedMisInfo = await updateCurrentMis(updateMisInfo);
+ * 와 같이 await를 사용해서 호출해주셔야 수정된 current 미션 정보를 읽어올 수 있습니다.
+ * 
  * @param {
  *  misID: str,
  *  updateInfo: {object}
  * } updateMisInfo 미션을 수정할 정보를 담은 object
- * @returns 성공시 Promise | 실패시 -1
+ * @returns 성공시 Promise<FirebaseFirestoreTypes.DocumentData> | 실패시 -1
  */
 const updateCurrentMis = async (updateMisInfo) => {
-  let misRef = usersCollection.doc(getCurrentUser().uid).collection('currentMisList');
-
   try {
-    // 미션 title, 성공 날짜가 변경되면 후기가 있는지 체크하고, 후기 데이터에서도 변경해줌
-    if (updateMisInfo.updateInfo.misTitle || updateMisInfo.updateInfo.successDate) {
+    const uid = getCurrentUser().uid;
+    let misRef = usersCollection.doc(uid).collection('currentMisList');
+
+    // misTitle, misSuccessDate가 변경되면 후기가 있는지 체크하고, 후기 데이터에서도 변경해줌. 실패상태로 변하면 후기를 삭제함
+    if (updateMisInfo.updateInfo.misTitle || updateMisInfo.updateInfo.misSuccessDate || updateMisInfo.updateInfo.isSuccess == false) {
       const misData = await getCurrentMisById(updateMisInfo.misID);
-      if ( misData.hasReview == true && updateMisInfo.updateInfo.misTitle) {
-        usersCollection.doc(getCurrentUser().uid).collection('revList').doc(updateMisInfo.misID).update({misTitle: updateMisInfo.updateInfo.misTitle});
-      }
-      if (misData.hasReview == true && updateMisInfo.updateInfo.successDate) {
-        usersCollection.doc(getCurrentUser().uid).collection('revList').doc(updateMisInfo.misID).update({misSuccessDate: updateMisInfo.updateInfo.successDate});
+      let updateRevInfo = {
+        misID: updateMisInfo.misID,
+      };
+      if ( misData.hasReview == true ) {
+        if ( updateMisInfo.updateInfo.misTitle ) updateRevInfo.misTitle = updateMisInfo.updateInfo.misTitle;
+        if ( updateMisInfo.updateInfo.misSuccessDate ) updateRevInfo.misSuccessDate = updateMisInfo.updateInfo.misSuccessDate;
+        await usersCollection.doc(uid).collection('revList').doc(updateMisInfo.misID).update(updateRevInfo);
+        if ( updateMisInfo.updateInfo.isSuccess == false ) {
+          const delRevInfo = {
+            misID: updateMisInfo.misID,
+            revImg: (await getRevById(updateMisInfo.misID)).revImg,
+            isOutdated: false,
+          };
+          deleteRev(delRevInfo);
+        }
       }
     }
     
-    // 성공상태로 변화하면 성공날짜를 변경, 실패상태로 변화하면 성공날짜를 다시 null로 설정해줌
-    if ( updateMisInfo.updateInfo.isSuccess == true ) {
-      misRef.doc(updateMisInfo.misID).update({successDate: firestore.FieldValue.serverTimestamp()});
-    } else if ( updateMisInfo.updateInfo.isSuccess == false ) {
-      misRef.doc(updateMisInfo.misID).update({successDate: null});
+    // 이미 성공했던 미션을 실패상태로 바꾸면 misSuccessDate 필드값을 null로 재설정
+    if ( updateMisInfo.updateInfo.isSuccess == false ) {
+      updateMisInfo.updateInfo.misSuccessDate = null;
     }
-    return misRef.doc(updateMisInfo.misID).update(updateMisInfo.updateInfo);
+    console.log((await (misRef.doc(updateMisInfo.misID).get())).data());
+    await misRef.doc(updateMisInfo.misID).update(updateMisInfo.updateInfo);
+    return (await (misRef.doc(updateMisInfo.misID).get())).data();
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -135,16 +152,14 @@ const updateCurrentMis = async (updateMisInfo) => {
  *  misID: str
  *  hasReview: boolean
  * } delMisInfo 삭제하고자 하는 미션의 정보를 담은 object
- * @returns 성공시 Promise | 실패시 -1
+ * @returns 성공시 Promise<void> | 실패시 -1
  */
 const deleteCurrentMis = async (delMisInfo) => {
   try {
-
     if (delMisInfo.hasReview == true) {
       const revInfo = await getRevById(delMisInfo.misID);
       await deleteRev({misID: delMisInfo.misID, revImg: revInfo.revImg, isOutdated: false});
     }
-
     const misRef = usersCollection.doc(getCurrentUser().uid).collection('currentMisList');
     return misRef.doc(delMisInfo.misID).delete();  
   } catch (e) {
@@ -227,7 +242,7 @@ const getPrevSuccessMisList = async (period) => {
 }
 
 /** 
- * PrevSuccessMisList에서 successDate를 기준으로 최근에 성공한 미션을 조회
+ * PrevSuccessMisList에서 misSuccessDate 필드값을 기준으로 최근에 성공한 미션을 조회
  * PrevSuccessMission이 3개 이상 있으면 세 개 조회, 그보다 적은 경우에는 PrevSuccessMisList 내의 미션을 모두 조회
  * @returns 성공시 Promise<> | 실패시 -1 | 성공미션이 없는 경우 0
  */
@@ -247,30 +262,9 @@ const getLatestPrevSuccessMis = async () => {
       console.log('There is no Data.');
       return 0;
     }
-    const latestMis = await usersCollection.doc(getCurrentUser().uid).collection('prevSuccessMisList').orderBy('successDate', 'desc').limit(limitNum).get();
+    const latestMis = await usersCollection.doc(getCurrentUser().uid).collection('prevSuccessMisList').orderBy('misSuccessDate', 'desc').limit(limitNum).get();
     return latestMis.docs.map(doc => ({ ...doc.data(), id: doc.id }));
   } catch (e) {
-    console.log(e.message);
-    return -1;
-  }
-}
-
-/** 
- * PrevSuccessMission 수정.
- * misData = {
- *   misTitle: 'fakeTitle'
- * }
- * 위와 같은 형식으로 updateMisInfo.misData에는 수정할 정보만 넣어서 호출
- * @param {
- *  misID: str,
- *  misData: {object}
- * } updateMisInfo 
- * @returns 성공시 Promise | 실패시 -1
- */
-const updatePrevSuccessMis = (updateMisInfo) => {
-  try {
-    return usersCollection.doc(getCurrentUser().uid).collection('prevSuccessMisList').doc(updateMisInfo.misID).update(updateMisInfo.misData);
-  } catch(e) {
     console.log(e.message);
     return -1;
   }
@@ -319,12 +313,8 @@ const clearCurrentMisList = async (period) => {
       const updateMisInfo = {
         misID: element.id,
         updateInfo: {
-          isAlarmSet: firebase.firestore.FieldValue.delete(),
-          misAlarmHour: firebase.firestore.FieldValue.delete(),
-          misAlarmMinute: firebase.firestore.FieldValue.delete(),
-          misAlarmStart: firebase.firestore.FieldValue.delete(),
-          misAlarmStop: firebase.firestore.FieldValue.delete(),
-          picNum: firebase.firestore.FieldValue.delete()
+          picNum: firebase.firestore.FieldValue.delete(),
+          isSuccess: firebase.firestore.FieldValue.delete()
         }
       }
       await updateCurrentMis(updateMisInfo);
@@ -346,7 +336,7 @@ const clearCurrentMisList = async (period) => {
 /**
  * 진행중인 미션의 기간이 끝났는지 아닌지 체크하는 함수.
  * 만약 기간이 끝났다면 currentMisList 내의 isSuccess:true인 미션을 모두 prevSuccessMissionList로 옮기고, currentMisList를 비운다.
- * @returns Promise<number>
+ * @returns Promise<void>
  */
 const checkCurrentMisListValid = async () => {
   const HOUR = 1*60*60*1000;
@@ -499,7 +489,6 @@ export {
   getPrevSuccessMisById,
   getPrevSuccessMisList,
   getLatestPrevSuccessMis,
-  updatePrevSuccessMis,
   deletePrevSuccessMis,
 
   checkCurrentMisListValid,
