@@ -439,11 +439,11 @@ const getRandomKeywords = async (isSeason) => {
       keyword2 = data[randNo2];
     } else {
       const now = getKSTTime();
-      const month = formatDate(now).split(".")[1];
-      if(month === '03' || month === '04' || month === '05') season = 0;
-      if(month === '06' || month === '07' || month === '08') season = 1;
-      if(month === '09' || month === '10' || month === '11') season = 2;
-      if(month === '01' || month === '02' || month === '12') season = 3;
+      const month = new Date(now).getMonth();
+      if(month === 2 || month === 3 || month === 4) season = 0;
+      if(month === 5 || month === 6 || month === 7) season = 1;
+      if(month === 8 || month === 9 || month === 10) season = 2;
+      if(month === 0 || month === 1 || month === 11) season = 3;
 
       if (season == 0) {
         seasonDocRef = firestore().collection('crawlingData').doc('springKeywords');
