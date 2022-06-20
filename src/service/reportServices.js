@@ -68,11 +68,15 @@ const getNumOfSuccessMis = async (period) => {
         num[0] += lastMonthprevMis.length;
       }
   
-      // 마지막 주 = 현재 주
+      // 현재 주의 데이터 넣기
       const curWeekNo = getWeek(now);
       num[curWeekNo-1] = curMisList.length;
-  
-      num.length = curWeekNo;
+
+      // 이번달이 몇 주까지 있는지 확인하고, Array 길이 설정해주기
+      let last = new Date(now.getFullYear() + '/' + (now.getMonth()+2) + '/00');
+      let weekOfLastDay = getWeek(last.getTime() + 9 * HOUR);
+      num.length = weekOfLastDay;
+
     } else if (period == 2) {
       num = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
       
