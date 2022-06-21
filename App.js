@@ -8,10 +8,10 @@ import {getCurrentUser} from './src/service/authServices';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+  console.log(getCurrentUser());
   useEffect(() => {
     try {
-      if(getCurrentUser() == null) {
+      if (getCurrentUser() == null) {
         setTimeout(() => {
           SplashScreen.hide();
         }, 2000);
@@ -29,7 +29,11 @@ const App = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {isLoggedIn? <MainStackNavigator></MainStackNavigator> : <Login setIsLoggedIn={setIsLoggedIn}></Login>}
+      {isLoggedIn ? (
+        <MainStackNavigator></MainStackNavigator>
+      ) : (
+        <Login setIsLoggedIn={setIsLoggedIn}></Login>
+      )}
     </SafeAreaView>
   );
 };

@@ -4,9 +4,11 @@ import CommonHeader from '../../components/Header/CommonHeader';
 import SettingsItem from './components/SettingsItem';
 import {deleteAccount, getCurrentUser, googleSignIn, signOut} from '../../service/authServices';
 import {restartApp} from '../../service/commonServices';
+import DeleteModal from '../../components/Modal/DeleteModal';
 
 const Settings = () => {
   const [isGuest, setIsGuest] = useState(true);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   let loginInfo = isGuest ? '게스트 로그인' : '소셜 로그인';
   const versionInfo = '1.01 ver';
   // prettier-ignore
@@ -43,6 +45,10 @@ const Settings = () => {
 
   return (
     <>
+      <DeleteModal
+        isModalVisible={isModalVisible}
+        setIsModalVisible={setIsModalVisible}
+        deleteFunction={deleteUser}></DeleteModal>
       <CommonHeader title="설정"></CommonHeader>
       <View style={styles.container}>
         <View style={styles.box}>
@@ -85,7 +91,7 @@ const Settings = () => {
             hasImage={false}
             isButton={true}
             isLast={true}
-            pressFunc={deleteUser}></SettingsItem>
+            pressFunc={() => setIsModalVisible(true)}></SettingsItem>
         </View>
       </View>
     </>
