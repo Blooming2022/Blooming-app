@@ -133,7 +133,6 @@ const updateCurrentMis = async (updateMisInfo) => {
     if ( updateMisInfo.updateInfo.isSuccess == false ) {
       updateMisInfo.updateInfo.misSuccessDate = null;
     }
-    console.log((await (misRef.doc(updateMisInfo.misID).get())).data());
     await misRef.doc(updateMisInfo.misID).update(updateMisInfo.updateInfo);
     
     // 미션정보에 미션 ID를 추가해서 반환
