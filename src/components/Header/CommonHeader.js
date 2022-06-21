@@ -54,14 +54,6 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'center',
   },
-  completeText: {
-    fontSize: 16,
-    color: '#999999',
-  },
-  violet: {
-    color: '#8752FF',
-    fontWeight: 'bold',
-  },
   flex: {
     flex: 1,
     backgroundColor: 'yellow',

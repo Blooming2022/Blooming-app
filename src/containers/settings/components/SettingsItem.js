@@ -1,19 +1,19 @@
 import React from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 
-const SettingsItem = ({title, text, hasImage, touchable, isLast}) => {
+const SettingsItem = ({title, text, hasImage, isButton, isLast, pressFunc}) => {
   return (
     <>
       <View style={styles.itemBox}>
-        {touchable ? (
-          <TouchableOpacity style={styles.touchable}>
+        {isButton ? (
+          <TouchableOpacity style={styles.touchable} onPress={pressFunc}>
             <Text style={[styles.title, isLast && styles.lastItem]}>{title}</Text>
           </TouchableOpacity>
         ) : (
           <Text style={styles.title}>{title}</Text>
         )}
         {hasImage ? (
-          <TouchableOpacity style={styles.goButton}>
+          <TouchableOpacity style={styles.goButton} onPress={pressFunc}>
             <Image
               style={styles.goButtonImg}
               source={require('../../../assets/images/backBtn.png')}></Image>
