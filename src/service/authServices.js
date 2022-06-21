@@ -29,7 +29,6 @@ const usersCollection = firestore().collection('users');
 const getCurrentUser = () => {
   return auth().currentUser;
 }
-let curUser = getCurrentUser();
 
 /** 구글 계정 로그인
  * 
@@ -41,7 +40,7 @@ const googleSignIn = async () => {
     const { idToken } = await GoogleSignin.signIn();
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
     const ret = await auth().signInWithCredential(googleCredential);
-    const user = curUser;
+    const user = getCurrentUser();
     console.log("[Auth] Successfully sign in with google credential.");
     await usersCollection.doc(user.uid)
     .set({
@@ -63,7 +62,7 @@ const googleSignIn = async () => {
 const guestSignIn = async () => {
   try {
     const ret = await auth().signInAnonymously();
-    const user = curUser;
+    const user = getCurrentUser();
     await usersCollection.doc(user.uid)
     .set({
       displayName: user.displayName,
@@ -107,7 +106,7 @@ const signOut = () => {
 const getUserProfile = async () => {
   try {
     let data;
-    await usersCollection.doc(curUser.uid).get()
+    await usersCollection.doc(getCurrentUser().uid).get()
     .then((docs) => {
       data = docs.data();
     });
@@ -131,7 +130,7 @@ const getUserProfile = async () => {
  */
 const updateUserProfile = async (data) => {
   try {
-    return await usersCollection.doc(curUser.uid).update(data);
+    return await usersCollection.doc(getCurrentUser().uid).update(data);
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -144,7 +143,7 @@ const updateUserProfile = async (data) => {
  */
 const deleteAccount = async () => {
   try {
-    const docPath = usersCollection.doc(curUser.uid);
+    const docPath = usersCollection.doc(getCurrentUser().uid);
     
     await docPath.collection('currentMisList').get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
@@ -163,7 +162,7 @@ const deleteAccount = async () => {
     });
 
     docPath.delete();
-    return await curUser.delete();
+    return await getCurrentUser().delete();
   } catch (e) {
     console.log(e.message);
     return -1;

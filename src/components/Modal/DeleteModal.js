@@ -10,7 +10,7 @@ const DeleteModal = ({isModalVisible, setIsModalVisible, deleteFunction}) => {
       style={styles.modal}>
       <View style={styles.modalView}>
         <Text style={[styles.modalText, styles.title]}>정말 삭제하시겠습니까?</Text>
-        <Text style={[styles.modalText, styles.subTitle]}>삭제 후 내용 복구가 불가능합니다.</Text>
+        <Text style={[styles.modalText, styles.subTitle]}>삭제 후 복구가 불가능합니다.</Text>
         <View style={styles.optionBox}>
           <TouchableOpacity style={styles.option} onPress={() => setIsModalVisible(false)}>
             <Text style={styles.modalText}>취소</Text>

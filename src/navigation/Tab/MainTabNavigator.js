@@ -4,7 +4,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MissionTabNavigator from './MissionTabNavigator';
 import ReviewTabNavigator from './ReivewTabNavigator';
 import ReportStackNavigator from '../Stack/ReportStackNavigator';
-import MyPageStackNavigator from '../Stack/MypageStackNavigator';
+import Settings from '../../containers/settings/Settings';
 
 const Tab = createBottomTabNavigator();
 
@@ -27,10 +27,10 @@ const MainTabNavigator = () => {
             src = focused
               ? require('../../assets/images/reportTabActive.png')
               : require('../../assets/images/reportTab.png');
-          } else if (route.name === 'MypageHome') {
+          } else if (route.name === 'Settings') {
             src = focused
-              ? require('../../assets/images/myTabActive.png')
-              : require('../../assets/images/myTab.png');
+              ? require('../../assets/images/settingTabActive.png')
+              : require('../../assets/images/settingTab.png');
           }
           return <Image source={src} />;
         },
@@ -44,7 +44,11 @@ const MainTabNavigator = () => {
         },
         tabBarStyle: {height: 60, borderRadius: 8, paddingVertical: 4},
       })}>
-      <Tab.Screen name="MissionHome" component={MissionTabNavigator} options={{tabBarLabel: '미션'}} />
+      <Tab.Screen
+        name="MissionHome"
+        component={MissionTabNavigator}
+        options={{tabBarLabel: '미션'}}
+      />
       <Tab.Screen
         name="ReviewHome"
         component={ReviewTabNavigator}
@@ -55,11 +59,7 @@ const MainTabNavigator = () => {
         component={ReportStackNavigator}
         options={{tabBarLabel: '분석'}}
       />
-      <Tab.Screen
-        name="MypageHome"
-        component={MyPageStackNavigator}
-        options={{tabBarLabel: 'My'}}
-      />
+      <Tab.Screen name="Settings" component={Settings} options={{tabBarLabel: '설정'}} />
     </Tab.Navigator>
   );
 };
