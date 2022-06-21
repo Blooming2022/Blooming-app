@@ -1,3 +1,6 @@
+import RNRestart from 'react-native-restart';
+import SplashScreen from 'react-native-splash-screen';
+
 /**
  * Get KST Time
  * @returns {number} KST Time (time value in milliseconds)
@@ -23,4 +26,9 @@ function formatDate(timeStamp) {
   return formattedday;
 }
 
-export {getKSTTime, formatDate};
+function restartApp() {
+  RNRestart.Restart();
+  SplashScreen.show();
+}
+
+export {getKSTTime, formatDate, restartApp};
