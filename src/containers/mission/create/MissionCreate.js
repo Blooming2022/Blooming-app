@@ -22,7 +22,7 @@ const MissionCreate = ({route}) => {
     } else setIsValid(false);
   }, [misTitle]);
 
-  const createMission = () => {
+  const createMission = async() => {
     let mission = {
       misTitle: misTitle,
       misPeriod: misPeriod,
@@ -33,8 +33,9 @@ const MissionCreate = ({route}) => {
       misMemo: misMemo,
       hasReview: false,
     };
-    createCurrentMis(mission); // 여기서 id를 포함한 미션 정보를 받아오고 싶습니다!
-    navigation.navigate('MissionDetail', {mission: mission}); // id를 받지 못했기에 여기서 이동한 디테일 페이지에서는 수정 시 오류가 납니다.
+    const result =  await createCurrentMis(mission);
+    console.log(result)
+    navigation.navigate('MissionDetail', {mission: result});
   };
 
   return (

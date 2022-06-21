@@ -10,14 +10,14 @@ import MisPeriodText from '../../../components/Text/MisPeriodText';
 const MissionUpdate = ({route}) => {
   const initialMisInfo = route.params.mission;
   const isInitialMount = useRef(true); // To disable the complete button on the first rendering
-  const [misPeriod, setMisPeriod] = useState(initialMisInfo.misPeriod);
+  // const [misPeriod, setMisPeriod] = useState(initialMisInfo.misPeriod);
   const [misTitle, setTitle] = useState(initialMisInfo.misTitle);
   const [misMemo, setMisMemo] = useState(initialMisInfo.misMemo);
   const [isValid, setIsValid] = useState(false); // Conditions for changing color of complete buttons
   let isMisSelfText = initialMisInfo.isMisSelf ? '셀프' : '랜덤';
   const navigation = useNavigation();
 
-  const updateMission = () => {
+  const updateMission = async () => {
     let updateInfo = {};
     if (initialMisInfo.misTitle !== misTitle) updateInfo.misTitle = misTitle;
     if (initialMisInfo.misMemo !== misMemo) updateInfo.misMemo = misMemo;
@@ -25,19 +25,20 @@ const MissionUpdate = ({route}) => {
       misID: initialMisInfo.id,
       updateInfo: updateInfo,
     };
-    updateCurrentMis(updateMisInfo);
-    let mission = {
-      id: initialMisInfo.id,
-      misTitle: misTitle,
-      misPeriod: misPeriod,
-      picNum: initialMisInfo.picNum,
-      isSuccess: initialMisInfo.isSuccess,
-      misSuccessDate: initialMisInfo.misSuccessDate,
-      isMisSelf: initialMisInfo.isMisSelf,
-      misMemo: misMemo,
-      hasReview: initialMisInfo.hasReview,
-    };
-    navigation.navigate('MissionDetail', {mission: mission});
+    const result = await updateCurrentMis(updateMisInfo);
+    // let mission = {
+    //   id: initialMisInfo.id,
+    //   misTitle: misTitle,
+    //   misPeriod: misPeriod,
+    //   picNum: initialMisInfo.picNum,
+    //   isSuccess: initialMisInfo.isSuccess,
+    //   misSuccessDate: initialMisInfo.misSuccessDate,
+    //   isMisSelf: initialMisInfo.isMisSelf,
+    //   misMemo: misMemo,
+    //   hasReview: initialMisInfo.hasReview,
+    // };
+    console.log(result);
+    navigation.navigate('MissionDetail', {mission: result});
   };
 
   useEffect(() => {

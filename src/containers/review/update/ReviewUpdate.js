@@ -16,7 +16,7 @@ const ReviewUpdate = ({route, navigation}) => {
   const [isImageExist, setIsImageExist] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
 
-  const updateReview = () => {
+  const updateReview = async () => {
     const updateRevInfo = {
       misID: initialReview.misID,
     };
@@ -29,8 +29,8 @@ const ReviewUpdate = ({route, navigation}) => {
       updateRevInfo.isImgUpdate = false;
     }
     updateRevInfo.revData = revData;
-    updateRev(updateRevInfo);
-    navigation.navigate('ReviewDetail', {review: review});
+    const result = await updateRev(updateRevInfo);
+    navigation.navigate('ReviewDetail', {review: result});
   };
   const deleteImage = () => {
     setReview({...review, ...{revImg: ''}});
