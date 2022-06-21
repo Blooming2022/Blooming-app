@@ -22,7 +22,7 @@ const MissionCreate = ({route}) => {
     } else setIsValid(false);
   }, [misTitle]);
 
-  const createMission = async() => {
+  const createMission = async () => {
     let mission = {
       misTitle: misTitle,
       misPeriod: misPeriod,
@@ -36,6 +36,9 @@ const MissionCreate = ({route}) => {
     const result =  await createCurrentMis(mission);
     console.log(result)
     navigation.navigate('MissionDetail', {mission: result});
+    // const doc = await createCurrentMis(mission);
+    // mission.id = doc.id;
+    // navigation.navigate('MissionDetail', {mission: mission});
   };
 
   return (
