@@ -34,11 +34,7 @@ const MissionCreate = ({route}) => {
       hasReview: false,
     };
     const result =  await createCurrentMis(mission);
-    console.log(result)
     navigation.navigate('MissionDetail', {mission: result});
-    // const doc = await createCurrentMis(mission);
-    // mission.id = doc.id;
-    // navigation.navigate('MissionDetail', {mission: mission});
   };
 
   return (
