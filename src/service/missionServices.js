@@ -7,13 +7,6 @@ const WEEK = 0;
 const MONTH = 1;
 const SEASON = 2;
 
-const selfMaxWeek = 2;
-const randMaxWeek = 2;
-const selfMaxMonth = 1;
-const randMaxMonth = 1;
-const selfMaxSeason = 1;
-const randMaxSeason = 1;
-
 /** 
  * 새로운 미션을 생성하기 위해 호출하는 함수.
  * misData는 아래와 같은 형식입니다.
@@ -485,13 +478,6 @@ const getRandomKeywords = async (isSeason) => {
 }
 
 export {
-  selfMaxWeek,
-  randMaxWeek,
-  selfMaxMonth,
-  randMaxMonth,
-  selfMaxSeason,
-  randMaxSeason,
-
   createCurrentMis,
   getCurrentMisById,
   getCurrentMisList,

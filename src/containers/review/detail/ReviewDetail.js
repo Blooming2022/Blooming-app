@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#CCCCCC',
     borderRadius: 12,
+    marginTop: 25,
   },
   revContent: {
     fontSize: 14,

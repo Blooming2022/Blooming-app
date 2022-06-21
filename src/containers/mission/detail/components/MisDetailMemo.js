@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 10,
-    marginBottom: 15,
+    marginBottom: 20,
   },
   memoIcon: {
     marginRight: 15,
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   separator: {
     borderBottomWidth: 1,
     borderBottomColor: '#C5C5C7',
-    marginBottom: 15,
+    marginBottom: 20,
   },
 });
 

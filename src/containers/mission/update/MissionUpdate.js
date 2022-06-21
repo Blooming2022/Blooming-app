@@ -44,10 +44,12 @@ const MissionUpdate = ({route}) => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
     } else {
-      if (misTitle !== '') setIsValid(true);
-      else setIsValid(false);
+      if (misTitle == '') setIsValid(false); // an essential condition
+      else if (initialMisInfo.misTitle !== misTitle) setIsValid(true);
+      else if (initialMisInfo.misMemo !== misMemo) setIsValid(true);
+      else setIsValid(false); // If there is no change in the misTitle, misMemo
     }
-  }, [misTitle]);
+  }, [misTitle, misMemo]);
 
   return (
     <>
@@ -87,7 +89,7 @@ const styles = StyleSheet.create({
   periodButtonText: {
     fontSize: 15,
     fontWeight: 'bold',
-    color: '#ffffff'
+    color: '#ffffff',
   },
   separator: {
     borderBottomWidth: 1,

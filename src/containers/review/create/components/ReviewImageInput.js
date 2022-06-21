@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     width: 111,
     height: 111,
     position: 'relative',
+    marginTop: 25,
   },
   border: {
     width: '100%',
