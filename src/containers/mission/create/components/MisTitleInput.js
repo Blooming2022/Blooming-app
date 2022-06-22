@@ -6,19 +6,17 @@ const MisTitleInput = ({misTitle, setMisTitle}) => {
   const placeholderStr = `미션 제목 (최대 ${maxLengthOfMisTitle}자)`;
 
   return (
-    <>
-      <View style={[styles.container]}>
-        <TextInput
-          autoFocus={true}
-          style={styles.textInput}
-          onChangeText={setMisTitle}
-          placeholder={placeholderStr}
-          placeholderTextColor={'#999999'}
-          maxLength={maxLengthOfMisTitle}>
-          {misTitle}
-        </TextInput>
-      </View>
-    </>
+    <View style={styles.container}>
+      <TextInput
+        autoFocus={true}
+        style={styles.textInput}
+        onChangeText={setMisTitle}
+        placeholder={placeholderStr}
+        placeholderTextColor={'#999999'}
+        maxLength={maxLengthOfMisTitle}>
+        {misTitle}
+      </TextInput>
+    </View>
   );
 };
 
