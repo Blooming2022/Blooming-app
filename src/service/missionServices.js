@@ -134,7 +134,7 @@ const updateCurrentMis = async (updateMisInfo) => {
       updateMisInfo.updateInfo.misSuccessDate = null;
     }
     await misRef.doc(updateMisInfo.misID).update(updateMisInfo.updateInfo);
-    
+
     // 미션정보에 미션 ID를 추가해서 반환
     let documentData = (await (misRef.doc(updateMisInfo.misID).get())).data();
     documentData.id = misRef.doc(updateMisInfo.misID).id;

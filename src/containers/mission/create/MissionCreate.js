@@ -6,6 +6,7 @@ import MisMemoField from './components/MisMemoField';
 import MisPeriodText from '../../../components/Text/MisPeriodText';
 import {createCurrentMis} from '../../../service/missionServices';
 import {useNavigation} from '@react-navigation/native';
+import RandomMisTitle from './components/RandomMisTitle';
 
 const MissionCreate = ({route}) => {
   const misInfo = route.params.misInfo;
@@ -22,6 +23,16 @@ const MissionCreate = ({route}) => {
     } else setIsValid(false);
   }, [misTitle]);
 
+  useEffect(() => {
+    // if randomMission, set misTitle
+    if (!misInfo.isMisSelf) {
+      const result1 = misInfo.misTitle.result1;
+      const result2 = misInfo.misTitle.result2;
+      const randomMisTitle = `${result1} / ${result2}`;
+      setMisTitle(randomMisTitle);
+    }
+  }, []);
+
   const createMission = async () => {
     let mission = {
       misTitle: misTitle,
@@ -33,9 +44,8 @@ const MissionCreate = ({route}) => {
       misMemo: misMemo,
       hasReview: false,
     };
-    const doc = await createCurrentMis(mission);
-    mission.id = doc.id;
-    navigation.navigate('MissionDetail', {mission: mission});
+    const result = await createCurrentMis(mission);
+    navigation.navigate('MissionDetail', {mission: result});
   };
 
   return (
@@ -47,7 +57,11 @@ const MissionCreate = ({route}) => {
         completeFunction={createMission}></CompleteHeader>
       <ScrollView style={styles.container} nestedScrollEnabled={true}>
         <MisPeriodText misPeriod={misPeriod}></MisPeriodText>
-        <MisTitleInput misTitle={misTitle} setMisTitle={setMisTitle}></MisTitleInput>
+        {misInfo.isMisSelf ? (
+          <MisTitleInput misTitle={misTitle} setMisTitle={setMisTitle}></MisTitleInput>
+        ) : (
+          <RandomMisTitle misTitle={misTitle}></RandomMisTitle>
+        )}
         <MisMemoField misMemo={misMemo} setMisMemo={setMisMemo} />
       </ScrollView>
     </>

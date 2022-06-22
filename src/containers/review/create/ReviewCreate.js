@@ -28,8 +28,8 @@ const ReviewCreate = ({route, navigation}) => {
       ...review,
       ...{isOutdated: false},
     }
-    await createRev(createRevInfo);
-    navigation.navigate('ReviewDetail', {review: review});
+    const result = await createRev(createRevInfo);
+    navigation.navigate('ReviewDetail', {review: result});
   };
   const deleteImage = () => {
     setReview({...review, ...{revImg: ''}});
