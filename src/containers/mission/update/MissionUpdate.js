@@ -7,6 +7,7 @@ import {updateCurrentMis} from '../../../service/missionServices';
 import {useNavigation} from '@react-navigation/native';
 import MisPeriodText from '../../../components/Text/MisPeriodText';
 import RandomMisTitle from '../create/components/RandomMisTitle';
+import useMissionChanged from '../../../context/hook/useMissionChanged';
 
 const MissionUpdate = ({route}) => {
   const initialMisInfo = route.params.mission;
@@ -16,6 +17,7 @@ const MissionUpdate = ({route}) => {
   const [isValid, setIsValid] = useState(false); // Conditions for changing color of complete buttons
   let isMisSelfText = initialMisInfo.isMisSelf ? '셀프' : '랜덤';
   const navigation = useNavigation();
+  const {isMissionChanged, setIsMissionChanged} = useMissionChanged();
 
   const updateMission = async () => {
     let updateInfo = {};
@@ -26,6 +28,7 @@ const MissionUpdate = ({route}) => {
       updateInfo: updateInfo,
     };
     const result = await updateCurrentMis(updateMisInfo);
+    setIsMissionChanged(!isMissionChanged);
     navigation.navigate('MissionDetail', {mission: result});
   };
 

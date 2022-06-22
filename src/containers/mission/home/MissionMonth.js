@@ -4,15 +4,17 @@ import DdayCount from './components/DdayCount';
 import MissionList from './components/MissionList';
 import MissionMonthFlower from './components/MissionMonthFlower';
 import {getCurrentMisList} from '../../../service/missionServices';
+import useMissionChanged from '../../../context/hook/useMissionChanged';
 
 const MissionMonth = () => {
   const [missionList, setMissionList] = useState([]);
+  const {isMissionChanged} = useMissionChanged();
 
   useEffect(() => {
     getCurrentMisList(1).then(missionList => {
       setMissionList(missionList);
     });
-  }, []);
+  }, [isMissionChanged]);
 
   return (
     <View style={styles.container}>

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, ScrollView} from 'react-native';
+import {StyleSheet, ScrollView} from 'react-native';
 import DetailHeader from '../../../components/Header/DetailHeader';
 import DeleteModal from '../../../components/Modal/DeleteModal';
 import MissionTitleBox from '../../../components/Text/MissionTitleBox';
@@ -9,6 +9,7 @@ import InfoModal from '../../../components/Modal/InfoModal';
 import MisDetailMemo from './components/MisDetailMemo';
 import MisDetailReview from './components/MisDetailReview';
 import MisPeriodText from '../../../components/Text/MisPeriodText';
+import useMissionChanged from '../../../context/hook/useMissionChanged';
 
 const MissionDetail = ({route}) => {
   const mission = route.params.mission;
@@ -16,6 +17,7 @@ const MissionDetail = ({route}) => {
   const [isInfoModalVisible, setIsInfoModalVisible] = useState(false);
   const navigation = useNavigation();
   const isMemoExist = mission.misMemo !== '';
+  const {isMissionChanged, setIsMissionChanged} = useMissionChanged();
 
   const goToMissionUpdate = () => {
     navigation.navigate('MissionUpdate', {mission: mission});
@@ -26,6 +28,7 @@ const MissionDetail = ({route}) => {
       hasReview: mission.hasReview,
     };
     deleteCurrentMis(delMisInfo);
+    setIsMissionChanged(!isMissionChanged);
     navigation.navigate('MainTab', {screen: 'missionHome'});
   };
   const showInfoModal = () => {
