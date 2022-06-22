@@ -13,10 +13,9 @@ const DetailHeader = ({navigation, updateFunction, setIsModalVisible, from}) => 
   useEffect(() => {
     // backButton
     const backButton = () => {
-      if(from ==='mission')
-        navigation.navigate('MainTab', {screen: 'MissionHome'});
-      else if(from ==='review')
-        navigation.navigate('MainTab', {screen: 'ReviewHome'});
+      if (from === 'mission') navigation.navigate('MainTab', {screen: 'MissionHome'});
+      else if (from === 'review') navigation.navigate('MainTab', {screen: 'ReviewHome'});
+      else if (from === 'report') navigation.navigate('MainTab', {screen: 'ReportHome'});
       return true;
     };
     const backHandler = BackHandler.addEventListener('hardwareBackPress', backButton);
@@ -28,10 +27,9 @@ const DetailHeader = ({navigation, updateFunction, setIsModalVisible, from}) => 
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          if(from ==='mission')
-            navigation.navigate('MainTab', {screen: 'MissionHome'});
-          else if(from ==='review')
-            navigation.navigate('MainTab', {screen: 'ReviewHome'});
+          if (from === 'mission') navigation.navigate('MainTab', {screen: 'MissionHome'});
+          else if (from === 'review') navigation.navigate('MainTab', {screen: 'ReviewHome'});
+          else if (from === 'report') navigation.navigate('MainTab', {screen: 'ReportHome'});
         }}>
         <Image
           source={require('../../assets/images/backBtn.png')}

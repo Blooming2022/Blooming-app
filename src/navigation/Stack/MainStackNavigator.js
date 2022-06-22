@@ -7,6 +7,7 @@ import RandomMissionGenerate from '../../containers/mission/create/RandomMission
 import MissionDetail from '../../containers/mission/detail/MissionDetail';
 import MissionUpdate from '../../containers/mission/update/MissionUpdate';
 import ReviewCreate from '../../containers/review/create/ReviewCreate';
+import PrevMisReviewCreate from '../../containers/report/components/PrevMisReviewCreate';
 import ReviewDetail from '../../containers/review/detail/ReviewDetail';
 import ReviewUpdate from '../../containers/review/update/ReviewUpdate';
 import Login from '../../containers/login/Login';
@@ -29,6 +30,7 @@ const MainStackNavigator = () => {
         <Stack.Screen name="MissionDetail" component={MissionDetail} />
         <Stack.Screen name="MissionUpdate" component={MissionUpdate} />
         <Stack.Screen name="ReviewCreate" component={ReviewCreate} />
+        <Stack.Screen name="PrevMisReviewCreate" component={PrevMisReviewCreate} />
         <Stack.Screen name="ReviewDetail" component={ReviewDetail} />
         <Stack.Screen name="ReviewUpdate" component={ReviewUpdate} />
         <Stack.Screen name="PrevSuccessMissionList" component={PrevSuccessMissionList} />

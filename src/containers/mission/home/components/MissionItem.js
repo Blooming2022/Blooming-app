@@ -3,7 +3,7 @@ import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {Menu, MenuItem} from 'react-native-material-menu';
 import {deleteCurrentMis, updateCurrentMis} from '../../../../service/missionServices';
 import {useNavigation} from '@react-navigation/native';
-import { getKSTTime } from '../../../../service/commonServices';
+import {getKSTTime} from '../../../../service/commonServices';
 import DeleteModal from '../../../../components/Modal/DeleteModal';
 
 const MissionItem = ({mission}) => {
@@ -56,7 +56,7 @@ const MissionItem = ({mission}) => {
   const showDelModal = () => {
     hideMenu();
     setIsDelModalVisible(true);
-  }
+  };
   const deleteMission = () => {
     setIsDelModalVisible(false);
     const delMisInfo = {
@@ -73,8 +73,8 @@ const MissionItem = ({mission}) => {
       misID: mission.id,
       updateInfo: {
         isSuccess: !mission.isSuccess,
-        misSuccessDate: getKSTTime()
-      }
+        misSuccessDate: getKSTTime(),
+      },
     };
     updateCurrentMis(updateMisInfo);
   };

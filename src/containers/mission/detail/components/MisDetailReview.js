@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {View, Image, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import { getRevById } from '../../../../service/reviewServices';
+import {getRevById} from '../../../../service/reviewServices';
 
 const MisDetailReview = ({showInfoModal, navigation, mission}) => {
   const isSuccess = mission.isSuccess;
@@ -12,7 +12,7 @@ const MisDetailReview = ({showInfoModal, navigation, mission}) => {
       review = await getRevById(mission.id);
     }
     fetchData();
-  }, [])
+  }, []);
 
   return (
     <View style={styles.reviewBox}>
