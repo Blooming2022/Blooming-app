@@ -5,7 +5,7 @@ import Modal from 'react-native-modal';
 const DeleteModal = ({isModalVisible, setIsModalVisible, deleteFunction}) => {
   useEffect(() => {
     return () => setIsModalVisible(false);
-  }, [])
+  }, []);
 
   return (
     <Modal

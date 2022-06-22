@@ -1,15 +1,13 @@
-import { useContext } from 'react';
+import {useContext} from 'react';
 import AppContext from '../AppContext';
 
 const useReviewChanged = () => {
-    const { 
-        isReviewChanged,
-        setIsReviewChanged, } = useContext(AppContext);
+  const {isReviewChanged, setIsReviewChanged} = useContext(AppContext);
 
-    return {
-        isReviewChanged,
-        setIsReviewChanged,
-    };
+  return {
+    isReviewChanged,
+    setIsReviewChanged,
+  };
 };
 
 export default useReviewChanged;

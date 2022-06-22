@@ -1,15 +1,13 @@
-import { useContext } from 'react';
+import {useContext} from 'react';
 import AppContext from '../AppContext';
 
 const useMissionChanged = () => {
-    const { 
-        isMissionChanged,
-        setIsMissionChanged, } = useContext(AppContext);
+  const {isMissionChanged, setIsMissionChanged} = useContext(AppContext);
 
-    return {
-        isMissionChanged,
-        setIsMissionChanged,
-    };
+  return {
+    isMissionChanged,
+    setIsMissionChanged,
+  };
 };
 
 export default useMissionChanged;

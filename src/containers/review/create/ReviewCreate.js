@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {StyleSheet, ScrollView} from 'react-native';
 import CompleteHeader from '../../../components/Header/CompleteHeader';
-import { createRev } from '../../../service/reviewServices';
+import {createRev} from '../../../service/reviewServices';
 import MissionInfoBox from './components/MissionInfoBox';
 import MissionTitleBox from '../../../components/Text/MissionTitleBox';
 import PhotoModal from './components/PhotoModal';
@@ -29,7 +29,7 @@ const ReviewCreate = ({route, navigation}) => {
     const createRevInfo = {
       ...review,
       ...{isOutdated: false},
-    }
+    };
     const result = await createRev(createRevInfo);
     setIsReviewChanged(!isReviewChanged);
     navigation.navigate('ReviewDetail', {review: result});
@@ -43,7 +43,7 @@ const ReviewCreate = ({route, navigation}) => {
     if (review.revImg !== '') setIsImageExist(true);
     if (isInitialMount.current) {
       isInitialMount.current = false;
-    } else if(review.revImg == '' && review.revContent == '') {
+    } else if (review.revImg == '' && review.revContent == '') {
       setIsValid(false);
     } else {
       setIsValid(true);

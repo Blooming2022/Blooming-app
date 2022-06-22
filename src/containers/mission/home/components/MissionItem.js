@@ -3,7 +3,7 @@ import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {Menu, MenuItem} from 'react-native-material-menu';
 import {deleteCurrentMis, updateCurrentMis} from '../../../../service/missionServices';
 import {useNavigation} from '@react-navigation/native';
-import { getKSTTime } from '../../../../service/commonServices';
+import {getKSTTime} from '../../../../service/commonServices';
 import DeleteModal from '../../../../components/Modal/DeleteModal';
 import useMissionChanged from '../../../../context/hook/useMissionChanged';
 
@@ -58,7 +58,7 @@ const MissionItem = ({mission}) => {
   const showDelModal = () => {
     hideMenu();
     setIsDelModalVisible(true);
-  }
+  };
   const deleteMission = () => {
     const delMisInfo = {
       misID: mission.id,
@@ -75,8 +75,8 @@ const MissionItem = ({mission}) => {
       misID: mission.id,
       updateInfo: {
         isSuccess: !mission.isSuccess,
-        misSuccessDate: getKSTTime()
-      }
+        misSuccessDate: getKSTTime(),
+      },
     };
     updateCurrentMis(updateMisInfo);
     setIsMissionChanged(!isMissionChanged);
@@ -139,13 +139,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   titleBox: {
-    width:'85%'
+    width: '85%',
   },
   title: {
     fontSize: 14,
     color: '#242424',
     paddingLeft: 16,
-    textAlign:'left',
+    textAlign: 'left',
   },
   missionMenu: {
     paddingHorizontal: 10,
