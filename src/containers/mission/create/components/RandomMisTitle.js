@@ -1,10 +1,21 @@
-import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import InfoModal from '../../../../components/Modal/InfoModal';
 
 const RandomMisTitle = ({misTitle}) => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.misTitle}>{misTitle}</Text>
+      <InfoModal
+        isModalVisible={isModalVisible}
+        setIsModalVisible={setIsModalVisible}
+        title="안내"
+        text1="랜덤미션은 수정할 수 없습니다."
+        text2="해당 키워드가 들어가는 미션에 도전해보세요!"></InfoModal>
+      <TouchableOpacity onPress={() => setIsModalVisible(true)}>
+        <Text style={styles.misTitle}>{misTitle}</Text>
+      </TouchableOpacity>
     </View>
   );
 };
