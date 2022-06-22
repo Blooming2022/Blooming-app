@@ -7,6 +7,7 @@ import MissionTitleBox from '../../../components/Text/MissionTitleBox';
 import PhotoModal from './components/PhotoModal';
 import ReviewContentInput from './components/ReviewContentInput';
 import ReviewImageInput from './components/ReviewImageInput';
+import useReviewChanged from '../../../context/hook/useReviewChanged';
 
 const ReviewCreate = ({route, navigation}) => {
   const mission = route.params.mission;
@@ -14,6 +15,7 @@ const ReviewCreate = ({route, navigation}) => {
   const [isValid, setIsValid] = useState(false); // Conditions for changing color of complete buttons
   const [isImageExist, setIsImageExist] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
+  const {isReviewChanged, setIsReviewChanged} = useReviewChanged();
   const [review, setReview] = useState({
     misID: mission.id,
     misPeriod: mission.misPeriod,
@@ -29,6 +31,7 @@ const ReviewCreate = ({route, navigation}) => {
       ...{isOutdated: false},
     }
     const result = await createRev(createRevInfo);
+    setIsReviewChanged(!isReviewChanged);
     navigation.navigate('ReviewDetail', {review: result});
   };
   const deleteImage = () => {

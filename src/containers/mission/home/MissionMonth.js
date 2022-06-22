@@ -5,16 +5,18 @@ import MissionList from './components/MissionList';
 import MissionMonthFlower from './components/MissionMonthFlower';
 import {getCurrentMisList} from '../../../service/missionServices';
 import useMissionChanged from '../../../context/hook/useMissionChanged';
+import useReviewChanged from '../../../context/hook/useReviewChanged';
 
 const MissionMonth = () => {
   const [missionList, setMissionList] = useState([]);
   const {isMissionChanged} = useMissionChanged();
+  const {isReviewChanged} = useReviewChanged();
 
   useEffect(() => {
     getCurrentMisList(1).then(missionList => {
       setMissionList(missionList);
     });
-  }, [isMissionChanged]);
+  }, [isMissionChanged, isReviewChanged]);
 
   return (
     <View style={styles.container}>

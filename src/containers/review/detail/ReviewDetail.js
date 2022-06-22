@@ -5,10 +5,12 @@ import MissionInfoBox from '../create/components/MissionInfoBox';
 import MissionTitleBox from '../../../components/Text/MissionTitleBox';
 import DeleteModal from '../../../components/Modal/DeleteModal';
 import {deleteRev} from '../../../service/reviewServices';
+import useReviewChanged from '../../../context/hook/useReviewChanged';
 
 const ReviewDetail = ({route, navigation}) => {
   const review = route.params.review;
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const {isReviewChanged, setIsReviewChanged} = useReviewChanged();
 
   const goToReviewUpdate = () => {
     navigation.navigate('ReviewUpdate', {review: review});
@@ -20,6 +22,7 @@ const ReviewDetail = ({route, navigation}) => {
       isOutdated: false, // prevSuccessMission 생성 이후 추가 작업 예정
     };
     deleteRev(delRevInfo);
+    setIsReviewChanged(!isReviewChanged);
     navigation.navigate('MainTab', {screen: 'ReviewHome'});
   };
 

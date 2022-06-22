@@ -5,16 +5,18 @@ import DdayCount from './components/DdayCount';
 import MissionList from './components/MissionList';
 import MissionWeekFlower from './components/MissionWeekFlower';
 import useMissionChanged from '../../../context/hook/useMissionChanged';
+import useReviewChanged from '../../../context/hook/useReviewChanged';
 
 const MissionWeek = () => {
   const [missionList, setMissionList] = useState([]);
   const {isMissionChanged} = useMissionChanged();
+  const {isReviewChanged} = useReviewChanged();
 
   useEffect(() => {
     getCurrentMisList(0).then(missionList => {
       setMissionList(missionList);
     });
-  }, [isMissionChanged]);
+  }, [isMissionChanged, isReviewChanged]);
 
   return (
     <View style={styles.container}>
