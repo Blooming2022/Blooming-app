@@ -4,6 +4,7 @@ import MainStackNavigator from './src/navigation/Stack/MainStackNavigator';
 import SplashScreen from 'react-native-splash-screen';
 import Login from './src/containers/login/Login';
 import {getCurrentUser} from './src/service/authServices';
+import AppProvider from './src/context/provider/AppProvider';
 // import {getCurrentMisList} from './src/service/missionServices';
 
 const App = () => {
@@ -29,11 +30,13 @@ const App = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {isLoggedIn ? (
-        <MainStackNavigator></MainStackNavigator>
-      ) : (
-        <Login setIsLoggedIn={setIsLoggedIn}></Login>
-      )}
+      <AppProvider>
+        {isLoggedIn ? (
+          <MainStackNavigator></MainStackNavigator>
+        ) : (
+          <Login setIsLoggedIn={setIsLoggedIn}></Login>
+        )}
+      </AppProvider>
     </SafeAreaView>
   );
 };
