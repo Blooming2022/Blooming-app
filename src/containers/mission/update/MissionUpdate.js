@@ -6,11 +6,12 @@ import MisMemoField from '../create/components/MisMemoField';
 import {updateCurrentMis} from '../../../service/missionServices';
 import {useNavigation} from '@react-navigation/native';
 import MisPeriodText from '../../../components/Text/MisPeriodText';
+import RandomMisTitle from '../create/components/RandomMisTitle';
 
 const MissionUpdate = ({route}) => {
   const initialMisInfo = route.params.mission;
   const isInitialMount = useRef(true); // To disable the complete button on the first rendering
-  const [misTitle, setTitle] = useState(initialMisInfo.misTitle);
+  const [misTitle, setMisTitle] = useState(initialMisInfo.misTitle);
   const [misMemo, setMisMemo] = useState(initialMisInfo.misMemo);
   const [isValid, setIsValid] = useState(false); // Conditions for changing color of complete buttons
   let isMisSelfText = initialMisInfo.isMisSelf ? '셀프' : '랜덤';
@@ -48,7 +49,11 @@ const MissionUpdate = ({route}) => {
         completeFunction={updateMission}></CompleteHeader>
       <ScrollView style={styles.container} nestedScrollEnabled={true}>
         <MisPeriodText misPeriod={initialMisInfo.misPeriod}></MisPeriodText>
-        <MisTitleInput misTitle={misTitle} setMisTitle={setTitle}></MisTitleInput>
+        {initialMisInfo.isMisSelf ? (
+          <MisTitleInput misTitle={misTitle} setMisTitle={setMisTitle}></MisTitleInput>
+        ) : (
+          <RandomMisTitle misTitle={misTitle}></RandomMisTitle>
+        )}
         <MisMemoField misMemo={misMemo} setMisMemo={setMisMemo} />
       </ScrollView>
     </>

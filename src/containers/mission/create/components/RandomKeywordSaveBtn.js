@@ -10,7 +10,6 @@ const RandomKeywordSaveBtn = ({misInfo, selectedValue, buttonDisabled}) => {
   };
   const goToMissionCreate = () => {
     const randomMisInfo = {...misInfo, ...{misTitle: selectedValue}};
-    console.log(randomMisInfo);
     navigation.navigate('MissionCreate', {misInfo: randomMisInfo});
   };
 
