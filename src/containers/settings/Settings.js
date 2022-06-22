@@ -2,7 +2,7 @@ import React, {useState, useEffect, useCallback} from 'react';
 import {View, StyleSheet, Linking} from 'react-native';
 import CommonHeader from '../../components/Header/CommonHeader';
 import SettingsItem from './components/SettingsItem';
-import {deleteAccount, getCurrentUser, googleSignIn, signOut} from '../../service/authServices';
+import {deleteAccount, getCurrentUser, googleSignIn, linkGuestToGoogle, signOut} from '../../service/authServices';
 import {restartApp} from '../../service/commonServices';
 import DeleteModal from '../../components/Modal/DeleteModal';
 
@@ -15,7 +15,7 @@ const Settings = () => {
   const infoPageUrl = 'https://elemental-resonance-76b.notion.site/INFO-23fbe2b899044e1e93e5bcec1d03be69';
 
   const linkGoogleAccount = () => {
-    googleSignIn().then(() => {
+    linkGuestToGoogle().then(() => {
       setIsGuest(false);
     });
   };

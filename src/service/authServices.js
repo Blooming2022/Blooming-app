@@ -77,6 +77,24 @@ const guestSignIn = async () => {
   }
 }
 
+const linkGuestToGoogle = async ()  => {
+  try {
+    googleConfigure();
+    const { idToken } = await GoogleSignin.signIn();
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+    const data = await auth().currentUser.linkWithCredential(googleCredential);
+    await usersCollection.doc(getCurrentUser().uid)
+    .update({
+      displayName: data.additionalUserInfo.profile.name,
+      gmailAddr: getCurrentUser().email,
+    });
+    
+  } catch(e) {
+    console.log(e.message);
+    return -1;
+  }
+}
+
 /** 현재 유저를 로그아웃시키는 함수
  * @returns 성공시 Promise<Void> | 실패시 -1
  */
@@ -237,6 +255,7 @@ export {
   getCurrentUser,
   googleSignIn,
   guestSignIn,
+  linkGuestToGoogle,
   signOut,
   getUserProfile,
   updateUserProfile,
