@@ -147,7 +147,6 @@ const ChartYear = () => {
           // hideRules
           height={200}
           noOfSections={6}
-          // stepValue={4}
           barWidth={15}
           data={chartData}
           yAxisThickness={0.54}
