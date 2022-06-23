@@ -1,12 +1,13 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {StyleSheet, ScrollView} from 'react-native';
 import CompleteHeader from '../../../components/Header/CompleteHeader';
-import { createRev } from '../../../service/reviewServices';
+import {createRev} from '../../../service/reviewServices';
 import MissionInfoBox from './components/MissionInfoBox';
 import MissionTitleBox from '../../../components/Text/MissionTitleBox';
 import PhotoModal from './components/PhotoModal';
 import ReviewContentInput from './components/ReviewContentInput';
 import ReviewImageInput from './components/ReviewImageInput';
+import useReviewChanged from '../../../context/hook/useReviewChanged';
 
 const ReviewCreate = ({route, navigation}) => {
   const mission = route.params.mission;
@@ -14,6 +15,7 @@ const ReviewCreate = ({route, navigation}) => {
   const [isValid, setIsValid] = useState(false); // Conditions for changing color of complete buttons
   const [isImageExist, setIsImageExist] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
+  const {isReviewChanged, setIsReviewChanged} = useReviewChanged();
   const [review, setReview] = useState({
     misID: mission.id,
     misPeriod: mission.misPeriod,
@@ -27,8 +29,9 @@ const ReviewCreate = ({route, navigation}) => {
     const createRevInfo = {
       ...review,
       ...{isOutdated: false},
-    }
+    };
     const result = await createRev(createRevInfo);
+    setIsReviewChanged(!isReviewChanged);
     navigation.navigate('ReviewDetail', {review: result});
   };
   const deleteImage = () => {
@@ -40,7 +43,7 @@ const ReviewCreate = ({route, navigation}) => {
     if (review.revImg !== '') setIsImageExist(true);
     if (isInitialMount.current) {
       isInitialMount.current = false;
-    } else if(review.revImg == '' && review.revContent == '') {
+    } else if (review.revImg == '' && review.revContent == '') {
       setIsValid(false);
     } else {
       setIsValid(true);

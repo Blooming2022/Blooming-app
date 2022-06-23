@@ -160,7 +160,7 @@ const deleteCurrentMis = async (delMisInfo) => {
       await deleteRev({misID: delMisInfo.misID, revImg: revInfo.revImg, isOutdated: false});
     }
     const misRef = usersCollection.doc(getCurrentUser().uid).collection('currentMisList');
-    return misRef.doc(delMisInfo.misID).delete();  
+    return misRef.doc(delMisInfo.misID).delete();
   } catch (e) {
     console.log(e.message);
     return -1;
