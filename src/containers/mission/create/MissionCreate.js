@@ -6,6 +6,7 @@ import MisMemoField from './components/MisMemoField';
 import MisPeriodText from '../../../components/Text/MisPeriodText';
 import {createCurrentMis} from '../../../service/missionServices';
 import {useNavigation} from '@react-navigation/native';
+import RandomMisTitle from './components/RandomMisTitle';
 
 const MissionCreate = ({route}) => {
   const misInfo = route.params.misInfo;
@@ -22,7 +23,17 @@ const MissionCreate = ({route}) => {
     } else setIsValid(false);
   }, [misTitle]);
 
-  const createMission = () => {
+  useEffect(() => {
+    // if randomMission, set misTitle
+    if (!misInfo.isMisSelf) {
+      const result1 = misInfo.misTitle.result1;
+      const result2 = misInfo.misTitle.result2;
+      const randomMisTitle = `${result1} / ${result2}`;
+      setMisTitle(randomMisTitle);
+    }
+  }, []);
+
+  const createMission = async () => {
     let mission = {
       misTitle: misTitle,
       misPeriod: misPeriod,
@@ -33,8 +44,8 @@ const MissionCreate = ({route}) => {
       misMemo: misMemo,
       hasReview: false,
     };
-    createCurrentMis(mission); // 여기서 id를 포함한 미션 정보를 받아오고 싶습니다!
-    navigation.navigate('MissionDetail', {mission: mission}); // id를 받지 못했기에 여기서 이동한 디테일 페이지에서는 수정 시 오류가 납니다.
+    const result = await createCurrentMis(mission);
+    navigation.navigate('MissionDetail', {mission: result});
   };
 
   return (
@@ -46,7 +57,11 @@ const MissionCreate = ({route}) => {
         completeFunction={createMission}></CompleteHeader>
       <ScrollView style={styles.container} nestedScrollEnabled={true}>
         <MisPeriodText misPeriod={misPeriod}></MisPeriodText>
-        <MisTitleInput misTitle={misTitle} setMisTitle={setMisTitle}></MisTitleInput>
+        {misInfo.isMisSelf ? (
+          <MisTitleInput misTitle={misTitle} setMisTitle={setMisTitle}></MisTitleInput>
+        ) : (
+          <RandomMisTitle misTitle={misTitle}></RandomMisTitle>
+        )}
         <MisMemoField misMemo={misMemo} setMisMemo={setMisMemo} />
       </ScrollView>
     </>

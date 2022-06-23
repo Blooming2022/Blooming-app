@@ -6,7 +6,7 @@ import {
   usersCollection,
   checkUserLevel,
 } from './authServices';
-import {formatDate, getKSTTime} from './commonServices';
+import {getKSTTime} from './commonServices';
 import {deleteRev, getRevById} from './reviewServices';
 
 const WEEK = 0;
@@ -36,7 +36,9 @@ const createCurrentMis = async misData => {
   try {
     const doc = misRef.doc();
     await doc.set(misData);
-    return (await doc.get()).data();
+    let documentData = (await doc.get()).data();
+    documentData.id = doc.id;
+    return documentData;
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -147,9 +149,12 @@ const updateCurrentMis = async updateMisInfo => {
     if (updateMisInfo.updateInfo.isSuccess == false) {
       updateMisInfo.updateInfo.misSuccessDate = null;
     }
-    console.log((await misRef.doc(updateMisInfo.misID).get()).data());
     await misRef.doc(updateMisInfo.misID).update(updateMisInfo.updateInfo);
-    return (await misRef.doc(updateMisInfo.misID).get()).data();
+
+    // 미션정보에 미션 ID를 추가해서 반환
+    let documentData = (await misRef.doc(updateMisInfo.misID).get()).data();
+    documentData.id = misRef.doc(updateMisInfo.misID).id;
+    return documentData;
   } catch (e) {
     console.log(e.message);
     return -1;

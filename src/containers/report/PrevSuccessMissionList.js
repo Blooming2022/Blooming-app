@@ -11,7 +11,7 @@ const PrevSuccessMissionList = () => {
 
   useEffect(() => {
     getPrevSuccessMisList().then(prevSuccessMisList => setPrevSuccessMisList(prevSuccessMisList));
-  }, [prevSuccessMisList]);
+  }, []);
 
   return (
     <>
@@ -35,18 +35,19 @@ const PrevSuccessMissionList = () => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     paddingVertical: 20,
     paddingHorizontal: 20,
-    flex: 1,
+    backgroundColor: '#F3F3F3',
   },
   noItem: {
     width: 353,
     height: 70,
     alignItems: 'center',
     backgroundColor: 'white',
+    borderRadius: 10,
     paddingHorizontal: 15,
     paddingVertical: 16,
-    borderRadius: 10,
   },
 });
 

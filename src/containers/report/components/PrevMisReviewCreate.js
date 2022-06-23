@@ -1,36 +1,37 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {StyleSheet, ScrollView} from 'react-native';
-import CompleteHeader from '../../../components/Header/CompleteHeader';
-import PhotoModal from '../create/components/PhotoModal';
-import MissionInfoBox from '../create/components/MissionInfoBox';
-import ReviewImageInput from '../create/components/ReviewImageInput';
-import MissionTitleBox from '../../../components/Text/MissionTitleBox';
-import ReviewContentInput from '../create/components/ReviewContentInput';
-import {updateRev} from '../../../service/reviewServices';
+import {createRev} from '../../../service/reviewServices';
 
-const ReviewUpdate = ({route, navigation}) => {
-  const initialReview = route.params.review;
-  const [review, setReview] = useState(route.params.review);
+import CompleteHeader from '../../../components/Header/CompleteHeader';
+import MissionInfoBox from '../../../containers/review/create/components/MissionInfoBox';
+import MissionTitleBox from '../../../components/Text/MissionTitleBox';
+import PhotoModal from '../../../containers/review/create/components/PhotoModal';
+import ReviewContentInput from '../../../containers/review/create/components/ReviewContentInput';
+import ReviewImageInput from '../../../containers/review/create/components/ReviewImageInput';
+
+const PrevMisReviewCreate = ({route, navigation}) => {
+  const mission = route.params.mission;
   const isInitialMount = useRef(true); // To disable the complete button on the first rendering
   const [isValid, setIsValid] = useState(false); // Conditions for changing color of complete buttons
   const [isImageExist, setIsImageExist] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [review, setReview] = useState({
+    misID: mission.id,
+    misPeriod: mission.misPeriod,
+    misTitle: mission.misTitle,
+    misSuccessDate: mission.misSuccessDate,
+    revContent: '',
+    revImg: '',
+  });
 
-  const updateReview = async () => {
-    const updateRevInfo = {
-      misID: initialReview.misID,
+  const createReview = () => {
+    const createRevInfo = {
+      ...review,
+      ...{isOutdated: true},
     };
-    const revData = {};
-    if (initialReview.revContent !== review.revContent) revData.revContent = review.revContent;
-    if (initialReview.revImg !== review.revImg) {
-      revData.revImg = review.revImg;
-      updateRevInfo.isImgUpdate = true;
-    } else {
-      updateRevInfo.isImgUpdate = false;
-    }
-    updateRevInfo.revData = revData;
-    const result = await updateRev(updateRevInfo);
-    navigation.navigate('ReviewDetail', {review: result});
+    createRev(createRevInfo);
+
+    navigation.navigate('ReviewDetail', {review: review});
   };
   const deleteImage = () => {
     setReview({...review, ...{revImg: ''}});
@@ -38,27 +39,23 @@ const ReviewUpdate = ({route, navigation}) => {
   };
 
   useEffect(() => {
+    if (review.revImg !== '') setIsImageExist(true);
     if (isInitialMount.current) {
       isInitialMount.current = false;
+    } else if (review.revImg == '' && review.revContent == '') {
+      setIsValid(false);
     } else {
-      if (review.revContent == '' && review.revImg == '')
-        setIsValid(false); // an essential condition
-      else if (initialReview.revContent !== review.revContent) setIsValid(true);
-      else if (initialReview.revImg !== review.revImg) setIsValid(true);
-      else setIsValid(false); // If there is no change in the revContent, revImg
+      setIsValid(true);
     }
   }, [review]);
-  useEffect(() => {
-    if (review.revImg !== '') setIsImageExist(true);
-  }, [review.revImg]);
 
   return (
     <>
       <CompleteHeader
         navigation={navigation}
-        title="후기 편집"
+        title="후기 작성"
         isValid={isValid}
-        completeFunction={updateReview}></CompleteHeader>
+        completeFunction={createReview}></CompleteHeader>
       <ScrollView style={styles.container}>
         <PhotoModal
           review={review}
@@ -66,11 +63,12 @@ const ReviewUpdate = ({route, navigation}) => {
           isModalVisible={isModalVisible}
           setModalVisible={setModalVisible}
           isImageExist={isImageExist}
+          setIsImageExist={setIsImageExist}
           width={300}
           height={300}></PhotoModal>
         <MissionInfoBox
           misSuccessDate={review.misSuccessDate}
-          misPeriod={review.misPeriod}></MissionInfoBox>
+          misPeriod={mission.misPeriod}></MissionInfoBox>
         <ReviewImageInput
           isImageExist={isImageExist}
           revImg={review.revImg}
@@ -91,4 +89,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ReviewUpdate;
+export default PrevMisReviewCreate;

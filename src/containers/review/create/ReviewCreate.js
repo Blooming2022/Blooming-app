@@ -23,7 +23,7 @@ const ReviewCreate = ({route, navigation}) => {
     revImg: '',
   });
 
-  const createReview = () => {
+  const createReview = async () => {
     const createRevInfo = {
       ...review,
       ...{isOutdated: false},
@@ -31,6 +31,8 @@ const ReviewCreate = ({route, navigation}) => {
     createRev(createRevInfo);
 
     navigation.navigate('ReviewDetail', {review: review});
+    const result = await createRev(createRevInfo);
+    navigation.navigate('ReviewDetail', {review: result});
   };
   const deleteImage = () => {
     setReview({...review, ...{revImg: ''}});

@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
 import {StyleSheet, ScrollView} from 'react-native';
-import DeleteHeader from '../../components/Header/DeleteHeader';
-
-import DeleteModal from '../../components/Modal/DeleteModal';
-import MissionTitleBox from '../../components/Text/MissionTitleBox';
-import {deletePrevSuccessMis} from '../../service/missionServices';
 import {useNavigation} from '@react-navigation/native';
+import {deletePrevSuccessMis} from '../../service/missionServices';
+
+import DeleteHeader from '../../components/Header/DeleteHeader';
+import DeleteModal from '../../components/Modal/DeleteModal';
 import InfoModal from '../../components/Modal/InfoModal';
+
+import MissionTitleBox from '../../components/Text/MissionTitleBox';
 import MisDetailMemo from '../../containers/mission/detail/components/MisDetailMemo';
 import PrevMisDetailReview from './components/PrevMisDetailReview';
 import MisPeriodText from '../../components/Text/MisPeriodText';
@@ -15,13 +16,11 @@ const PrevSuccessMissionDetail = ({route}) => {
   const mission = route.params.mission;
   const [isDelModalVisible, setIsDelModalVisible] = useState(false);
   const [isInfoModalVisible, setIsInfoModalVisible] = useState(false);
-  const [isValid, setIsValid] = useState(false); // Conditions for changing color of complete buttons
 
-  let isMisSelfText = mission.isMisSelf ? '셀프' : '랜덤';
   const navigation = useNavigation();
   const isMemoExist = mission.misMemo !== '';
 
-  const deleteMission = () => {
+  const deletePrevMission = () => {
     const delMisInfo = {
       misID: mission.id,
       hasReview: mission.hasReview,
@@ -33,46 +32,11 @@ const PrevSuccessMissionDetail = ({route}) => {
     setIsInfoModalVisible(true);
   };
 
-  const updateMission = () => {
-    let updateInfo = {};
-    let updateMisInfo = {
-      misID: mission.id,
-      updateInfo: updateInfo,
-    };
-    updateCurrentMis(updateMisInfo);
-    let mission = {
-      id: mission.id,
-      misTitle: mission.misTitle,
-      misPeriod: mission.misPeriod,
-      picNum: mission.picNum,
-      isSuccess: mission.isSuccess,
-      misSuccessDate: mission.misSuccessDate,
-      isMisSelf: mission.isMisSelf,
-      misMemo: mission.misMemo,
-      hasReview: mission.hasReview,
-    };
-    navigation.navigate('MissionDetail', {mission: mission});
-  };
-
-  const goToMissionUpdate = () => {
-    navigation.navigate('MissionUpdate', {mission: mission});
-  };
-  // useEffect(() => {
-  //   if (mission.current) {
-  //     mission.current = false;
-  //   } else {
-  //     if (misTitle == '') setIsValid(false); // an essential condition
-  //     else if (mission.misTitle !== misTitle) setIsValid(true);
-  //     else if (mission.misMemo !== misMemo) setIsValid(true);
-  //     else setIsValid(false); // If there is no change in the misTitle, misMemo
-  //   }
-  // }, [misTitle, misMemo]);
-
   return (
     <>
       <DeleteHeader
         navigation={navigation}
-        deleteFunction={goToMissionUpdate}
+        deleteFunction={deletePrevMission}
         setIsModalVisible={setIsDelModalVisible}
         from="report"></DeleteHeader>
 
@@ -80,7 +44,7 @@ const PrevSuccessMissionDetail = ({route}) => {
         <DeleteModal
           isModalVisible={isDelModalVisible}
           setIsModalVisible={setIsDelModalVisible}
-          deleteFunction={deleteMission}></DeleteModal>
+          deleteFunction={deletePrevMission}></DeleteModal>
         <InfoModal
           isModalVisible={isInfoModalVisible}
           setIsModalVisible={setIsInfoModalVisible}
@@ -102,8 +66,8 @@ const PrevSuccessMissionDetail = ({route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
     backgroundColor: '#ffffff',
+    paddingHorizontal: 20, // margin으로 할 경우 테두리 모양으로 어두운 부분 생김
     paddingTop: 20,
   },
   periodBoxWrapper: {
@@ -112,11 +76,11 @@ const styles = StyleSheet.create({
   periodBox: {
     width: 57,
     height: 37,
+    justifyContent: 'center',
+    alignItems: 'center',
     borderColor: '#999999',
     borderWidth: 1,
     borderRadius: 35,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   misPeriod: {
     fontSize: 14,

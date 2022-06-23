@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {SafeAreaView, StyleSheet, ScrollView, Text, View, TouchableOpacity} from 'react-native';
-import {createPrevSuccessMis} from '../../service/missionServices';
+import {SafeAreaView, StyleSheet, ScrollView, View} from 'react-native';
 import {getPrevSuccessMisList} from '../../service/missionServices';
-import {getCurrentMisList} from '../../service/missionServices';
 
 import ChartWeek from './components/ChartWeek';
 import ChartMonth from './components/ChartMonth';
@@ -58,20 +56,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-around',
-    paddingLeft: 20,
-    paddingRight: 20,
+    marginHorizontal: 20,
   },
   periodButtonOuterContainer: {
-    marginVertical: 10,
-    // flexDirection: 'row',
     alignItems: 'center',
+    marginVertical: 10,
   },
   periodButtonInnerContainer: {
+    width: '100%',
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 35,
-    width: '100%',
     borderColor: '#E0E0E0',
     borderWidth: 2,
     backgroundColor: '#fff',
