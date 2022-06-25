@@ -11,6 +11,7 @@ const ChartWeek = () => {
     const func = async () => {
       weekSuccessNum = await getNumOfSuccessMis(0);
     };
+    func();
   }, []);
 
   weekSuccessNum = [0, 1, 3, 4, 2, 0, 1];

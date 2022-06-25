@@ -11,6 +11,7 @@ const ChartYear = () => {
     const func = async () => {
       yearSuccessNum = await getNumOfSuccessMis(2);
     };
+    func();
   }, []);
 
   yearSuccessNum = [0, 1, 3, 4, 2, 10, 13, 12, 23, 13, 3, 6];

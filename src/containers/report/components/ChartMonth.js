@@ -11,6 +11,7 @@ const ChartMonth = () => {
     const func = async () => {
       monthSuccessNum = await getNumOfSuccessMis(1);
     };
+    func();
   }, []);
 
   monthSuccessNum = [0, 1, 3, 4, 2];
