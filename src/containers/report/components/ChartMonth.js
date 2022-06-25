@@ -6,7 +6,7 @@ import {getNumOfSuccessMis} from '../../../service/reportServices';
 
 const ChartMonth = () => {
   let monthSuccessNum = [];
-  async dispatch => {
+  const func = async () => {
     monthSuccessNum = await getNumOfSuccessMis(1);
   };
 
