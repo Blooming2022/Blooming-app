@@ -14,7 +14,7 @@ const Report = () => {
   const [prevSuccessMisList, setPrevSuccessMisList] = useState([]);
 
   useEffect(() => {
-    getPrevSuccessMisList().then(prevSuccessMisList => setPrevSuccessMisList(prevSuccessMisList));
+    getLatestPrevSuccessMis().then(prevSuccessMisList => setPrevSuccessMisList(prevSuccessMisList));
   }, [prevSuccessMisList]);
 
   return (
