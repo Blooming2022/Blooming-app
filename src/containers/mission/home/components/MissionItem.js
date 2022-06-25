@@ -5,6 +5,7 @@ import {deleteCurrentMis, updateCurrentMis} from '../../../../service/missionSer
 import {useNavigation} from '@react-navigation/native';
 import {getKSTTime} from '../../../../service/commonServices';
 import DeleteModal from '../../../../components/Modal/DeleteModal';
+import useMissionChanged from '../../../../context/hook/useMissionChanged';
 
 const MissionItem = ({mission}) => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
@@ -12,6 +13,7 @@ const MissionItem = ({mission}) => {
   let imageSource;
   let addNum;
   const navigation = useNavigation();
+  const {isMissionChanged, setIsMissionChanged} = useMissionChanged();
 
   if (mission.misPeriod == 0) {
     imageSource = [
@@ -58,12 +60,12 @@ const MissionItem = ({mission}) => {
     setIsDelModalVisible(true);
   };
   const deleteMission = () => {
-    setIsDelModalVisible(false);
     const delMisInfo = {
       misID: mission.id,
       hasReview: mission.hasReview,
     };
     deleteCurrentMis(delMisInfo);
+    setIsMissionChanged(!isMissionChanged);
   };
   const goToMissionDetail = () => {
     navigation.navigate('MissionDetail', {mission: mission});
@@ -77,6 +79,7 @@ const MissionItem = ({mission}) => {
       },
     };
     updateCurrentMis(updateMisInfo);
+    setIsMissionChanged(!isMissionChanged);
   };
 
   return (
@@ -93,7 +96,7 @@ const MissionItem = ({mission}) => {
             <Image source={imageSource[mission.picNum].image}></Image>
           )}
         </TouchableOpacity>
-        <TouchableOpacity onPress={goToMissionDetail}>
+        <TouchableOpacity style={styles.titleBox} onPress={goToMissionDetail}>
           <Text style={styles.title}>{mission.misTitle}</Text>
         </TouchableOpacity>
       </View>
@@ -135,10 +138,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  titleBox: {
+    width: '85%',
+  },
   title: {
     fontSize: 14,
     color: '#242424',
     paddingLeft: 16,
+    textAlign: 'left',
   },
   missionMenu: {
     paddingHorizontal: 10,

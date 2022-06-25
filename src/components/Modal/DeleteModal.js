@@ -1,8 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import Modal from 'react-native-modal';
 
 const DeleteModal = ({isModalVisible, setIsModalVisible, deleteFunction}) => {
+  useEffect(() => {
+    return () => setIsModalVisible(false);
+  }, []);
+
   return (
     <Modal
       isVisible={isModalVisible}

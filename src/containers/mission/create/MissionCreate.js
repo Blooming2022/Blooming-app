@@ -7,6 +7,7 @@ import MisPeriodText from '../../../components/Text/MisPeriodText';
 import {createCurrentMis} from '../../../service/missionServices';
 import {useNavigation} from '@react-navigation/native';
 import RandomMisTitle from './components/RandomMisTitle';
+import useMissionChanged from '../../../context/hook/useMissionChanged';
 
 const MissionCreate = ({route}) => {
   const misInfo = route.params.misInfo;
@@ -16,6 +17,7 @@ const MissionCreate = ({route}) => {
   const [isValid, setIsValid] = useState(false);
   let isMisSelfText = misInfo.isMisSelf ? '셀프' : '랜덤';
   const navigation = useNavigation();
+  const {isMissionChanged, setIsMissionChanged} = useMissionChanged();
 
   useEffect(() => {
     if (misTitle !== '') {
@@ -45,6 +47,7 @@ const MissionCreate = ({route}) => {
       hasReview: false,
     };
     const result = await createCurrentMis(mission);
+    setIsMissionChanged(!isMissionChanged);
     navigation.navigate('MissionDetail', {mission: result});
   };
 
