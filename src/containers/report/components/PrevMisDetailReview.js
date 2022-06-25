@@ -30,7 +30,7 @@ const PrevMisDetailReview = ({showInfoModal, navigation, mission}) => {
       ) : (
         <TouchableOpacity
           style={styles.addReviewBtn}
-          onPress={() => navigation.navigate('PrevMisReviewCreate', {mission: mission})}>
+          onPress={() => navigation.navigate('ReviewCreate', {mission: mission, isOutdated: true})}>
           <Image
             style={styles.ableBtnImg}
             source={require('../../../assets/images/addReviewBtnDisable.png')}></Image>

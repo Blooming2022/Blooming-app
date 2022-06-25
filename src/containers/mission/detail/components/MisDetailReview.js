@@ -31,7 +31,9 @@ const MisDetailReview = ({showInfoModal, navigation, mission}) => {
       ) : isSuccess ? (
         <TouchableOpacity
           style={styles.addReviewBtn}
-          onPress={() => navigation.navigate('ReviewCreate', {mission: mission})}>
+          onPress={() =>
+            navigation.navigate('ReviewCreate', {mission: mission, isOutdated: false})
+          }>
           <Image
             style={styles.ableBtnImg}
             source={require('../../../../assets/images/addReviewBtnDisable.png')}></Image>
