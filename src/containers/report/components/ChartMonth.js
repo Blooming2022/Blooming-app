@@ -6,9 +6,12 @@ import {getNumOfSuccessMis} from '../../../service/reportServices';
 
 const ChartMonth = () => {
   let monthSuccessNum = [];
-  const func = async () => {
-    monthSuccessNum = await getNumOfSuccessMis(1);
-  };
+
+  useEffect(() => {
+    const func = async () => {
+      monthSuccessNum = await getNumOfSuccessMis(1);
+    };
+  }, []);
 
   monthSuccessNum = [0, 1, 3, 4, 2];
 

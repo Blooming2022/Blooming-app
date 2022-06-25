@@ -6,9 +6,12 @@ import {getNumOfSuccessMis} from '../../../service/reportServices';
 
 const ChartYear = () => {
   let yearSuccessNum = [];
-  const func = async () => {
-    yearSuccessNum = await getNumOfSuccessMis(2);
-  };
+
+  useEffect(() => {
+    const func = async () => {
+      yearSuccessNum = await getNumOfSuccessMis(2);
+    };
+  }, []);
 
   yearSuccessNum = [0, 1, 3, 4, 2, 10, 13, 12, 23, 13, 3, 6];
 
