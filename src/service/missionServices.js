@@ -248,10 +248,6 @@ const getPrevSuccessMisList = async period => {
   try {
     const data = await misRef.get();
     const ret = data.docs.map(doc => ({...doc.data(), id: doc.id}));
-    if (ret.length == 0) {
-      console.log('There is no data.');
-      return -1;
-    }
     console.log(ret);
     return ret;
   } catch (e) {
@@ -279,7 +275,7 @@ const getLatestPrevSuccessMis = async () => {
     } else {
       limitNum = 0;
       console.log('There is no Data.');
-      return 0;
+      return [];
     }
     const latestMis = await usersCollection
       .doc(getCurrentUser().uid)

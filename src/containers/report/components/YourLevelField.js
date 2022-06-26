@@ -134,11 +134,11 @@ const YourLevelField = () => {
       setPercentage(result);
       setPercentage(percent);
 
-      console.log('percent ' + userInfo.level + ' ' + percent);
+      // console.log('percent ' + userInfo.level + ' ' + percent);
     }
-    console.log('유저 성공미션 횟수 ' + userInfo.successNum);
-    console.log('성공할때 필요한 ' + successNumOfLevel);
-    console.log('leftNum ' + leftNum);
+    // console.log('유저 성공미션 횟수 ' + userInfo.successNum);
+    // console.log('성공할때 필요한 ' + successNumOfLevel);
+    // console.log('leftNum ' + leftNum);
 
     return percent;
   };

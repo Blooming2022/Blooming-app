@@ -3,7 +3,7 @@ import {StyleSheet, View, Image, TouchableOpacity} from 'react-native';
 import MissionAddModal from '../../../../components/Modal/MissionAddModal';
 import {useNavigation} from '@react-navigation/native';
 
-const MissionWeekFlower = ({missionList, setMissionList}) => {
+const MissionWeekFlower = ({missionList}) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [picNum, setPicNum] = useState(0);
   const navigation = useNavigation();
@@ -20,9 +20,7 @@ const MissionWeekFlower = ({missionList, setMissionList}) => {
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
         picNum={picNum}
-        misPeriod={0}
-        setMissionList={setMissionList}
-        missionList={missionList}></MissionAddModal>
+        misPeriod={0}></MissionAddModal>
       <View style={styles.petal0}>
         {missionList.find(item => item.picNum == 0) == undefined ||
         !missionList.find(item => item.picNum == 0).isSuccess ? (

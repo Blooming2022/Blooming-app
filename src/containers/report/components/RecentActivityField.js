@@ -4,18 +4,18 @@ import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import RecentActivityList from './RecentActivityList';
 import ViewAllActivitiesBtn from './ViewAllActivitiesBtn';
 
-const RecentActivityField = ({prevSuccessMisList, setPrevSuccessMisList}) => {
+const RecentActivityField = ({prevSuccessMisList}) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.subContainer}>
         <Text style={styles.title}>지난 활동</Text>
-        <RecentActivityList
-          prevSuccessMisList={prevSuccessMisList}
-          setPrevSuccessMisList={setPrevSuccessMisList}></RecentActivityList>
+        <RecentActivityList prevSuccessMisList={prevSuccessMisList}></RecentActivityList>
       </View>
-      <View style={styles.subContainer}>
-        <ViewAllActivitiesBtn></ViewAllActivitiesBtn>
-      </View>
+      {prevSuccessMisList.length !== 0 && (
+        <View style={styles.subContainer}>
+          <ViewAllActivitiesBtn></ViewAllActivitiesBtn>
+        </View>
+      )}
     </SafeAreaView>
   );
 };
