@@ -11,7 +11,7 @@ const RecentActivityItem = ({activityItem}) => {
 
   if (activityItem.misPeriod == 0) {
     missionPeriod = '한주미션';
-  } else if (activityItem.period == 1) {
+  } else if (activityItem.misPeriod == 1) {
     missionPeriod = '한달미션';
   } else {
     missionPeriod = '계절미션';

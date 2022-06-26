@@ -5,7 +5,6 @@ import {deletePrevSuccessMis} from '../../service/missionServices';
 
 import DeleteHeader from '../../components/Header/DeleteHeader';
 import DeleteModal from '../../components/Modal/DeleteModal';
-import InfoModal from '../../components/Modal/InfoModal';
 
 import MissionTitleBox from '../../components/Text/MissionTitleBox';
 import MisDetailMemo from '../../containers/mission/detail/components/MisDetailMemo';
@@ -15,7 +14,6 @@ import MisPeriodText from '../../components/Text/MisPeriodText';
 const PrevSuccessMissionDetail = ({route}) => {
   const mission = route.params.mission;
   const [isDelModalVisible, setIsDelModalVisible] = useState(false);
-  const [isInfoModalVisible, setIsInfoModalVisible] = useState(false);
 
   const navigation = useNavigation();
   const isMemoExist = mission.misMemo !== '';
@@ -28,36 +26,21 @@ const PrevSuccessMissionDetail = ({route}) => {
     deletePrevSuccessMis(delMisInfo);
     navigation.navigate('PrevSuccessMissionList');
   };
-  const showInfoModal = () => {
-    setIsInfoModalVisible(true);
-  };
 
   return (
     <>
       <DeleteHeader
         navigation={navigation}
-        deleteFunction={deletePrevMission}
-        setIsModalVisible={setIsDelModalVisible}
-        from="report"></DeleteHeader>
-
+        setIsDelModalVisible={setIsDelModalVisible}></DeleteHeader>
       <ScrollView style={styles.container}>
         <DeleteModal
           isModalVisible={isDelModalVisible}
           setIsModalVisible={setIsDelModalVisible}
           deleteFunction={deletePrevMission}></DeleteModal>
-        <InfoModal
-          isModalVisible={isInfoModalVisible}
-          setIsModalVisible={setIsInfoModalVisible}
-          title="안내"
-          text1="이미 성공한 미션인 경우"
-          text2="후기만 추가할 수 있습니다."></InfoModal>
         <MisPeriodText misPeriod={mission.misPeriod}></MisPeriodText>
         <MissionTitleBox misTitle={mission.misTitle}></MissionTitleBox>
         {isMemoExist && <MisDetailMemo misMemo={mission.misMemo}></MisDetailMemo>}
-        <PrevMisDetailReview
-          showInfoModal={showInfoModal}
-          navigation={navigation}
-          mission={mission}></PrevMisDetailReview>
+        <PrevMisDetailReview navigation={navigation} mission={mission}></PrevMisDetailReview>
       </ScrollView>
     </>
   );

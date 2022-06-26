@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {View, Image, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {getRevById} from '../../../service/reviewServices';
 
-const PrevMisDetailReview = ({showInfoModal, navigation, mission}) => {
+const PrevMisDetailReview = ({navigation, mission}) => {
   const hasReview = mission.hasReview;
   let review;
 
@@ -17,9 +17,6 @@ const PrevMisDetailReview = ({showInfoModal, navigation, mission}) => {
     <View style={styles.reviewBox}>
       <View style={styles.reviewTextBox}>
         <Text style={styles.reviewText}>후기</Text>
-        <TouchableOpacity style={styles.infoBtn} onPress={showInfoModal}>
-          <Image source={require('../../../assets/images/infoBtn.png')}></Image>
-        </TouchableOpacity>
       </View>
       {hasReview ? (
         <TouchableOpacity

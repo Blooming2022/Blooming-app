@@ -7,44 +7,43 @@ import {useNavigation} from '@react-navigation/native';
 
 const PrevSuccessMissionList = () => {
   const navigation = useNavigation();
-  const [prevSuccessMisList, setPrevSuccessMisList] = useState([]);
+  const [prevSuccessMisList, setPrevSuccessMisList] = useState([]); // this is the whole prevSuccessMisList
   const dummy = [
     {
       misID: 'cPkZLuaHMYvBua5p2Kzz',
-      misTitle: '예시1',
-      misPeriod: 0,
+      misTitle: '바다보러 가기',
+      misPeriod: 1,
       isSuccess: true,
-      misSuccessDate: 1655952358099,
+      misSuccessDate: 1655922358099,
       isMisSelf: true,
-      misMemo: 'exaplllllefa',
+      misMemo: '바다는 역시 동해바다지!',
       hasReview: false,
     },
     {
       misID: 'cPkZLuaHMYvBua1p2Kzz',
-      misTitle: '예시1',
-      misPeriod: 1,
+      misTitle: '부모님 안마해드리기',
+      misPeriod: 0,
       isSuccess: true,
-      misSuccessDate: 1655952358099,
+      misSuccessDate: 1655852358099,
       isMisSelf: true,
-      misMemo: 'exaplllllefa',
+      misMemo: '효도하자',
       hasReview: false,
     },
     {
       misID: 'cPkZLuaH8YvBua5p2Kzz',
-      misTitle: '예시1',
+      misTitle: '바다/서핑',
       misPeriod: 2,
       isSuccess: true,
-      misSuccessDate: 1655952358099,
+      misSuccessDate: 1655452358099,
       isMisSelf: true,
-      misMemo: 'exaplllllefa',
+      misMemo: '',
       hasReview: false,
     },
   ];
   useEffect(() => {
     const getList = async () => {
       // await getPrevSuccessMisList().then(prevSuccessMisList => setPrevSuccessMisList(prevSuccessMisList));
-      setPrevSuccessMisList(dummy);
-      console.log(prevSuccessMisList);
+      setPrevSuccessMisList(dummy); // just for testing
     };
     getList();
   }, []);
