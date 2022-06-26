@@ -118,12 +118,27 @@ const updateCurrentMis = async updateMisInfo => {
     if (
       updateMisInfo.updateInfo.misTitle ||
       updateMisInfo.updateInfo.misSuccessDate ||
-      updateMisInfo.updateInfo.isSuccess == false
+      updateMisInfo.updateInfo.isSuccess == false ||
+      updateMisInfo.updateInfo.isSuccess == true
     ) {
       const misData = await getCurrentMisById(updateMisInfo.misID);
       let updateRevInfo = {
         misID: updateMisInfo.misID,
       };
+      if (misData.isSuccess == true && updateMisInfo.updateInfo.isSuccess == false) {
+        const userProfile = await getUserProfile();
+        let successNum = userProfile.successNum;
+        successNum = successNum - 1;
+        updateUserProfile({successNum: successNum});
+        checkUserLevel();
+      }
+      if (updateMisInfo.updateInfo.isSuccess == true) {
+        const userProfile = await getUserProfile();
+        let successNum = userProfile.successNum;
+        successNum = successNum + 1;
+        updateUserProfile({successNum: successNum});
+        checkUserLevel();
+      }
       if (misData.hasReview == true) {
         if (updateMisInfo.updateInfo.misTitle)
           updateRevInfo.misTitle = updateMisInfo.updateInfo.misTitle;
@@ -176,7 +191,13 @@ const deleteCurrentMis = async delMisInfo => {
       await deleteRev({misID: delMisInfo.misID, revImg: revInfo.revImg, isOutdated: false});
     }
     const misRef = usersCollection.doc(getCurrentUser().uid).collection('currentMisList');
-    return misRef.doc(delMisInfo.misID).delete();
+    const ret = misRef.doc(delMisInfo.misID).delete();
+    const userProfile = await getUserProfile();
+    let successNum = userProfile.successNum;
+    successNum = successNum - 1;
+    updateUserProfile({successNum: successNum});
+    checkUserLevel();
+    return ret;
   } catch (e) {
     console.log(e.message);
     return -1;
@@ -196,11 +217,6 @@ const createPrevSuccessMis = async misID => {
       .collection('prevSuccessMisList')
       .doc(misID)
       .set(misData);
-    const userProfile = await getUserProfile();
-    let successNum = userProfile.successNum;
-    successNum = successNum + 1;
-    updateUserProfile({successNum: successNum});
-    checkUserLevel();
     return ret;
   } catch (e) {
     console.log(e.message);
@@ -296,7 +312,6 @@ const deletePrevSuccessMis = async delMisInfo => {
       const revInfo = await getRevById(delMisInfo.misID);
       await deleteRev({misID: delMisInfo.misID, revImg: revInfo.revImg, isOutdated: true});
     }
-
     const ret = usersCollection
       .doc(getCurrentUser().uid)
       .collection('prevSuccessMisList')
