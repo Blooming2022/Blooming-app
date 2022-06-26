@@ -190,13 +190,16 @@ const deleteCurrentMis = async delMisInfo => {
       const revInfo = await getRevById(delMisInfo.misID);
       await deleteRev({misID: delMisInfo.misID, revImg: revInfo.revImg, isOutdated: false});
     }
+    const misData = await getCurrentMisById(delMisInfo.misID);
     const misRef = usersCollection.doc(getCurrentUser().uid).collection('currentMisList');
+    if (misData.isSuccess == true) {
+      const userProfile = await getUserProfile();
+      let successNum = userProfile.successNum;
+      successNum = successNum - 1;
+      updateUserProfile({successNum: successNum});
+      checkUserLevel();
+    }
     const ret = misRef.doc(delMisInfo.misID).delete();
-    const userProfile = await getUserProfile();
-    let successNum = userProfile.successNum;
-    successNum = successNum - 1;
-    updateUserProfile({successNum: successNum});
-    checkUserLevel();
     return ret;
   } catch (e) {
     console.log(e.message);
