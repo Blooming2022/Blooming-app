@@ -14,7 +14,7 @@ const MissionItem = ({mission}) => {
   let addNum;
   const navigation = useNavigation();
   const {isMissionChanged, setIsMissionChanged} = useMissionChanged();
-  
+
   if (mission.misPeriod == 0) {
     imageSource = [
       {image: require('../../../../assets/images/missionPink.png')},
@@ -44,7 +44,7 @@ const MissionItem = ({mission}) => {
     ];
     addNum = 2;
   }
-  
+
   const showMenu = () => {
     setIsMenuVisible(true);
   };
@@ -78,7 +78,6 @@ const MissionItem = ({mission}) => {
         misSuccessDate: getKSTTime(),
       },
     };
-    console.log(Object.entries(updateMisInfo.updateInfo)+ '------------')
     await updateCurrentMis(updateMisInfo);
     setIsMissionChanged(!isMissionChanged);
   };

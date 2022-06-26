@@ -25,14 +25,13 @@ const YourLevelField = () => {
   const calculateProgressBar = () => {
     const size = 320 * (userInfo.successNum / level[userInfo.level + 1].num);
     setSize(size);
-  };
-  
+  };  
   const getUserInfo = () => {
     getUserProfile().then(result => setUserInfo(result));
   };
+
   useEffect(() => {
     getUserInfo();
-    console.log(userInfo+'---------')
     // setUserInfo(dummy); // Just for testing
   }, [isMissionChanged]);
 
