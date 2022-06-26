@@ -228,22 +228,14 @@ const getPrevSuccessMisById = async misID => {
   }
 };
 
-/**
- * 성공미션 기간별 전체 리스트 조회
- *
- * @param {int} period period=0이면 한주, 1이면 한달, 2이면 계절, 그 외에는 전체 미션 리스트 데이터를 가져옴
+/** 
+ * prevSuccessMission 리스트 전체 조회
+ * const prevSuccessMisList = await getPrevSuccessMisList();
+ * 와 같이 await를 사용해서 호출해주셔야 prevSuccessMission 리스트를 읽어올 수 있습니다.
  * @returns 성공시 Promise | 실패시 -1
  */
-const getPrevSuccessMisList = async period => {
+const getPrevSuccessMisList = async () => {
   let misRef = usersCollection.doc(getCurrentUser().uid).collection('prevSuccessMisList');
-
-  if (period == WEEK) {
-    misRef = misRef.where('misPeriod', '==', 0);
-  } else if (period == MONTH) {
-    misRef = misRef.where('misPeriod', '==', 1);
-  } else if (period == SEASON) {
-    misRef = misRef.where('misPeriod', '==', 2);
-  }
 
   try {
     const data = await misRef.get();
@@ -252,7 +244,6 @@ const getPrevSuccessMisList = async period => {
       console.log('There is no data.');
       return -1;
     }
-    console.log(ret);
     return ret;
   } catch (e) {
     console.log(e.message);
