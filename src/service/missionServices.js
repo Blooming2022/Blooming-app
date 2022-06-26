@@ -118,12 +118,27 @@ const updateCurrentMis = async updateMisInfo => {
     if (
       updateMisInfo.updateInfo.misTitle ||
       updateMisInfo.updateInfo.misSuccessDate ||
-      updateMisInfo.updateInfo.isSuccess == false
+      updateMisInfo.updateInfo.isSuccess == false ||
+      updateMisInfo.updateInfo.isSuccess == true
     ) {
       const misData = await getCurrentMisById(updateMisInfo.misID);
       let updateRevInfo = {
         misID: updateMisInfo.misID,
       };
+      if (misData.isSuccess == true && updateMisInfo.updateInfo.isSuccess == false) {
+        const userProfile = await getUserProfile();
+        let successNum = userProfile.successNum;
+        successNum = successNum - 1;
+        updateUserProfile({successNum: successNum});
+        checkUserLevel();
+      }
+      if (updateMisInfo.updateInfo.isSuccess == true) {
+        const userProfile = await getUserProfile();
+        let successNum = userProfile.successNum;
+        successNum = successNum + 1;
+        updateUserProfile({successNum: successNum});
+        checkUserLevel();
+      }
       if (misData.hasReview == true) {
         if (updateMisInfo.updateInfo.misTitle)
           updateRevInfo.misTitle = updateMisInfo.updateInfo.misTitle;
@@ -196,11 +211,6 @@ const createPrevSuccessMis = async misID => {
       .collection('prevSuccessMisList')
       .doc(misID)
       .set(misData);
-    const userProfile = await getUserProfile();
-    let successNum = userProfile.successNum;
-    successNum = successNum + 1;
-    updateUserProfile({successNum: successNum});
-    checkUserLevel();
     return ret;
   } catch (e) {
     console.log(e.message);
@@ -302,11 +312,6 @@ const deletePrevSuccessMis = async delMisInfo => {
       .collection('prevSuccessMisList')
       .doc(delMisInfo.misID)
       .delete();
-    const userProfile = await getUserProfile();
-    let successNum = userProfile.successNum;
-    successNum = successNum - 1;
-    updateUserProfile({successNum: successNum});
-    checkUserLevel();
     return ret;
   } catch (e) {
     console.log(e.message);
