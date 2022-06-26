@@ -8,6 +8,7 @@ import ChartYear from './components/ChartYear';
 import RecentActivityField from './components/RecentActivityField';
 import YourLevelField from './components/YourLevelField';
 import ReportPeriodSelectBtn from './components/ReportPeriodSelectionBtn';
+import useMissionChanged from '../../../context/hook/useMissionChanged';
 
 const Report = () => {
   const [prevSuccessMisList, setPrevSuccessMisList] = useState([]); // this is latest prevSuccessMisList
@@ -18,6 +19,7 @@ const Report = () => {
   const [sumOfNum0, setSumOfNum0] = useState(0);
   const [sumOfNum1, setSumOfNum1] = useState(0);
   const [sumOfNum2, setSumOfNum2] = useState(0);
+  const {isMissionChanged} = useMissionChanged();
 
   useEffect(() => {
     const getNumOfMiData = async () => {
@@ -29,7 +31,7 @@ const Report = () => {
       setYearSuccessNum(result2);
     };
     getNumOfMiData();
-  }, []);
+  }, [isMissionChanged]);
 
   useEffect(() => {
     let sum0 = 0;
