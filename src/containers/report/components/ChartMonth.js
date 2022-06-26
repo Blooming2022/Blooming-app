@@ -4,7 +4,7 @@ import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import {BarChart} from 'react-native-gifted-charts';
 
 const ChartMonth = ({monthSuccessNum, sumOfNum}) => {
-  const chartData = [
+  let chartData = [
     {
       value: monthSuccessNum[0],
       label: '1주',
@@ -57,6 +57,20 @@ const ChartMonth = ({monthSuccessNum, sumOfNum}) => {
     },
   ];
 
+  if(monthSuccessNum.length == 6) {
+    const lastItem = {
+      value: monthSuccessNum[5],
+      label: '6주',
+      topLabelComponent: () => <Text style={styles.topBarLabel}>{monthSuccessNum[5]}</Text>,
+      labelWidth: 20,
+      labelTextStyle: {
+        color: '#242424',
+        marginHorizontal: 4,
+      }
+    };
+    chartData.push(lastItem);
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>이번 달</Text>
@@ -64,7 +78,6 @@ const ChartMonth = ({monthSuccessNum, sumOfNum}) => {
       <View style={styles.chartField}>
         <ScrollView horizontal={true} persistentScrollbar={true}>
           <BarChart
-            // hideRules //점선의 유부
             height={200}
             noOfSections={6}
             barWidth={15}

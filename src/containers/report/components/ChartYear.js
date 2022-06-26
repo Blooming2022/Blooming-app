@@ -133,7 +133,6 @@ const ChartYear = ({yearSuccessNum, sumOfNum}) => {
       <Text style={styles.successNum}>{sumOfNum}개 성공</Text>
       <View style={styles.chartField}>
         <BarChart
-          // hideRules
           height={200}
           noOfSections={6}
           barWidth={15}

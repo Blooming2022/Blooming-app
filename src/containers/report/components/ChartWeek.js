@@ -83,7 +83,6 @@ const ChartWeek = ({weekSuccessNum, sumOfNum}) => {
       <Text style={styles.successNum}>{sumOfNum}개 성공</Text>
       <View style={styles.chartField}>
         <BarChart
-          // hideRules // 점선의 유무
           height={200}
           noOfSections={4}
           barWidth={15}
