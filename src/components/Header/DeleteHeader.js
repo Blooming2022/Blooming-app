@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View, Image, StyleSheet, TouchableOpacity, BackHandler} from 'react-native';
 import {Menu, MenuItem} from 'react-native-material-menu';
 
-const DetailHeader = ({navigation, updateFunction, setIsModalVisible, from}) => {
+const DeleteHeader = ({navigation, setIsModalVisible, from}) => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const showMenu = () => {
     setIsMenuVisible(true);
@@ -42,18 +42,10 @@ const DetailHeader = ({navigation, updateFunction, setIsModalVisible, from}) => 
           <TouchableOpacity style={styles.button} onPress={showMenu}>
             <Image
               style={styles.headerButtonImage}
-              source={require('../../assets/images/kebabMenu.png')}></Image>
+              source={require('../../assets/images/trashbin.png')}></Image>
           </TouchableOpacity>
         }
         onRequestClose={hideMenu}>
-        <MenuItem
-          onPress={() => {
-            hideMenu();
-            updateFunction();
-          }}
-          textStyle={styles.menuText}>
-          수정
-        </MenuItem>
         <MenuItem
           onPress={() => {
             hideMenu();
@@ -85,9 +77,10 @@ const styles = StyleSheet.create({
     paddingVertical: 18,
   },
   headerButtonImage: {
-    width: 18,
-    height: 18,
+    width: 22,
+    height: 22,
     resizeMode: 'contain',
+    marginRight: 10,
   },
   menu: {
     backgroundColor: '#2C2C2C',
@@ -100,4 +93,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DetailHeader;
+export default DeleteHeader;

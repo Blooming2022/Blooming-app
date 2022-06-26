@@ -8,7 +8,10 @@ const Stack = createNativeStackNavigator();
 
 const ReportStackNavigator = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}>
       <Stack.Screen name="Report" component={Report} />
       <Stack.Screen name="Level" component={Level} />
     </Stack.Navigator>
