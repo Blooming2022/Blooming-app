@@ -70,7 +70,7 @@ const MissionItem = ({mission}) => {
   const goToMissionDetail = () => {
     navigation.navigate('MissionDetail', {mission: mission});
   };
-  const checkMission = () => {
+  const checkMission = async () => {
     const updateMisInfo = {
       misID: mission.id,
       updateInfo: {
@@ -78,7 +78,7 @@ const MissionItem = ({mission}) => {
         misSuccessDate: getKSTTime(),
       },
     };
-    updateCurrentMis(updateMisInfo);
+    await updateCurrentMis(updateMisInfo);
     setIsMissionChanged(!isMissionChanged);
   };
 

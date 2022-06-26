@@ -19,7 +19,7 @@ const ReviewDetail = ({route, navigation}) => {
     const delRevInfo = {
       misID: review.misID,
       revImg: review.revImg,
-      isOutdated: false, // prevSuccessMission 생성 이후 추가 작업 예정
+      isOutdated: review.isOutdated,
     };
     deleteRev(delRevInfo);
     setIsReviewChanged(!isReviewChanged);

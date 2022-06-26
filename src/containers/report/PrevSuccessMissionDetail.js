@@ -2,10 +2,9 @@ import React, {useState} from 'react';
 import {StyleSheet, ScrollView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {deletePrevSuccessMis} from '../../service/missionServices';
-
+import usePrevMissionChanged from '../../context/hook/usePrevMissionChanged';
 import DeleteHeader from '../../components/Header/DeleteHeader';
 import DeleteModal from '../../components/Modal/DeleteModal';
-
 import MissionTitleBox from '../../components/Text/MissionTitleBox';
 import MisDetailMemo from '../../containers/mission/detail/components/MisDetailMemo';
 import PrevMisDetailReview from './components/PrevMisDetailReview';
@@ -14,6 +13,7 @@ import MisPeriodText from '../../components/Text/MisPeriodText';
 const PrevSuccessMissionDetail = ({route}) => {
   const mission = route.params.mission;
   const [isDelModalVisible, setIsDelModalVisible] = useState(false);
+  const {isPrevMissionChanged, setIsPrevMissionChanged} = usePrevMissionChanged();
 
   const navigation = useNavigation();
   const isMemoExist = mission.misMemo !== '';
@@ -24,6 +24,7 @@ const PrevSuccessMissionDetail = ({route}) => {
       hasReview: mission.hasReview,
     };
     deletePrevSuccessMis(delMisInfo);
+    setIsPrevMissionChanged(!isPrevMissionChanged);
     navigation.navigate('PrevSuccessMissionList');
   };
 

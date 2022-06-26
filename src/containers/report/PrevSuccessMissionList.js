@@ -4,10 +4,14 @@ import {getPrevSuccessMisList} from '../../service/missionServices';
 import RecentActivityItem from './components/RecentActivityItem';
 import CommonHeader from '../../components/Header/CommonHeader';
 import {useNavigation} from '@react-navigation/native';
+import useReviewChanged from '../../context/hook/useReviewChanged';
+import usePrevMissionChanged from '../../context/hook/usePrevMissionChanged';
 
 const PrevSuccessMissionList = () => {
   const navigation = useNavigation();
   const [prevSuccessMisList, setPrevSuccessMisList] = useState([]); // this is the whole prevSuccessMisList
+  const {isReviewChanged} = useReviewChanged();
+  const {isPrevMissionChanged} = usePrevMissionChanged();
 
   // Just for testing
   const dummy = [
@@ -50,7 +54,7 @@ const PrevSuccessMissionList = () => {
       // setPrevSuccessMisList(dummy); // just for testing
     };
     getList();
-  }, []);
+  }, [isPrevMissionChanged, isReviewChanged]);
 
   return (
     <>

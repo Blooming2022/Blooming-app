@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {SafeAreaView, StyleSheet, Text, View, Image} from 'react-native';
 import ViewAllLevelsBtn from './ViewAllLevelsBtn';
 import {getUserProfile} from '../../../service/authServices';
+import useMissionChanged from '../../../context/hook/useMissionChanged';
 
 const YourLevelField = () => {
   const [userInfo, setUserInfo] = useState(undefined);
@@ -13,33 +14,32 @@ const YourLevelField = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [size, setSize] = useState(0);
   const level = [
-    {name: '씨앗', num: 2, image: require('../../../assets/images/level0.png')},
-    {name: '새싹', num: 5, image: require('../../../assets/images/level1.png')},
-    {name: '줄기', num: 9, image: require('../../../assets/images/level2.png')},
-    {name: '가지', num: 14, image: require('../../../assets/images/level3.png')},
-    {name: '꽃봉오리', num: 29, image: require('../../../assets/images/level4.png')},
-    {name: '꽃나무', image: require('../../../assets/images/level5.png')},
+    {name: '씨앗', num: 0, image: require('../../../assets/images/level0.png')},
+    {name: '새싹', num: 3, image: require('../../../assets/images/level1.png')},
+    {name: '줄기', num: 6, image: require('../../../assets/images/level2.png')},
+    {name: '가지', num: 10, image: require('../../../assets/images/level3.png')},
+    {name: '꽃봉오리', num: 15, image: require('../../../assets/images/level4.png')},
+    {name: '꽃나무', num: 30, image: require('../../../assets/images/level5.png')},
   ];
-
+  const {isMissionChanged} = useMissionChanged();
   const calculateProgressBar = () => {
     const size = 320 * (userInfo.successNum / level[userInfo.level + 1].num);
     setSize(size);
+  };  
+  const getUserInfo = () => {
+    getUserProfile().then(result => setUserInfo(result));
   };
 
   useEffect(() => {
-    const getUserInfo = () => {
-      getUserProfile().then(result => setUserInfo(result));
-    };
     getUserInfo();
     // setUserInfo(dummy); // Just for testing
-  }, []);
+  }, [isMissionChanged]);
 
   useEffect(() => {
     if (userInfo !== undefined) {
       setIsLoading(true);
       calculateProgressBar();
-      console.log(userInfo + 'is not undefined');
-    } else console.log(userInfo + 'is undefined');
+    }
   }, [userInfo]);
 
   return (
@@ -61,9 +61,7 @@ const YourLevelField = () => {
               <Text style={styles.infoText}>꽃나무를 피웠어요! 당신은 블루밍 마스터에요!</Text>
             ) : (
               <Text style={styles.infoText}>
-                {level[userInfo.level + 1].name}에 도달하기 위해{' '}
-                {level[userInfo.level + 1].num - userInfo.successNum}
-                개의 미션이 남았어요!
+                {level[userInfo.level + 1].name}에 도달하기 위해 {level[userInfo.level+1].num - userInfo.successNum}개의 미션이 남았어요!
               </Text>
             )}
           </View>
