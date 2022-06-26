@@ -5,6 +5,7 @@ const AppProvider = ({children}) => {
   // Data Provider for notify rendering Time
   const [isMissionChanged, setIsMissionChanged] = useState(false);
   const [isReviewChanged, setIsReviewChanged] = useState(false);
+  const [isPrevMissionChanged, setIsPrevMissionChanged] = useState(false);
 
   return (
     <AppContext.Provider
@@ -13,6 +14,8 @@ const AppProvider = ({children}) => {
         setIsMissionChanged,
         isReviewChanged,
         setIsReviewChanged,
+        isPrevMissionChanged,
+        setIsPrevMissionChanged,
       }}>
       {children}
     </AppContext.Provider>
