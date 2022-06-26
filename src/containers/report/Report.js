@@ -8,7 +8,7 @@ import ChartYear from './components/ChartYear';
 import RecentActivityField from './components/RecentActivityField';
 import YourLevelField from './components/YourLevelField';
 import ReportPeriodSelectBtn from './components/ReportPeriodSelectionBtn';
-import useMissionChanged from '../../../context/hook/useMissionChanged';
+import useMissionChanged from '../../context/hook/useMissionChanged';
 
 const Report = () => {
   const [prevSuccessMisList, setPrevSuccessMisList] = useState([]); // this is latest prevSuccessMisList
