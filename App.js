@@ -5,7 +5,7 @@ import SplashScreen from 'react-native-splash-screen';
 import Login from './src/containers/login/Login';
 import {getCurrentUser} from './src/service/authServices';
 import AppProvider from './src/context/provider/AppProvider';
-// import {getCurrentMisList} from './src/service/missionServices';
+import {checkCurrentMisListValid} from './src/service/missionServices';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -17,7 +17,7 @@ const App = () => {
           SplashScreen.hide();
         }, 2000);
       } else {
-        // getCurrentMisList();
+        checkCurrentMisListValid();
         setIsLoggedIn(true);
         setTimeout(() => {
           SplashScreen.hide();
