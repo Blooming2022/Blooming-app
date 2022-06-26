@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, ScrollView, View} from 'react-native';
 import {getLatestPrevSuccessMis} from '../../service/missionServices';
 import {getNumOfSuccessMis} from '../../service/reportServices';
-
 import ChartWeek from './components/ChartWeek';
 import ChartMonth from './components/ChartMonth';
 import ChartYear from './components/ChartYear';
@@ -21,7 +20,7 @@ const Report = () => {
   const [sumOfNum2, setSumOfNum2] = useState(0);
 
   useEffect(() => {
-    const getData = async () => {
+    const getNumOfMiData = async () => {
       const result0 = await getNumOfSuccessMis(0);
       setWeekSuccessNum(result0);
       const result1 = await getNumOfSuccessMis(1);
@@ -29,7 +28,7 @@ const Report = () => {
       const result2 = await getNumOfSuccessMis(2);
       setYearSuccessNum(result2);
     };
-    getData();
+    getNumOfMiData();
   }, []);
 
   useEffect(() => {
