@@ -1,18 +1,11 @@
 import React from 'react';
 import {StyleSheet, ScrollView, View, Text} from 'react-native';
 import MissionItem from './MissionItem';
-const MissionList = ({missionList, setMissionList}) => {
+const MissionList = ({missionList}) => {
   return (
     <ScrollView>
       {missionList.length !== 0 ? (
-        missionList.map((item, index) => (
-          <MissionItem
-            mission={item}
-            key={index}
-            missionList={missionList}
-            setMissionList={setMissionList}
-          />
-        ))
+        missionList.map((item, index) => <MissionItem mission={item} key={index} />)
       ) : (
         <View style={styles.noItem}>
           <Text style={styles.noItemText}>당신의 삶을 변화시킬</Text>

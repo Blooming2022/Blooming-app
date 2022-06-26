@@ -24,10 +24,7 @@ const MissionSeason = () => {
       <MissionSeasonFlower
         missionList={missionList}
         setMissionList={setMissionList}></MissionSeasonFlower>
-      <MissionList
-        style={styles.missionList}
-        missionList={missionList}
-        setMissionList={setMissionList}></MissionList>
+      <MissionList style={styles.missionList} missionList={missionList}></MissionList>
     </View>
   );
 };

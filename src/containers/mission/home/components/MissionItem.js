@@ -97,7 +97,9 @@ const MissionItem = ({mission}) => {
           )}
         </TouchableOpacity>
         <TouchableOpacity style={styles.titleBox} onPress={goToMissionDetail}>
-          <Text style={styles.title}>{mission.misTitle}</Text>
+          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.title}>
+            {mission.misTitle}
+          </Text>
         </TouchableOpacity>
       </View>
       <Menu
@@ -139,9 +141,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   titleBox: {
-    width: '85%',
+    width: 200,
   },
   title: {
+    width: '100%',
     fontSize: 14,
     color: '#242424',
     paddingLeft: 16,

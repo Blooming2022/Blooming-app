@@ -2,7 +2,7 @@ import React from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import RecentActivityItem from './RecentActivityItem';
 
-const RecentActivityList = ({prevSuccessMisList, setPrevSuccessMisList}) => {
+const RecentActivityList = ({prevSuccessMisList}) => {
   return (
     <ScrollView>
       {prevSuccessMisList.length !== 0 ? (
@@ -11,8 +11,8 @@ const RecentActivityList = ({prevSuccessMisList, setPrevSuccessMisList}) => {
         ))
       ) : (
         <View style={styles.noItem}>
-          <Text>당신의 삶을 변화시킬</Text>
-          <Text>특별한 미션을 달성해보세요!</Text>
+          <Text style={styles.noItemText}>아직 기간이 지난 미션이</Text>
+          <Text style={styles.noItemText}>없습니다</Text>
         </View>
       )}
     </ScrollView>
@@ -21,13 +21,16 @@ const RecentActivityList = ({prevSuccessMisList, setPrevSuccessMisList}) => {
 
 const styles = StyleSheet.create({
   noItem: {
-    width: 353,
-    height: 70,
+    height: 90,
     alignItems: 'center',
-    backgroundColor: 'white',
-    paddingHorizontal: 15,
-    paddingVertical: 16,
+    justifyContent: 'center',
+    backgroundColor: '#ffffff',
     borderRadius: 10,
+  },
+  noItemText: {
+    fontSize: 12,
+    lineHeight: 20,
+    color: '#999999',
   },
 });
 

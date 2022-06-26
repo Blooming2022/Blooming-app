@@ -7,28 +7,66 @@ import {useNavigation} from '@react-navigation/native';
 
 const PrevSuccessMissionList = () => {
   const navigation = useNavigation();
-  const [prevSuccessMisList, setPrevSuccessMisList] = useState([]);
+  const [prevSuccessMisList, setPrevSuccessMisList] = useState([]); // this is the whole prevSuccessMisList
 
+  // Just for testing
+  const dummy = [
+    {
+      misID: 'cPkZLuaHMYvBua5p2Kzz',
+      misTitle: '바다보러 가기',
+      misPeriod: 1,
+      isSuccess: true,
+      misSuccessDate: 1655922358099,
+      isMisSelf: true,
+      misMemo: '바다는 역시 동해바다지!',
+      hasReview: false,
+    },
+    {
+      misID: 'cPkZLuaHMYvBua1p2Kzz',
+      misTitle: '부모님 안마해드리기',
+      misPeriod: 0,
+      isSuccess: true,
+      misSuccessDate: 1655852358099,
+      isMisSelf: true,
+      misMemo: '효도하자',
+      hasReview: false,
+    },
+    {
+      misID: 'cPkZLuaH8YvBua5p2Kzz',
+      misTitle: '바다/서핑',
+      misPeriod: 2,
+      isSuccess: true,
+      misSuccessDate: 1655452358099,
+      isMisSelf: true,
+      misMemo: '',
+      hasReview: false,
+    },
+  ];
   useEffect(() => {
-    getPrevSuccessMisList().then(prevSuccessMisList => setPrevSuccessMisList(prevSuccessMisList));
+    const getList = async () => {
+      await getPrevSuccessMisList().then(prevSuccessMisList =>
+        setPrevSuccessMisList(prevSuccessMisList),
+      );
+      // setPrevSuccessMisList(dummy); // just for testing
+    };
+    getList();
   }, []);
 
   return (
     <>
       <CommonHeader navigation={navigation} title="지난 활동 보기" hasArrow={true}></CommonHeader>
-
-      <ScrollView style={styles.container}>
-        {prevSuccessMisList.length !== null ? (
-          prevSuccessMisList.map((item, index) => (
+      {prevSuccessMisList.length !== 0 ? (
+        <ScrollView style={styles.container}>
+          {prevSuccessMisList.map((item, index) => (
             <RecentActivityItem activityItem={item} key={index} />
-          ))
-        ) : (
-          <View style={styles.noItem}>
-            <Text>당신의 삶을 변화시킬</Text>
-            <Text>특별한 미션을 달성해보세요!</Text>
-          </View>
-        )}
-      </ScrollView>
+          ))}
+        </ScrollView>
+      ) : (
+        <View style={styles.noItem}>
+          <Text style={styles.noItemText}>아직 기간이 지난 미션이</Text>
+          <Text style={styles.noItemText}>없습니다</Text>
+        </View>
+      )}
     </>
   );
 };
@@ -41,13 +79,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3F3F3',
   },
   noItem: {
-    width: 353,
-    height: 70,
+    flex: 1,
     alignItems: 'center',
-    backgroundColor: 'white',
-    borderRadius: 10,
-    paddingHorizontal: 15,
-    paddingVertical: 16,
+    justifyContent: 'center',
+  },
+  noItemText: {
+    fontSize: 16,
+    lineHeight: 24,
+    color: '#999999',
   },
 });
 

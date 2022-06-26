@@ -228,7 +228,7 @@ const getPrevSuccessMisById = async misID => {
   }
 };
 
-/** 
+/**
  * prevSuccessMission 리스트 전체 조회
  * const prevSuccessMisList = await getPrevSuccessMisList();
  * 와 같이 await를 사용해서 호출해주셔야 prevSuccessMission 리스트를 읽어올 수 있습니다.
@@ -240,10 +240,7 @@ const getPrevSuccessMisList = async () => {
   try {
     const data = await misRef.get();
     const ret = data.docs.map(doc => ({...doc.data(), id: doc.id}));
-    if (ret.length == 0) {
-      console.log('There is no data.');
-      return -1;
-    }
+    console.log(ret);
     return ret;
   } catch (e) {
     console.log(e.message);
@@ -270,7 +267,7 @@ const getLatestPrevSuccessMis = async () => {
     } else {
       limitNum = 0;
       console.log('There is no Data.');
-      return 0;
+      return [];
     }
     const latestMis = await usersCollection
       .doc(getCurrentUser().uid)

@@ -1,24 +1,9 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
 import {BarChart} from 'react-native-gifted-charts';
-import {getNumOfSuccessMis} from '../../../service/reportServices';
 
-const ChartYear = () => {
-  let yearSuccessNum = [];
-
-  useEffect(() => {
-    const func = async () => {
-      yearSuccessNum = await getNumOfSuccessMis(2);
-    };
-    func();
-  }, []);
-
-  yearSuccessNum = [0, 1, 3, 4, 2, 10, 13, 12, 23, 13, 3, 6];
-
-  const SumOfYearSuccessNum = yearSuccessNum.reduce(function add(sum, currValue) {
-    return sum + currValue;
-  }, 0);
+const ChartYear = ({yearSuccessNum, sumOfNum}) => {
   const chartData = [
     {
       value: yearSuccessNum[0],
@@ -145,7 +130,7 @@ const ChartYear = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>이번 해</Text>
-      <Text style={styles.successNum}>{SumOfYearSuccessNum}개 성공</Text>
+      <Text style={styles.successNum}>{sumOfNum}개 성공</Text>
       <View style={styles.chartField}>
         <BarChart
           // hideRules

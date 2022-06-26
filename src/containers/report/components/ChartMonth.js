@@ -1,25 +1,9 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {StyleSheet, Text, View, ScrollView} from 'react-native';
 
 import {BarChart} from 'react-native-gifted-charts';
-import {getNumOfSuccessMis} from '../../../service/reportServices';
 
-const ChartMonth = () => {
-  let monthSuccessNum = [];
-
-  useEffect(() => {
-    const func = async () => {
-      monthSuccessNum = await getNumOfSuccessMis(1);
-    };
-    func();
-  }, []);
-
-  monthSuccessNum = [0, 1, 3, 4, 2];
-
-  const SumOfMonthSuccessNum = monthSuccessNum.reduce(function add(sum, currValue) {
-    return sum + currValue;
-  }, 0);
-
+const ChartMonth = ({monthSuccessNum, sumOfNum}) => {
   const chartData = [
     {
       value: monthSuccessNum[0],
@@ -76,7 +60,7 @@ const ChartMonth = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>이번 달</Text>
-      <Text style={styles.successNum}>{SumOfMonthSuccessNum}개 성공</Text>
+      <Text style={styles.successNum}>{sumOfNum}개 성공</Text>
       <View style={styles.chartField}>
         <ScrollView horizontal={true} persistentScrollbar={true}>
           <BarChart

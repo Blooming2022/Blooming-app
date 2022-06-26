@@ -1,60 +1,27 @@
-import React, {useState, useEffect} from 'react';
-import {View, Image, StyleSheet, TouchableOpacity, BackHandler} from 'react-native';
-import {Menu, MenuItem} from 'react-native-material-menu';
+import React from 'react';
+import {View, Image, StyleSheet, TouchableOpacity} from 'react-native';
 
-const DeleteHeader = ({navigation, setIsModalVisible, from}) => {
-  const [isMenuVisible, setIsMenuVisible] = useState(false);
-  const showMenu = () => {
-    setIsMenuVisible(true);
+const DeleteHeader = ({navigation, setIsDelModalVisible}) => {
+  const showDeleteModal = () => {
+    setIsDelModalVisible(true);
   };
-  const hideMenu = () => {
-    setIsMenuVisible(false);
-  };
-  useEffect(() => {
-    // backButton
-    const backButton = () => {
-      if (from === 'mission') navigation.navigate('MainTab', {screen: 'MissionHome'});
-      else if (from === 'review') navigation.navigate('MainTab', {screen: 'ReviewHome'});
-      else if (from === 'report') navigation.navigate('MainTab', {screen: 'ReportHome'});
-      return true;
-    };
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', backButton);
-    return () => backHandler.remove();
-  }, []);
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          if (from === 'mission') navigation.navigate('MainTab', {screen: 'MissionHome'});
-          else if (from === 'review') navigation.navigate('MainTab', {screen: 'ReviewHome'});
-          else if (from === 'report') navigation.navigate('MainTab', {screen: 'ReportHome'});
+          navigation.goBack();
         }}>
         <Image
           source={require('../../assets/images/backBtn.png')}
           style={styles.headerButtonImage}></Image>
       </TouchableOpacity>
-      <Menu
-        style={styles.menu}
-        visible={isMenuVisible}
-        anchor={
-          <TouchableOpacity style={styles.button} onPress={showMenu}>
-            <Image
-              style={styles.headerButtonImage}
-              source={require('../../assets/images/trashbin.png')}></Image>
-          </TouchableOpacity>
-        }
-        onRequestClose={hideMenu}>
-        <MenuItem
-          onPress={() => {
-            hideMenu();
-            setIsModalVisible(true);
-          }}
-          textStyle={styles.menuText}>
-          삭제
-        </MenuItem>
-      </Menu>
+      <TouchableOpacity style={styles.button} onPress={showDeleteModal}>
+        <Image
+          style={styles.headerButtonImage}
+          source={require('../../assets/images/trashbin.png')}></Image>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -80,7 +47,6 @@ const styles = StyleSheet.create({
     width: 22,
     height: 22,
     resizeMode: 'contain',
-    marginRight: 10,
   },
   menu: {
     backgroundColor: '#2C2C2C',

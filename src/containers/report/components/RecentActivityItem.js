@@ -11,7 +11,7 @@ const RecentActivityItem = ({activityItem}) => {
 
   if (activityItem.misPeriod == 0) {
     missionPeriod = '한주미션';
-  } else if (activityItem.period == 1) {
+  } else if (activityItem.misPeriod == 1) {
     missionPeriod = '한달미션';
   } else {
     missionPeriod = '계절미션';
@@ -22,6 +22,7 @@ const RecentActivityItem = ({activityItem}) => {
     {image: require('../../../assets/images/monthFlower.png')},
     {image: require('../../../assets/images/seasonTree.png')},
   ];
+
   const goToMissionDetail = () => {
     navigation.navigate('PrevSuccessMissionDetail', {mission: activityItem});
   };
@@ -29,19 +30,14 @@ const RecentActivityItem = ({activityItem}) => {
   return (
     <TouchableOpacity onPress={goToMissionDetail}>
       <View style={styles.container}>
-        <View style={styles.activityItem}>
-          {activityItem !== null ? (
-            <Image style={styles.icon} source={imageSource[activityItem.misPeriod].image}></Image>
-          ) : (
-            <Image style={styles.icon}></Image>
-          )}
-
-          <View style={styles.columnContainer}>
-            <Text style={styles.period}>{missionPeriod}</Text>
-            <Text style={styles.title}>{activityItem.misTitle}</Text>
-          </View>
-          <Text style={styles.successDate}>{successDate}</Text>
+        <Image style={styles.icon} source={imageSource[activityItem.misPeriod].image}></Image>
+        <View style={styles.columnContainer}>
+          <Text style={styles.period}>{missionPeriod}</Text>
+          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.title}>
+            {activityItem.misTitle}
+          </Text>
         </View>
+        <Text style={styles.successDate}>{successDate}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -49,30 +45,21 @@ const RecentActivityItem = ({activityItem}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    width: 353,
+    height: 70,
     flexDirection: 'row',
-    justifyContent: 'space-around',
     alignItems: 'center',
+    backgroundColor: '#ffffff',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 10,
     marginBottom: 10,
   },
   columnContainer: {
     flexDirection: 'column',
-    width: 90,
-    marginLeft: 9,
+    width: 200,
+    marginHorizontal: 9,
     marginTop: 15,
     marginBottom: 18,
-  },
-  activityItem: {
-    display: 'flex',
-    width: 353,
-    height: 70,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderRadius: 10,
   },
   icon: {
     width: 35,
@@ -82,18 +69,16 @@ const styles = StyleSheet.create({
   period: {
     fontSize: 12,
     color: '#ABABAB',
-    marginLeft: 20,
     marginBottom: 2,
   },
   title: {
+    width: '100%',
     fontSize: 12,
     color: '#242424',
-    marginLeft: 20,
   },
   successDate: {
     fontSize: 12,
     color: '#ABABAB',
-    marginLeft: 120,
     marginTop: 30,
   },
 });

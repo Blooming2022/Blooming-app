@@ -24,10 +24,7 @@ const MissionMonth = () => {
       <MissionMonthFlower
         missionList={missionList}
         setMissionList={setMissionList}></MissionMonthFlower>
-      <MissionList
-        style={styles.missionList}
-        missionList={missionList}
-        setMissionList={setMissionList}></MissionList>
+      <MissionList style={styles.missionList} missionList={missionList}></MissionList>
     </View>
   );
 };

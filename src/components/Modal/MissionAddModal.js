@@ -2,21 +2,17 @@ import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import Modal from 'react-native-modal';
 
-const MissionAddModal = ({
-  isModalVisible,
-  setIsModalVisible,
-  picNum,
-  misPeriod,
-  missionList,
-  setMissionList,
-  navigation,
-}) => {
+const MissionAddModal = ({isModalVisible, setIsModalVisible, picNum, misPeriod, navigation}) => {
   const addSelfMission = () => {
-    navigation.navigate('MissionCreate', {misInfo : {picNum : picNum, misPeriod : misPeriod, isMisSelf: true}})
+    navigation.navigate('MissionCreate', {
+      misInfo: {picNum: picNum, misPeriod: misPeriod, isMisSelf: true},
+    });
     setIsModalVisible(false);
   };
   const addRandomMission = () => {
-    navigation.navigate('RandomMissionGenerate', {misInfo : {picNum : picNum, misPeriod : misPeriod, isMisSelf: false}});
+    navigation.navigate('RandomMissionGenerate', {
+      misInfo: {picNum: picNum, misPeriod: misPeriod, isMisSelf: false},
+    });
     setIsModalVisible(false);
   };
   return (
