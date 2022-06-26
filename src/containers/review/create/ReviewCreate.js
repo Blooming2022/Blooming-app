@@ -9,7 +9,7 @@ import ReviewContentInput from './components/ReviewContentInput';
 import ReviewImageInput from './components/ReviewImageInput';
 import useReviewChanged from '../../../context/hook/useReviewChanged';
 
-const ReviewCreate = ({route, navigation}) => {
+const ReviewCreate = ({route, navigation, isOutdated}) => {
   const mission = route.params.mission;
   const isInitialMount = useRef(true); // To disable the complete button on the first rendering
   const [isValid, setIsValid] = useState(false); // Conditions for changing color of complete buttons
@@ -28,7 +28,7 @@ const ReviewCreate = ({route, navigation}) => {
   const createReview = async () => {
     const createRevInfo = {
       ...review,
-      ...{isOutdated: false},
+      ...{isOutdated: isOutdated},
     };
     const result = await createRev(createRevInfo);
     setIsReviewChanged(!isReviewChanged);
