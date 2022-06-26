@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
-    paddingHorizontal: 20, // margin으로 할 경우 테두리 모양으로 어두운 부분 생김
+    paddingHorizontal: 20,
     paddingTop: 20,
   },
   periodBoxWrapper: {

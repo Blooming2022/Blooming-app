@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, ScrollView, View} from 'react-native';
 import {getLatestPrevSuccessMis} from '../../service/missionServices';
+import {getNumOfSuccessMis} from '../../service/reportServices';
 
 import ChartWeek from './components/ChartWeek';
 import ChartMonth from './components/ChartMonth';
@@ -10,9 +11,46 @@ import YourLevelField from './components/YourLevelField';
 import ReportPeriodSelectBtn from './components/ReportPeriodSelectionBtn';
 
 const Report = () => {
-  const [reportPeriod, setReportPeriod] = useState(0);
   const [prevSuccessMisList, setPrevSuccessMisList] = useState([]); // this is latest prevSuccessMisList
+  const [selectedId, setSelectedId] = useState(0);
+  const [weekSuccessNum, setWeekSuccessNum] = useState([0, 0, 0, 0, 0, 0, 0]);
+  const [monthSuccessNum, setMonthSuccessNum] = useState([0, 0, 0, 0, 0]);
+  const [yearSuccessNum, setYearSuccessNum] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+  const [sumOfNum0, setSumOfNum0] = useState(0);
+  const [sumOfNum1, setSumOfNum1] = useState(0);
+  const [sumOfNum2, setSumOfNum2] = useState(0);
 
+  useEffect(() => {
+    const getData = async () => {
+      const result0 = await getNumOfSuccessMis(0);
+      setWeekSuccessNum(result0);
+      const result1 = await getNumOfSuccessMis(1);
+      setMonthSuccessNum(result1);
+      const result2 = await getNumOfSuccessMis(2);
+      setYearSuccessNum(result2);
+    };
+    getData();
+  }, []);
+
+  useEffect(() => {
+    let sum0 = 0;
+    let sum1 = 0;
+    let sum2 = 0;
+    weekSuccessNum.forEach(item => {
+      sum0 += item;
+    });
+    setSumOfNum0(sum0);
+    monthSuccessNum.forEach(item => {
+      sum1 += item;
+    });
+    setSumOfNum1(sum1);
+    yearSuccessNum.forEach(item => {
+      sum2 += item;
+    });
+    setSumOfNum2(sum2);
+  }, [weekSuccessNum, monthSuccessNum, yearSuccessNum]);
+
+  // Just for testing
   const dummy = [
     {
       misID: 'cPkZLuaHMYvBua5p2Kzz',
@@ -47,8 +85,8 @@ const Report = () => {
   ];
   useEffect(() => {
     const getList = async () => {
-      // await getLatestPrevSuccessMis().then(prevMisList => setPrevSuccessMisList(prevMisList));
-      setPrevSuccessMisList(dummy); // just for testing
+      await getLatestPrevSuccessMis().then(prevMisList => setPrevSuccessMisList(prevMisList));
+      // setPrevSuccessMisList(dummy); // just for testing
     };
     getList();
   }, []);
@@ -60,24 +98,24 @@ const Report = () => {
           <View style={styles.periodButtonInnerContainer}>
             <ReportPeriodSelectBtn
               buttontext={'주'}
-              selectedId={0}
-              reportPeriod={reportPeriod}
-              setReportPeriod={setReportPeriod}></ReportPeriodSelectBtn>
+              id={0}
+              selectedId={selectedId}
+              setSelectedId={setSelectedId}></ReportPeriodSelectBtn>
             <ReportPeriodSelectBtn
               buttontext={'월'}
-              selectedId={1}
-              reportPeriod={reportPeriod}
-              setReportPeriod={setReportPeriod}></ReportPeriodSelectBtn>
+              id={1}
+              selectedId={selectedId}
+              setSelectedId={setSelectedId}></ReportPeriodSelectBtn>
             <ReportPeriodSelectBtn
               buttontext={'년'}
-              selectedId={2}
-              reportPeriod={reportPeriod}
-              setReportPeriod={setReportPeriod}></ReportPeriodSelectBtn>
+              id={2}
+              selectedId={selectedId}
+              setSelectedId={setSelectedId}></ReportPeriodSelectBtn>
           </View>
         </View>
-        {reportPeriod == 0 && <ChartWeek />}
-        {reportPeriod == 1 && <ChartMonth />}
-        {reportPeriod == 2 && <ChartYear />}
+        {selectedId == 0 && <ChartWeek weekSuccessNum={weekSuccessNum} sumOfNum={sumOfNum0} />}
+        {selectedId == 1 && <ChartMonth monthSuccessNum={monthSuccessNum} sumOfNum={sumOfNum1} />}
+        {selectedId == 2 && <ChartYear yearSuccessNum={yearSuccessNum} sumOfNum={sumOfNum2} />}
         <RecentActivityField prevSuccessMisList={prevSuccessMisList}></RecentActivityField>
         <YourLevelField />
       </ScrollView>

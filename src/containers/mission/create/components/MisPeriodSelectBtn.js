@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   notSelectedtext: {
-    color: '#000',
+    color: '#242424',
   },
 });
 

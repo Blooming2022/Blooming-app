@@ -8,6 +8,8 @@ import {useNavigation} from '@react-navigation/native';
 const PrevSuccessMissionList = () => {
   const navigation = useNavigation();
   const [prevSuccessMisList, setPrevSuccessMisList] = useState([]); // this is the whole prevSuccessMisList
+
+  // Just for testing
   const dummy = [
     {
       misID: 'cPkZLuaHMYvBua5p2Kzz',
@@ -42,8 +44,10 @@ const PrevSuccessMissionList = () => {
   ];
   useEffect(() => {
     const getList = async () => {
-      // await getPrevSuccessMisList().then(prevSuccessMisList => setPrevSuccessMisList(prevSuccessMisList));
-      setPrevSuccessMisList(dummy); // just for testing
+      await getPrevSuccessMisList().then(prevSuccessMisList =>
+        setPrevSuccessMisList(prevSuccessMisList),
+      );
+      // setPrevSuccessMisList(dummy); // just for testing
     };
     getList();
   }, []);

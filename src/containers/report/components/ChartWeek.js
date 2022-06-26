@@ -1,25 +1,9 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
 import {BarChart} from 'react-native-gifted-charts';
-import {getNumOfSuccessMis} from '../../../service/reportServices';
 
-const ChartWeek = () => {
-  let weekSuccessNum = [];
-
-  useEffect(() => {
-    const func = async () => {
-      weekSuccessNum = await getNumOfSuccessMis(0);
-    };
-    func();
-  }, []);
-
-  weekSuccessNum = [0, 1, 3, 4, 2, 0, 1];
-
-  const SumOfWeekSuccessNum = weekSuccessNum.reduce(function add(sum, currValue) {
-    return sum + currValue;
-  }, 0);
-
+const ChartWeek = ({weekSuccessNum, sumOfNum}) => {
   const chartData = [
     {
       value: weekSuccessNum[0],
@@ -96,7 +80,7 @@ const ChartWeek = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>이번 주</Text>
-      <Text style={styles.successNum}>{SumOfWeekSuccessNum}개 성공</Text>
+      <Text style={styles.successNum}>{sumOfNum}개 성공</Text>
       <View style={styles.chartField}>
         <BarChart
           // hideRules // 점선의 유무

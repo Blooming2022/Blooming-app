@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
 
-const ReportPeriodSelectBtn = ({buttontext, selectedId, reportPeriod, setReportPeriod}) => {
-  const [isActive, setIsActive] = useState();
+const ReportPeriodSelectBtn = ({buttontext, selectedId, id, setSelectedId}) => {
+  const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
-    reportPeriod === selectedId ? setIsActive(true) : setIsActive(false);
-  }, []);
+    id === selectedId ? setIsActive(true) : setIsActive(false);
+  }, [selectedId]);
 
   return (
     <View style={styles.container}>
@@ -14,7 +14,7 @@ const ReportPeriodSelectBtn = ({buttontext, selectedId, reportPeriod, setReportP
         activeOpacity={0.3}
         style={[styles.button, isActive ? styles.selected : styles.notSelected]}
         onPress={() => {
-          setReportPeriod(selectedId);
+          setSelectedId(id);
         }}>
         <Text style={[styles.buttontext, isActive ? styles.selectedtext : styles.notSelectedtext]}>
           {buttontext}
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   notSelectedtext: {
-    color: '#000',
+    color: '#242424',
   },
 });
 
