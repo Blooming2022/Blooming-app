@@ -132,7 +132,7 @@ const updateCurrentMis = async updateMisInfo => {
         updateUserProfile({successNum: successNum});
         checkUserLevel();
       }
-      if (updateMisInfo.updateInfo.isSuccess == true) {
+      if (updateMisInfo.updateInfo.isSuccess == true && misData.isSuccess == false) {
         const userProfile = await getUserProfile();
         let successNum = userProfile.successNum;
         successNum = successNum + 1;
