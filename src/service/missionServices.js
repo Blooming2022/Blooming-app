@@ -439,6 +439,25 @@ const checkCurrentMisListValid = async () => {
 };
 
 /**
+ * misPeriod에 따라 해당 리스트의 마감 시간을 리턴
+ * @returns Promise<void>
+ */
+const getTargetTime = async period => {
+  const timeCollection = firestore().collection('TargetTime');
+  let doc;
+  if(period == 0)
+    doc = await timeCollection.doc('targetWeek').get();
+  else if(period == 1)
+    doc = await timeCollection.doc('targetMonth').get();
+  else
+    doc = await timeCollection.doc('targetSeason').get();
+
+  const result = doc.data().targetTime;
+  console.log(result)
+  return result;
+}
+
+/**
  * 랜덤미션 생성하기를 눌렀을 때 랜덤미션 키워드 2개를 묶어 반환하는 함수
  * {"result1": "인테리어", "result2": "캠핑"} 형식으로 return
  * @param {boolean} isSeason 계절 랜덤미션을 생성하면 true, 아니면 false 넣어 호출
@@ -526,4 +545,6 @@ export {
   deletePrevSuccessMis,
   checkCurrentMisListValid,
   getRandomKeywords,
+  getTargetTime,
+  clearCurrentMisList
 };
